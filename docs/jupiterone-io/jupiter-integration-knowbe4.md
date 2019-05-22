@@ -1,12 +1,11 @@
-# Example
+# KnowBe4
 
 ## Overview
 
-JupiterOne provides a managed integration with Example Provider. The integration
-connects directly to Example Provider APIs to obtain account metadata and
-analyze resource relationships. Customers authorize access by creating an API
-token in their target Example Provider account and providing that credential to
-JupiterOne.
+JupiterOne provides a managed integration with KnowBe4. The integration connects
+directly to KnowBe4 APIs to obtain account metadata and analyze resource
+relationships. Customers authorize access by ... and providing that credential
+to JupiterOne.
 
 ## Integration Instance Configuration
 
