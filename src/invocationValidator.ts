@@ -1,9 +1,10 @@
 import {
+  IntegrationInstanceAuthenticationError,
   IntegrationInstanceConfigError,
   IntegrationValidationContext,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 
-// import ProviderClient from "./ProviderClient";
+import ProviderClient from "./ProviderClient";
 
 /**
  * Performs validation of the execution before the execution handler function is
@@ -33,9 +34,9 @@ export default async function invocationValidator(
   } else if (site.toLowerCase() !== "us" && site.toLowerCase() !== "eu") {
     throw new IntegrationInstanceConfigError("Invalid Site in config");
   }
-  // try {
-  //   await new ProviderClient(config, context.logger).fetchAccountDetails();
-  // } catch (err) {
-  //   throw new IntegrationInstanceAuthenticationError(err);
-  // }
+  try {
+    await new ProviderClient(config, context.logger).fetchAccountDetails();
+  } catch (err) {
+    throw new IntegrationInstanceAuthenticationError(err);
+  }
 }
