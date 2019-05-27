@@ -5,7 +5,7 @@ import {
 
 import { IntegrationConfig } from "./types";
 
-import request = require("request-promise-native");
+import * as request from "request-promise-native";
 
 export interface Account {
   name: string;
