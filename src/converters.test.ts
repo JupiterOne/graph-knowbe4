@@ -2,14 +2,17 @@ import {
   createAccountEntity,
   createAccountRelationships,
   createGroupEntities,
+  createTrainingEntities,
   createUserEntities,
   createUserGroupRelationships,
 } from "./converters";
-import { Account, Group, User } from "./ProviderClient";
+import { Account, Group, TrainingCampaign, User } from "./ProviderClient";
 import {
   ACCOUNT_USER_RELATIONSHIP_TYPE,
   AccountEntity,
   GroupEntity,
+  TrainingEntity,
+  TrainingModuleEntity,
   USER_GROUP_RELATIONSHIP_CLASS,
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
@@ -24,6 +27,10 @@ const userEntities: UserEntity[] = require("./test-data/user-entities.json");
 
 const groups: Group[] = require("./test-data/groups.json");
 const groupEntities: GroupEntity[] = require("./test-data/group-entities.json");
+
+const trainingCampaigns: TrainingCampaign[] = require("./test-data/training-campaigns.json");
+const trainingEntities: TrainingEntity[] = require("./test-data/training-entities.json");
+const trainingModules: TrainingModuleEntity[] = require("./test-data/training-module-entities.json");
 /* tslint:enable */
 
 test("createAccountEntity", () => {
@@ -53,11 +60,18 @@ test("createAccountRelationships", () => {
 });
 
 test("createUserEntities", () => {
-  expect(createUserEntities(users)).toEqual(userEntities);
+  expect(createUserEntities(users, accountEntity.admins)).toEqual(userEntities);
 });
 
 test("createGroupEntities", () => {
   expect(createGroupEntities(groups)).toEqual(groupEntities);
+});
+
+test("createTrainingEntities", () => {
+  expect(createTrainingEntities(trainingCampaigns)).toEqual({
+    trainingEntities,
+    trainingModules,
+  });
 });
 
 test("createUserGroupRelationships", () => {

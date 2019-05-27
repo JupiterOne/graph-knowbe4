@@ -2,7 +2,13 @@ import { IntegrationExecutionContext } from "@jupiterone/jupiter-managed-integra
 
 import executionHandler from "./executionHandler";
 import initializeContext from "./initializeContext";
-import { Account, Group, User } from "./ProviderClient";
+import {
+  Account,
+  Group,
+  TrainingCampaign,
+  TrainingEnrollment,
+  User,
+} from "./ProviderClient";
 import {
   GROUP_ENTITY_TYPE,
   USER_ENTITY_TYPE,
@@ -15,6 +21,8 @@ jest.mock("./initializeContext");
 const account: Account = require("./test-data/account.json");
 const users: User[] = require("./test-data/users.json");
 const groups: Group[] = require("./test-data/groups.json");
+const training: TrainingCampaign[] = require("./test-data/training-campaigns.json");
+const trainingEnrollments: TrainingEnrollment[] = require("./test-data/training-enrollments.json");
 /* tslint:enable */
 
 test("executionHandler", async () => {
@@ -32,6 +40,10 @@ test("executionHandler", async () => {
       fetchAccountDetails: jest.fn().mockResolvedValue(account),
       fetchGroups: jest.fn().mockResolvedValue(groups),
       fetchUsers: jest.fn().mockResolvedValue(users),
+      fetchTraining: jest.fn().mockResolvedValue(training),
+      fetchTrainingEnrollments: jest
+        .fn()
+        .mockResolvedValue(trainingEnrollments),
     },
   };
 
@@ -58,8 +70,8 @@ test("executionHandler", async () => {
   expect(executionContext.provider.fetchUsers).toHaveBeenCalledTimes(1);
   expect(executionContext.provider.fetchGroups).toHaveBeenCalledTimes(1);
 
-  // account, users, groups
-  expect(executionContext.persister.processEntities).toHaveBeenCalledTimes(3);
+  // account, users, groups, training
+  expect(executionContext.persister.processEntities).toHaveBeenCalledTimes(4);
 
   // account->(users|groups), group->users
   expect(executionContext.persister.processRelationships).toHaveBeenCalledTimes(

@@ -1,0 +1,38 @@
+[
+  {
+    "_key": "knowbe4:training:campaign:3317",
+    "_type": "training_campaign",
+    "_class": "Training",
+    "displayName": "Remedial Campaign - Northwest",
+    "campaign_id": 3317,
+    "name": "Remedial Campaign - Northwest",
+    "groups": [16343],
+    "status": "Completed",
+    "modules": [19],
+    "content": [],
+    "duration_type": "Relative Duration",
+    "start_date": "2018-05-04T13:00:00.000Z",
+    "end_date": null,
+    "relative_duration": "1 week",
+    "auto_enroll": true,
+    "allow_multiple_enrollments": true
+  },
+  {
+    "_key": "knowbe4:training:campaign:3261",
+    "_type": "training_campaign",
+    "_class": "Training",
+    "displayName": "Annual Training",
+    "campaign_id": 3261,
+    "name": "Annual Training",
+    "groups": [0],
+    "status": "Completed",
+    "modules": [9, 106],
+    "content": [150],
+    "duration_type": "Specific End Date",
+    "start_date": "2018-06-26T13:00:00.000Z",
+    "end_date": "2018-07-27T03:59:00.000Z",
+    "relative_duration": null,
+    "auto_enroll": true,
+    "allow_multiple_enrollments": false
+  }
+]

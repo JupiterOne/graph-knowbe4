@@ -3,7 +3,13 @@ import {
   RelationshipFromIntegration,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 
-import { Account, Group, User } from "./ProviderClient";
+import {
+  Account,
+  Group,
+  TrainingCampaign,
+  TrainingContent,
+  User,
+} from "./ProviderClient";
 import {
   ACCOUNT_ENTITY_CLASS,
   ACCOUNT_ENTITY_TYPE,
@@ -11,6 +17,12 @@ import {
   GROUP_ENTITY_CLASS,
   GROUP_ENTITY_TYPE,
   GroupEntity,
+  TRAINING_ENTITY_CLASS,
+  TRAINING_ENTITY_TYPE,
+  TRAINING_MODULE_ENTITY_CLASS,
+  TRAINING_MODULE_ENTITY_TYPE,
+  TrainingEntity,
+  TrainingModuleEntity,
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
   USER_GROUP_RELATIONSHIP_CLASS,
@@ -40,7 +52,10 @@ export function createAccountEntity(data: Account): AccountEntity {
   };
 }
 
-export function createUserEntities(data: User[]): UserEntity[] {
+export function createUserEntities(
+  data: User[],
+  admins: number[],
+): UserEntity[] {
   return data.map(d => ({
     ...d,
     _class: USER_ENTITY_CLASS,
@@ -48,6 +63,8 @@ export function createUserEntities(data: User[]): UserEntity[] {
     _type: USER_ENTITY_TYPE,
     displayName: d.email,
     active: d.status === "active",
+    admin: admins.includes(d.id),
+    permissions: admins.includes(d.id) ? ["admin"] : [],
   }));
 }
 
@@ -59,6 +76,89 @@ export function createGroupEntities(data: Group[]): GroupEntity[] {
     _type: GROUP_ENTITY_TYPE,
     displayName: d.name,
     active: d.status === "active",
+  }));
+}
+
+export interface TrainingCollection {
+  trainingEntities: TrainingEntity[];
+  trainingModules: TrainingModuleEntity[];
+}
+
+export function createTrainingEntities(
+  data: TrainingCampaign[],
+): TrainingCollection {
+  const trainingEntities: TrainingEntity[] = [];
+  const trainingModules: TrainingModuleEntity[] = [];
+
+  data.forEach(d => {
+    trainingEntities.push(createTrainingEntity(d));
+    trainingModules.push(...createTrainingModuleEntities(d.content));
+  });
+
+  return {
+    trainingEntities,
+    trainingModules,
+  };
+}
+
+export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
+  const groups: number[] = [];
+  const modules: number[] = [];
+  const content: number[] = [];
+
+  data.groups.forEach(g => {
+    if (g.group_id !== undefined) {
+      groups.push(g.group_id);
+    }
+  });
+
+  data.modules.forEach(m => {
+    if (m.store_purchase_id !== undefined) {
+      modules.push(m.store_purchase_id);
+    }
+  });
+
+  data.content.forEach(c => {
+    if (c.policy_id !== undefined) {
+      content.push(c.policy_id);
+    }
+  });
+
+  return {
+    _class: TRAINING_ENTITY_CLASS,
+    _key: `knowbe4:training:campaign:${data.campaign_id}`,
+    _type: TRAINING_ENTITY_TYPE,
+    displayName: data.name,
+    campaign_id: data.campaign_id,
+    name: data.name,
+    status: data.status,
+    duration_type: data.duration_type,
+    start_date: data.start_date,
+    end_date: data.end_date,
+    relative_duration: data.relative_duration,
+    auto_enroll: data.auto_enroll,
+    allow_multiple_enrollments: data.allow_multiple_enrollments,
+    groups,
+    modules,
+    content,
+  };
+}
+
+export function createTrainingModuleEntities(
+  data: TrainingContent[],
+): TrainingModuleEntity[] {
+  return data.map(d => ({
+    ...d,
+    _class: TRAINING_MODULE_ENTITY_CLASS,
+    _key: `knowbe4:training:${
+      d.store_purchase_id
+        ? "purchase:" + d.store_purchase_id
+        : d.policy_id
+        ? "policy:" + d.policy_id
+        : "module:" + d.name.toLocaleLowerCase()
+    }`,
+    _type: TRAINING_MODULE_ENTITY_TYPE,
+    displayName: d.name,
   }));
 }
 
