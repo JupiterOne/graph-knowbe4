@@ -2,7 +2,14 @@ import { createTestIntegrationExecutionContext } from "@jupiterone/jupiter-manag
 import initializeContext from "./initializeContext";
 
 test("creates provider client", () => {
-  const executionContext = createTestIntegrationExecutionContext();
+  const executionContext = createTestIntegrationExecutionContext({
+    instance: {
+      config: {
+        site: "us",
+        apiKey: "testKey",
+      },
+    },
+  });
   const integrationContext = initializeContext(executionContext);
   expect(integrationContext.provider).toBeDefined();
 });

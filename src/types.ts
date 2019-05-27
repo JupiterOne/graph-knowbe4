@@ -4,36 +4,44 @@ import {
   IntegrationExecutionContext,
   PersisterClient,
 } from "@jupiterone/jupiter-managed-integration-sdk";
-import ProviderClient from "./ProviderClient";
 
-export const ACCOUNT_ENTITY_TYPE = "provider_account";
+import ProviderClient, { Group, User } from "./ProviderClient";
+
+export const ACCOUNT_ENTITY_TYPE = "knowbe4_account";
 export const ACCOUNT_ENTITY_CLASS = "Account";
 
-export const USER_ENTITY_TYPE = "provider_user";
+export const USER_ENTITY_TYPE = "knowbe4_user";
 export const USER_ENTITY_CLASS = "User";
-export const ACCOUNT_USER_RELATIONSHIP_TYPE = "provider_account_user";
+export const ACCOUNT_USER_RELATIONSHIP_TYPE = "knowbe4_account_has_user";
 
-export const DEVICE_ENTITY_TYPE = "provider_device";
-export const DEVICE_ENTITY_CLASS = "Device";
-export const ACCOUNT_DEVICE_RELATIONSHIP_TYPE = "provider_account_device";
+export const GROUP_ENTITY_TYPE = "knowbe4_user_group";
+export const GROUP_ENTITY_CLASS = "UserGroup";
+export const ACCOUNT_GROUP_RELATIONSHIP_TYPE = "knowbe4_account_has_user_group";
 
-export const USER_DEVICE_RELATIONSHIP_TYPE = "provider_user_device";
-export const USER_DEVICE_RELATIONSHIP_CLASS = "HAS";
+export const USER_GROUP_RELATIONSHIP_TYPE = "knowbe4_user_group_membership";
+export const USER_GROUP_RELATIONSHIP_CLASS = "HAS";
+
+export interface IntegrationConfig {
+  apiKey: string;
+  site: string;
+}
 
 export interface AccountEntity extends EntityFromIntegration {
-  accountId: string;
+  name: string;
+  type: string;
+  domains: string[];
+  admins: number[];
+  subscription_level: string;
+  subscription_end_date: string;
+  number_of_seats: number;
+  current_risk_score: number;
 }
 
-export interface UserEntity extends EntityFromIntegration {
-  userId: string;
-}
+export interface UserEntity extends EntityFromIntegration, User {}
 
-export interface DeviceEntity extends EntityFromIntegration {
-  deviceId: string;
-  ownerId: string;
-}
+export interface GroupEntity extends EntityFromIntegration, Group {}
 
-export interface ExampleExecutionContext extends IntegrationExecutionContext {
+export interface ExecutionContext extends IntegrationExecutionContext {
   graph: GraphClient;
   persister: PersisterClient;
   provider: ProviderClient;
