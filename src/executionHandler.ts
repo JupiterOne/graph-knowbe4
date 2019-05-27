@@ -2,24 +2,25 @@ import {
   IntegrationExecutionContext,
   IntegrationExecutionResult,
 } from "@jupiterone/jupiter-managed-integration-sdk";
+
 import {
   createAccountEntity,
   createAccountRelationships,
-  createDeviceEntities,
-  createUserDeviceRelationships,
+  createGroupEntities,
   createUserEntities,
+  createUserGroupRelationships,
 } from "./converters";
 import initializeContext from "./initializeContext";
 import ProviderClient from "./ProviderClient";
 import {
-  ACCOUNT_DEVICE_RELATIONSHIP_TYPE,
   ACCOUNT_ENTITY_TYPE,
+  ACCOUNT_GROUP_RELATIONSHIP_TYPE,
   ACCOUNT_USER_RELATIONSHIP_TYPE,
   AccountEntity,
-  DEVICE_ENTITY_TYPE,
-  DeviceEntity,
-  USER_DEVICE_RELATIONSHIP_TYPE,
+  GROUP_ENTITY_TYPE,
+  GroupEntity,
   USER_ENTITY_TYPE,
+  USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
 } from "./types";
 
@@ -31,24 +32,24 @@ export default async function executionHandler(
   const [
     oldAccountEntities,
     oldUserEntities,
-    oldDeviceEntities,
+    oldGroupEntities,
     oldAccountRelationships,
-    oldUserDeviceRelationships,
+    oldUserGroupRelationships,
     newAccountEntities,
     newUserEntities,
-    newDeviceEntities,
+    newGroupEntities,
   ] = await Promise.all([
     graph.findEntitiesByType<AccountEntity>(ACCOUNT_ENTITY_TYPE),
     graph.findEntitiesByType<UserEntity>(USER_ENTITY_TYPE),
-    graph.findEntitiesByType<DeviceEntity>(DEVICE_ENTITY_TYPE),
+    graph.findEntitiesByType<GroupEntity>(GROUP_ENTITY_TYPE),
     graph.findRelationshipsByType([
       ACCOUNT_USER_RELATIONSHIP_TYPE,
-      ACCOUNT_DEVICE_RELATIONSHIP_TYPE,
+      ACCOUNT_GROUP_RELATIONSHIP_TYPE,
     ]),
-    graph.findRelationshipsByType(USER_DEVICE_RELATIONSHIP_TYPE),
+    graph.findRelationshipsByType(USER_GROUP_RELATIONSHIP_TYPE),
     fetchAccountEntitiesFromProvider(provider),
     fetchUserEntitiesFromProvider(provider),
-    fetchDeviceEntitiesFromProvider(provider),
+    fetchGroupEntitiesFromProvider(provider),
   ]);
 
   const [accountEntity] = newAccountEntities;
@@ -60,14 +61,14 @@ export default async function executionHandler(
     ),
     ...createAccountRelationships(
       accountEntity,
-      newDeviceEntities,
-      ACCOUNT_DEVICE_RELATIONSHIP_TYPE,
+      newGroupEntities,
+      ACCOUNT_GROUP_RELATIONSHIP_TYPE,
     ),
   ];
 
-  const newUserDeviceRelationships = createUserDeviceRelationships(
+  const newUserGroupRelationships = createUserGroupRelationships(
     newUserEntities,
-    newDeviceEntities,
+    newGroupEntities,
   );
 
   return {
@@ -75,12 +76,12 @@ export default async function executionHandler(
       [
         ...persister.processEntities(oldAccountEntities, newAccountEntities),
         ...persister.processEntities(oldUserEntities, newUserEntities),
-        ...persister.processEntities(oldDeviceEntities, newDeviceEntities),
+        ...persister.processEntities(oldGroupEntities, newGroupEntities),
       ],
       [
         ...persister.processRelationships(
-          oldUserDeviceRelationships,
-          newUserDeviceRelationships,
+          oldUserGroupRelationships,
+          newUserGroupRelationships,
         ),
         ...persister.processRelationships(
           oldAccountRelationships,
@@ -103,8 +104,8 @@ async function fetchUserEntitiesFromProvider(
   return createUserEntities(await provider.fetchUsers());
 }
 
-async function fetchDeviceEntitiesFromProvider(
+async function fetchGroupEntitiesFromProvider(
   provider: ProviderClient,
-): Promise<DeviceEntity[]> {
-  return createDeviceEntities(await provider.fetchDevices());
+): Promise<GroupEntity[]> {
+  return createGroupEntities(await provider.fetchGroups());
 }

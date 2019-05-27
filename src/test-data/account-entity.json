@@ -1,0 +1,14 @@
+{
+  "_key": "knowbe4:account:kb4-demo",
+  "_type": "knowbe4_account",
+  "_class": "Account",
+  "displayName": "KB4-Demo",
+  "name": "KB4-Demo",
+  "type": "paid",
+  "domains": ["kb4-demo.com"],
+  "admins": [974345],
+  "subscription_level": "Diamond",
+  "subscription_end_date": "2021-03-06",
+  "number_of_seats": 25,
+  "current_risk_score": 45.742
+}

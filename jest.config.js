@@ -21,5 +21,11 @@ module.exports = {
       functions: 100,
       lines: 100,
     },
+    "./src/invocationValidator.ts": {
+      statements: 78.57,
+      branches: 87.5,
+      functions: 100,
+      lines: 78.57,
+    },
   },
 };

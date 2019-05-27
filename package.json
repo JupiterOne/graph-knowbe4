@@ -27,7 +27,10 @@
     "format": "yarn prettier --write '**/*.{ts,js,json,md}'",
     "test": "jest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/uuid": "^3.4.4",
+    "request-promise-native": "^1.0.7"
+  },
   "peerDependencies": {
     "@jupiterone/jupiter-managed-integration-sdk": "^23.0.2"
   },
@@ -43,6 +46,7 @@
     "@types/fs-extra": "^5.0.5",
     "@types/jest": "^24.0.0",
     "@types/node": "^10.12.20",
+    "@types/request-promise-native": "^1.0.16",
     "bunyan": "^1.8.12",
     "dotenv": "^7.0.0",
     "fs-extra": "^7.0.1",

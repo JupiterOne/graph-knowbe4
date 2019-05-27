@@ -1,0 +1,56 @@
+[
+  {
+    "enrollment_id": 1525526,
+    "content_type": "Store Purchase",
+    "module_name": "Phishing Gameshow Trivia",
+    "user": {
+      "id": 796713,
+      "first_name": "John",
+      "last_name": "Blake",
+      "email": "jblake@kb4-demo.com"
+    },
+    "campaign_name": "Monthly Training",
+    "enrollment_date": "2018-06-18T19:00:14.000Z",
+    "start_date": "2018-06-18T19:49:00.000Z",
+    "completion_date": null,
+    "status": "In Progress",
+    "time_spent": 497,
+    "policy_acknowledged": false
+  },
+  {
+    "enrollment_id": 1525524,
+    "content_type": "Uploaded Policy",
+    "module_name": "Data Protection Policy",
+    "user": {
+      "id": 796706,
+      "first_name": "Bob",
+      "last_name": "Jones",
+      "email": "bjones@kb4-demo.com"
+    },
+    "campaign_name": "Compliance Policy Agreement",
+    "enrollment_date": "2018-06-18T19:00:14.000Z",
+    "start_date": null,
+    "completion_date": null,
+    "status": "Not Started",
+    "time_spent": 0,
+    "policy_acknowledged": false
+  },
+  {
+    "enrollment_id": 2525523,
+    "content_type": "Uploaded Policy",
+    "module_name": "Acceptable Use Policy",
+    "user": {
+      "id": 796702,
+      "first_name": "Sarah",
+      "last_name": "Fisher",
+      "email": "sfisher@kb4-demo.com"
+    },
+    "campaign_name": "New Employee Policies",
+    "enrollment_date": "2018-06-18T19:00:14.000Z",
+    "start_date": "2018-06-18T19:49:00.000Z",
+    "completion_date": "2018-06-18T21:49:00.000Z",
+    "status": "Passed",
+    "time_spent": 2340,
+    "policy_acknowledged": false
+  }
+]

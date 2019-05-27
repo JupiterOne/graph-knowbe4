@@ -2,49 +2,63 @@ import {
   EntityFromIntegration,
   RelationshipFromIntegration,
 } from "@jupiterone/jupiter-managed-integration-sdk";
-import { Account, Device, User } from "./ProviderClient";
+
+import { Account, Group, User } from "./ProviderClient";
 import {
   ACCOUNT_ENTITY_CLASS,
   ACCOUNT_ENTITY_TYPE,
   AccountEntity,
-  DEVICE_ENTITY_CLASS,
-  DEVICE_ENTITY_TYPE,
-  DeviceEntity,
-  USER_DEVICE_RELATIONSHIP_CLASS,
-  USER_DEVICE_RELATIONSHIP_TYPE,
+  GROUP_ENTITY_CLASS,
+  GROUP_ENTITY_TYPE,
+  GroupEntity,
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
+  USER_GROUP_RELATIONSHIP_CLASS,
+  USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
 } from "./types";
 
 export function createAccountEntity(data: Account): AccountEntity {
+  const admins = [];
+
+  for (const admin of data.admins) {
+    admins.push(admin.id);
+  }
   return {
     _class: ACCOUNT_ENTITY_CLASS,
-    _key: `provider-account-${data.id}`,
+    _key: `knowbe4:account:${data.name.toLowerCase()}`,
     _type: ACCOUNT_ENTITY_TYPE,
-    accountId: data.id,
     displayName: data.name,
+    name: data.name,
+    type: data.type,
+    domains: data.domains,
+    admins,
+    subscription_level: data.subscription_level,
+    subscription_end_date: data.subscription_end_date,
+    number_of_seats: data.number_of_seats,
+    current_risk_score: data.current_risk_score,
   };
 }
 
 export function createUserEntities(data: User[]): UserEntity[] {
   return data.map(d => ({
+    ...d,
     _class: USER_ENTITY_CLASS,
-    _key: `provider-user-${d.id}`,
+    _key: `knowbe4:user:${d.id}`,
     _type: USER_ENTITY_TYPE,
-    displayName: `${d.firstName} ${d.lastName}`,
-    userId: d.id,
+    displayName: d.email,
+    active: d.status === "active",
   }));
 }
 
-export function createDeviceEntities(data: Device[]): DeviceEntity[] {
+export function createGroupEntities(data: Group[]): GroupEntity[] {
   return data.map(d => ({
-    _class: DEVICE_ENTITY_CLASS,
-    _key: `provider-device-id-${d.id}`,
-    _type: DEVICE_ENTITY_TYPE,
-    deviceId: d.id,
-    displayName: d.manufacturer,
-    ownerId: d.ownerId,
+    ...d,
+    _class: GROUP_ENTITY_CLASS,
+    _key: `knowbe4:group:${d.id}`,
+    _type: GROUP_ENTITY_TYPE,
+    displayName: d.name,
+    active: d.status === "active",
   }));
 }
 
@@ -75,19 +89,23 @@ export function createAccountRelationship(
   };
 }
 
-export function createUserDeviceRelationships(
+export function createUserGroupRelationships(
   users: UserEntity[],
-  devices: DeviceEntity[],
+  groups: GroupEntity[],
 ) {
-  const usersById: { [id: string]: UserEntity } = {};
-  for (const user of users) {
-    usersById[user.userId] = user;
+  const groupsById: { [id: string]: GroupEntity } = {};
+  for (const group of groups) {
+    groupsById[group.id.toString()] = group;
   }
 
   const relationships = [];
-  for (const device of devices) {
-    const user = usersById[device.ownerId];
-    relationships.push(createUserDeviceRelationship(user, device));
+  for (const user of users) {
+    for (const groupId of user.groups) {
+      const group = groupsById[groupId.toString()];
+      if (group) {
+        relationships.push(createUserDeviceRelationship(user, group));
+      }
+    }
   }
 
   return relationships;
@@ -95,13 +113,13 @@ export function createUserDeviceRelationships(
 
 function createUserDeviceRelationship(
   user: UserEntity,
-  device: DeviceEntity,
+  group: GroupEntity,
 ): RelationshipFromIntegration {
   return {
-    _class: USER_DEVICE_RELATIONSHIP_CLASS,
-    _fromEntityKey: user._key,
-    _key: `${user._key}_has_${device._key}`,
-    _toEntityKey: device._key,
-    _type: USER_DEVICE_RELATIONSHIP_TYPE,
+    _class: USER_GROUP_RELATIONSHIP_CLASS,
+    _fromEntityKey: group._key,
+    _key: `${group._key}_has_${user._key}`,
+    _toEntityKey: user._key,
+    _type: USER_GROUP_RELATIONSHIP_TYPE,
   };
 }

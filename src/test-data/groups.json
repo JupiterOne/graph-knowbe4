@@ -1,0 +1,66 @@
+[
+  {
+    "id": 14804,
+    "name": "Admins",
+    "group_type": "console_group",
+    "adi_guid": null,
+    "member_count": 15,
+    "status": "active"
+  },
+  {
+    "id": 14224,
+    "name": "IT",
+    "group_type": "console_group",
+    "adi_guid": null,
+    "member_count": 4,
+    "status": "active"
+  },
+  {
+    "id": 3140,
+    "name": "Executives",
+    "group_type": "console_group",
+    "adi_guid": null,
+    "member_count": 6,
+    "status": "active"
+  },
+  {
+    "id": 3141,
+    "name": "Accounting",
+    "group_type": "adi_managed_group",
+    "adi_guid": "abc12345-6789-abc-1234-456789abc123",
+    "member_count": 10,
+    "status": "active"
+  },
+  {
+    "id": 3139,
+    "name": "Sales",
+    "group_type": "console_group",
+    "adi_guid": null,
+    "member_count": 53,
+    "status": "active"
+  },
+  {
+    "id": 7824,
+    "name": "Marketing",
+    "group_type": "console_group",
+    "adi_guid": null,
+    "member_count": 14,
+    "status": "active"
+  },
+  {
+    "id": 1759,
+    "name": "Customer Service",
+    "group_type": "console_group",
+    "adi_guid": null,
+    "member_count": 50,
+    "status": "active"
+  },
+  {
+    "id": 6276,
+    "name": "Clickers in the past 90 days",
+    "group_type": "smart_group",
+    "adi_guid": null,
+    "member_count": 20,
+    "status": "active"
+  }
+]

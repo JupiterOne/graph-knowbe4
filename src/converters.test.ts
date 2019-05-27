@@ -1,45 +1,47 @@
 import {
   createAccountEntity,
   createAccountRelationships,
-  createDeviceEntities,
-  createUserDeviceRelationships,
+  createGroupEntities,
   createUserEntities,
+  createUserGroupRelationships,
 } from "./converters";
-import { Account, Device, User } from "./ProviderClient";
+import { Account, Group, User } from "./ProviderClient";
 import {
   ACCOUNT_USER_RELATIONSHIP_TYPE,
-  DEVICE_ENTITY_CLASS,
-  DEVICE_ENTITY_TYPE,
-  USER_DEVICE_RELATIONSHIP_CLASS,
-  USER_DEVICE_RELATIONSHIP_TYPE,
-  USER_ENTITY_CLASS,
-  USER_ENTITY_TYPE,
+  AccountEntity,
+  GroupEntity,
+  USER_GROUP_RELATIONSHIP_CLASS,
+  USER_GROUP_RELATIONSHIP_TYPE,
+  UserEntity,
 } from "./types";
 
-const account: Account = {
-  id: "account-1",
-  name: "account-name",
-};
+/* tslint:disable */
+const account: Account = require("./test-data/account.json");
+const accountEntity: AccountEntity = require("./test-data/account-entity.json");
 
-const users: User[] = [
-  {
-    firstName: "fname",
-    id: "user-1",
-    lastName: "lname",
-  },
-];
+const users: User[] = require("./test-data/users.json");
+const userEntities: UserEntity[] = require("./test-data/user-entities.json");
 
-const devices: Device[] = [
-  {
-    id: "device-1",
-    manufacturer: "man-1",
-    ownerId: "user-1",
-  },
-];
+const groups: Group[] = require("./test-data/groups.json");
+const groupEntities: GroupEntity[] = require("./test-data/group-entities.json");
+/* tslint:enable */
+
+test("createAccountEntity", () => {
+  expect(createAccountEntity(account)).toEqual(accountEntity);
+});
 
 test("createAccountRelationships", () => {
-  const accountEntity = createAccountEntity(account);
-  const userEntities = createUserEntities(users);
+  const relationships = [];
+
+  for (const user of userEntities) {
+    relationships.push({
+      _class: "HAS",
+      _fromEntityKey: "knowbe4:account:kb4-demo",
+      _key: `knowbe4:account:kb4-demo_has_${user._key}`,
+      _toEntityKey: user._key,
+      _type: ACCOUNT_USER_RELATIONSHIP_TYPE,
+    });
+  }
 
   expect(
     createAccountRelationships(
@@ -47,52 +49,32 @@ test("createAccountRelationships", () => {
       userEntities,
       ACCOUNT_USER_RELATIONSHIP_TYPE,
     ),
-  ).toEqual([
-    {
-      _class: "HAS",
-      _fromEntityKey: "provider-account-account-1",
-      _key: "provider-account-account-1_has_provider-user-user-1",
-      _toEntityKey: "provider-user-user-1",
-      _type: ACCOUNT_USER_RELATIONSHIP_TYPE,
-    },
-  ]);
+  ).toEqual(relationships);
 });
 
 test("createUserEntities", () => {
-  expect(createUserEntities(users)).toEqual([
-    {
-      _class: USER_ENTITY_CLASS,
-      _key: "provider-user-user-1",
-      _type: USER_ENTITY_TYPE,
-      displayName: "fname lname",
-      userId: "user-1",
-    },
-  ]);
+  expect(createUserEntities(users)).toEqual(userEntities);
 });
 
-test("createDeviceEntities", () => {
-  expect(createDeviceEntities(devices)).toEqual([
-    {
-      _class: DEVICE_ENTITY_CLASS,
-      _key: "provider-device-id-device-1",
-      _type: DEVICE_ENTITY_TYPE,
-      deviceId: "device-1",
-      displayName: "man-1",
-      ownerId: "user-1",
-    },
-  ]);
+test("createGroupEntities", () => {
+  expect(createGroupEntities(groups)).toEqual(groupEntities);
 });
 
-test("createUserDeviceRelationships", () => {
-  const userEntities = createUserEntities(users);
-  const deviceEntities = createDeviceEntities(devices);
-  expect(createUserDeviceRelationships(userEntities, deviceEntities)).toEqual([
+test("createUserGroupRelationships", () => {
+  expect(createUserGroupRelationships(userEntities, groupEntities)).toEqual([
     {
-      _class: USER_DEVICE_RELATIONSHIP_CLASS,
-      _fromEntityKey: "provider-user-user-1",
-      _key: `provider-user-user-1_has_provider-device-id-device-1`,
-      _toEntityKey: "provider-device-id-device-1",
-      _type: USER_DEVICE_RELATIONSHIP_TYPE,
+      _class: USER_GROUP_RELATIONSHIP_CLASS,
+      _fromEntityKey: "knowbe4:group:6276",
+      _key: `knowbe4:group:6276_has_knowbe4:user:667548`,
+      _toEntityKey: "knowbe4:user:667548",
+      _type: USER_GROUP_RELATIONSHIP_TYPE,
+    },
+    {
+      _class: USER_GROUP_RELATIONSHIP_CLASS,
+      _fromEntityKey: "knowbe4:group:1759",
+      _key: `knowbe4:group:1759_has_knowbe4:user:667548`,
+      _toEntityKey: "knowbe4:user:667548",
+      _type: USER_GROUP_RELATIONSHIP_TYPE,
     },
   ]);
 });

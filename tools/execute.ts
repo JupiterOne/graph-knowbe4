@@ -3,7 +3,8 @@ import { executeIntegrationLocal } from "@jupiterone/jupiter-managed-integration
 import invocationConfig from "../src/index";
 
 const integrationConfig = {
-  // providerApiToken: process.env.PROVIDER_LOCAL_EXECUTION_API_TOKEN
+  site: process.env.KB4_SITE as string,
+  apiKey: process.env.KB4_TOKEN as string,
 };
 
 const invocationArgs = {
