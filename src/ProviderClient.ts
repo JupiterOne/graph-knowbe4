@@ -57,13 +57,72 @@ export interface User extends UserBase {
   archived_at: string | null;
 }
 
-export interface Group {
+export interface GroupBase {
   id: number;
+  group_id?: number;
   name: string;
+}
+
+export interface Group extends GroupBase {
   group_type: string;
   adi_guid: string | null;
   member_count: number;
   status: string;
+}
+
+export interface StorePurchase {
+  store_purchase_id: number;
+  content_type: string;
+  name: string;
+  description: string;
+  type: string;
+  duration: number;
+  retired: boolean;
+  retirement_date: string | null;
+  publish_date: string;
+  publisher: string;
+  purchase_date: string;
+  policy_url: string;
+}
+
+export interface UploadedPolicy {
+  policy_id: number;
+  content_type: string;
+  name: string;
+  minimum_time: number;
+  default_language: string;
+  published: boolean;
+}
+
+export interface TrainingContent extends StorePurchase, UploadedPolicy {}
+
+export interface TrainingCampaign {
+  campaign_id: number;
+  name: string;
+  groups: GroupBase[];
+  status: string;
+  modules: StorePurchase[];
+  content: TrainingContent[];
+  duration_type: string;
+  start_date: string;
+  end_date: string | null;
+  relative_duration: string | null;
+  auto_enroll: boolean;
+  allow_multiple_enrollments: boolean;
+}
+
+export interface TrainingEnrollment {
+  enrollment_id: number;
+  content_type: string;
+  module_name: string;
+  user: UserBase;
+  campaign_name: string;
+  enrollment_date: string;
+  start_date: string | null;
+  completion_date: string | null;
+  status: string;
+  time_spent: number;
+  policy_acknowledged: boolean;
 }
 
 export default class ProviderClient {
@@ -99,33 +158,19 @@ export default class ProviderClient {
   }
 
   public async fetchGroups(): Promise<Group[]> {
-    try {
-      this.logger.trace("Fetching KnowBe4 groups...");
-      const result = await this.collectAllPages("groups");
-      this.logger.trace({}, "Fetched KnowBe4 groups");
-      return result;
-    } catch (err) {
-      throw new IntegrationError({
-        cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
-      });
-    }
+    return await this.collectAllPages("groups");
   }
 
   public async fetchUsers(): Promise<User[]> {
-    try {
-      this.logger.trace("Fetching KnowBe4 users...");
-      const result = await this.collectAllPages("users");
-      this.logger.trace({}, "Fetched KnowBe4 users");
-      return result;
-    } catch (err) {
-      throw new IntegrationError({
-        cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
-      });
-    }
+    return await this.collectAllPages("users");
+  }
+
+  public async fetchTraining(): Promise<TrainingCampaign[]> {
+    return await this.collectAllPages("training/campaigns");
+  }
+
+  public async fetchTrainingEnrollments(): Promise<TrainingEnrollment[]> {
+    return await this.collectAllPages("training/enrollments");
   }
 
   private async forEachPage(
@@ -159,15 +204,25 @@ export default class ProviderClient {
     firstUri: string,
     params?: string,
   ): Promise<any[]> {
-    const results: any[] = [];
+    try {
+      this.logger.trace(`Fetching KnowBe4 ${firstUri}...`);
+      const results: any[] = [];
 
-    await this.forEachPage(firstUri, params, (page: any) => {
-      for (const item of page || []) {
-        results.push(item);
-      }
-    });
+      await this.forEachPage(firstUri, params, (page: any) => {
+        for (const item of page || []) {
+          results.push(item);
+        }
+      });
+      this.logger.trace(`Fetched KnowBe4 ${firstUri}`);
 
-    return results;
+      return results;
+    } catch (err) {
+      throw new IntegrationError({
+        cause: err,
+        expose: false,
+        message: "Error calling KnowBe4 API",
+      });
+    }
   }
 
   private async collectOnePage(path: string, params?: string): Promise<any> {

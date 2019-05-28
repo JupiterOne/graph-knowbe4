@@ -55,6 +55,9 @@
       {
         "group_id": 0,
         "name": "All Users"
+      },
+      {
+        "name": "no_group_id"
       }
     ],
     "status": "Completed",
@@ -86,6 +89,11 @@
         "publisher": "Security Awareness Company",
         "purchase_date": "2017-01-09T05:00:00.000Z",
         "policy_url": "https://www.yourcompany.com/employees/HIPAA-policy.html"
+      },
+      {
+        "x": 0,
+        "y": "Unknown",
+        "z": "Random"
       }
     ],
     "content": [
@@ -124,6 +132,11 @@
         "minimum_time": 3,
         "default_language": "en-us",
         "published": true
+      },
+      {
+        "content_id": 1,
+        "content_type": "Unknown",
+        "name": "Random"
       }
     ],
     "duration_type": "Specific End Date",

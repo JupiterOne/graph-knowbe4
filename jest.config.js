@@ -9,6 +9,7 @@ module.exports = {
     "src/**/*.ts",
     "!src/index.ts",
     "!src/ProviderClient.ts",
+    "!src/util/*",
   ],
   moduleFileExtensions: [...defaults.moduleFileExtensions, "ts"],
   testEnvironment: "node",
@@ -26,6 +27,12 @@ module.exports = {
       branches: 87.5,
       functions: 100,
       lines: 78.57,
+    },
+    "./src/converters.ts": {
+      statements: 93.07,
+      branches: 77.27,
+      functions: 88,
+      lines: 92.86,
     },
   },
 };

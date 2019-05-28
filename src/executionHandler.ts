@@ -7,8 +7,13 @@ import {
   createAccountEntity,
   createAccountRelationships,
   createGroupEntities,
+  createTrainingEnrollmentRelationships,
+  createTrainingEntities,
+  createTrainingGroupRelationships,
+  createTrainingModuleRelationships,
   createUserEntities,
   createUserGroupRelationships,
+  TrainingCollection,
 } from "./converters";
 import initializeContext from "./initializeContext";
 import ProviderClient from "./ProviderClient";
@@ -19,6 +24,12 @@ import {
   AccountEntity,
   GROUP_ENTITY_TYPE,
   GroupEntity,
+  TRAINING_COMPLETION_RELATIONSHIP_TYPE,
+  TRAINING_ENROLLMENT_RELATIONSHIP_TYPE,
+  TRAINING_ENTITY_TYPE,
+  TRAINING_GROUP_RELATIONSHIP_TYPE,
+  TRAINING_MODULE_ENTITY_TYPE,
+  TRAINING_MODULE_RELATIONSHIP_TYPE,
   USER_ENTITY_TYPE,
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
@@ -29,30 +40,50 @@ export default async function executionHandler(
 ): Promise<IntegrationExecutionResult> {
   const { graph, persister, provider } = initializeContext(context);
 
+  const accountEntity = await fetchAccountEntitiesFromProvider(provider);
+  const newAccountEntities = [accountEntity];
+
   const [
     oldAccountEntities,
     oldUserEntities,
     oldGroupEntities,
+    oldTrainingEntities,
     oldAccountRelationships,
+    oldTrainingEnrollmentRelationships,
+    oldTrainingModuleRelationships,
+    oldTrainingGroupRelationships,
     oldUserGroupRelationships,
-    newAccountEntities,
-    newUserEntities,
-    newGroupEntities,
   ] = await Promise.all([
     graph.findEntitiesByType<AccountEntity>(ACCOUNT_ENTITY_TYPE),
     graph.findEntitiesByType<UserEntity>(USER_ENTITY_TYPE),
     graph.findEntitiesByType<GroupEntity>(GROUP_ENTITY_TYPE),
+    graph.findEntitiesByType([
+      TRAINING_ENTITY_TYPE,
+      TRAINING_MODULE_ENTITY_TYPE,
+    ]),
     graph.findRelationshipsByType([
       ACCOUNT_USER_RELATIONSHIP_TYPE,
       ACCOUNT_GROUP_RELATIONSHIP_TYPE,
     ]),
+    graph.findRelationshipsByType([
+      TRAINING_ENROLLMENT_RELATIONSHIP_TYPE,
+      TRAINING_COMPLETION_RELATIONSHIP_TYPE,
+    ]),
+    graph.findRelationshipsByType(TRAINING_MODULE_RELATIONSHIP_TYPE),
+    graph.findRelationshipsByType(TRAINING_GROUP_RELATIONSHIP_TYPE),
     graph.findRelationshipsByType(USER_GROUP_RELATIONSHIP_TYPE),
-    fetchAccountEntitiesFromProvider(provider),
-    fetchUserEntitiesFromProvider(provider),
-    fetchGroupEntitiesFromProvider(provider),
   ]);
 
-  const [accountEntity] = newAccountEntities;
+  const [
+    newUserEntities,
+    newGroupEntities,
+    newTrainingCollection,
+  ] = await Promise.all([
+    fetchUserEntitiesFromProvider(provider, accountEntity.admins),
+    fetchGroupEntitiesFromProvider(provider),
+    fetchTrainingEntitiesFromProvider(provider),
+  ]);
+
   const newAccountRelationships = [
     ...createAccountRelationships(
       accountEntity,
@@ -66,6 +97,22 @@ export default async function executionHandler(
     ),
   ];
 
+  const newTrainingEnrollmentRelationships = createTrainingEnrollmentRelationships(
+    await provider.fetchTrainingEnrollments(),
+    newTrainingCollection.trainingModules,
+    newUserEntities,
+  );
+
+  const newTrainingModuleRelationships = createTrainingModuleRelationships(
+    newTrainingCollection.trainingEntities,
+    newTrainingCollection.trainingModules,
+  );
+
+  const newTrainingGroupRelationships = createTrainingGroupRelationships(
+    newTrainingCollection.trainingEntities,
+    newGroupEntities,
+  );
+
   const newUserGroupRelationships = createUserGroupRelationships(
     newUserEntities,
     newGroupEntities,
@@ -77,6 +124,10 @@ export default async function executionHandler(
         ...persister.processEntities(oldAccountEntities, newAccountEntities),
         ...persister.processEntities(oldUserEntities, newUserEntities),
         ...persister.processEntities(oldGroupEntities, newGroupEntities),
+        ...persister.processEntities(oldTrainingEntities, [
+          ...newTrainingCollection.trainingEntities,
+          ...newTrainingCollection.trainingModules,
+        ]),
       ],
       [
         ...persister.processRelationships(
@@ -87,6 +138,18 @@ export default async function executionHandler(
           oldAccountRelationships,
           newAccountRelationships,
         ),
+        ...persister.processRelationships(
+          oldTrainingEnrollmentRelationships,
+          newTrainingEnrollmentRelationships,
+        ),
+        ...persister.processRelationships(
+          oldTrainingModuleRelationships,
+          newTrainingModuleRelationships,
+        ),
+        ...persister.processRelationships(
+          oldTrainingGroupRelationships,
+          newTrainingGroupRelationships,
+        ),
       ],
     ]),
   };
@@ -94,18 +157,25 @@ export default async function executionHandler(
 
 async function fetchAccountEntitiesFromProvider(
   provider: ProviderClient,
-): Promise<AccountEntity[]> {
-  return [createAccountEntity(await provider.fetchAccountDetails())];
+): Promise<AccountEntity> {
+  return createAccountEntity(await provider.fetchAccountDetails());
 }
 
 async function fetchUserEntitiesFromProvider(
   provider: ProviderClient,
+  admins: number[],
 ): Promise<UserEntity[]> {
-  return createUserEntities(await provider.fetchUsers());
+  return createUserEntities(await provider.fetchUsers(), admins);
 }
 
 async function fetchGroupEntitiesFromProvider(
   provider: ProviderClient,
 ): Promise<GroupEntity[]> {
   return createGroupEntities(await provider.fetchGroups());
+}
+
+async function fetchTrainingEntitiesFromProvider(
+  provider: ProviderClient,
+): Promise<TrainingCollection> {
+  return createTrainingEntities(await provider.fetchTraining());
 }
