@@ -8,6 +8,7 @@ import {
   createAccountRelationships,
   createGroupEntities,
   createTrainingEntities,
+  createTrainingGroupRelationships,
   createTrainingModuleRelationships,
   createUserEntities,
   createUserGroupRelationships,
@@ -23,6 +24,7 @@ import {
   GROUP_ENTITY_TYPE,
   GroupEntity,
   TRAINING_ENTITY_TYPE,
+  TRAINING_GROUP_RELATIONSHIP_TYPE,
   TRAINING_MODULE_ENTITY_TYPE,
   TRAINING_MODULE_RELATIONSHIP_TYPE,
   USER_ENTITY_TYPE,
@@ -45,10 +47,8 @@ export default async function executionHandler(
     oldTrainingEntities,
     oldAccountRelationships,
     oldTrainingModuleRelationships,
+    oldTrainingGroupRelationships,
     oldUserGroupRelationships,
-    newUserEntities,
-    newGroupEntities,
-    newTrainingCollection,
   ] = await Promise.all([
     graph.findEntitiesByType<AccountEntity>(ACCOUNT_ENTITY_TYPE),
     graph.findEntitiesByType<UserEntity>(USER_ENTITY_TYPE),
@@ -62,7 +62,15 @@ export default async function executionHandler(
       ACCOUNT_GROUP_RELATIONSHIP_TYPE,
     ]),
     graph.findRelationshipsByType(TRAINING_MODULE_RELATIONSHIP_TYPE),
+    graph.findRelationshipsByType(TRAINING_GROUP_RELATIONSHIP_TYPE),
     graph.findRelationshipsByType(USER_GROUP_RELATIONSHIP_TYPE),
+  ]);
+
+  const [
+    newUserEntities,
+    newGroupEntities,
+    newTrainingCollection,
+  ] = await Promise.all([
     fetchUserEntitiesFromProvider(provider, accountEntity.admins),
     fetchGroupEntitiesFromProvider(provider),
     fetchTrainingEntitiesFromProvider(provider),
@@ -84,6 +92,11 @@ export default async function executionHandler(
   const newTrainingModuleRelationships = createTrainingModuleRelationships(
     newTrainingCollection.trainingEntities,
     newTrainingCollection.trainingModules,
+  );
+
+  const newTrainingGroupRelationships = createTrainingGroupRelationships(
+    newTrainingCollection.trainingEntities,
+    newGroupEntities,
   );
 
   const newUserGroupRelationships = createUserGroupRelationships(
@@ -114,6 +127,10 @@ export default async function executionHandler(
         ...persister.processRelationships(
           oldTrainingModuleRelationships,
           newTrainingModuleRelationships,
+        ),
+        ...persister.processRelationships(
+          oldTrainingGroupRelationships,
+          newTrainingGroupRelationships,
         ),
       ],
     ]),

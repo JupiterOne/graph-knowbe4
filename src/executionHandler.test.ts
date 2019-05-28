@@ -73,9 +73,9 @@ test("executionHandler", async () => {
   // account, users, groups, training
   expect(executionContext.persister.processEntities).toHaveBeenCalledTimes(4);
 
-  // account->(users|groups), group->users, training->module
+  // account->(users|groups), group->users, training->module, training->group
   expect(executionContext.persister.processRelationships).toHaveBeenCalledTimes(
-    3,
+    4,
   );
 
   expect(

@@ -19,6 +19,8 @@ import {
   GroupEntity,
   TRAINING_ENTITY_CLASS,
   TRAINING_ENTITY_TYPE,
+  TRAINING_GROUP_RELATIONSHIP_CLASS,
+  TRAINING_GROUP_RELATIONSHIP_TYPE,
   TRAINING_MODULE_ENTITY_CLASS,
   TRAINING_MODULE_ENTITY_TYPE,
   TRAINING_MODULE_RELATIONSHIP_CLASS,
@@ -211,7 +213,7 @@ export function createUserGroupRelationships(
     for (const groupId of user.groups) {
       const group = groupsById[groupId.toString()];
       if (group) {
-        relationships.push(createUserDeviceRelationship(user, group));
+        relationships.push(createUserGroupRelationship(user, group));
       }
     }
   }
@@ -219,7 +221,7 @@ export function createUserGroupRelationships(
   return relationships;
 }
 
-function createUserDeviceRelationship(
+function createUserGroupRelationship(
   user: UserEntity,
   group: GroupEntity,
 ): RelationshipFromIntegration {
@@ -267,5 +269,40 @@ function createTrainingModuleRelationship(
     _key: `${t._key}_has_${m._key}`,
     _toEntityKey: m._key,
     _type: TRAINING_MODULE_RELATIONSHIP_TYPE,
+  };
+}
+
+export function createTrainingGroupRelationships(
+  trainings: TrainingEntity[],
+  groups: GroupEntity[],
+) {
+  const groupsById: { [id: string]: GroupEntity } = {};
+  for (const group of groups) {
+    groupsById[group.id.toString()] = group;
+  }
+
+  const relationships = [];
+  for (const t of trainings) {
+    for (const item of t.groups) {
+      const g = groupsById[item.toString()];
+      if (g) {
+        relationships.push(createTrainingGroupRelationship(t, g));
+      }
+    }
+  }
+
+  return relationships;
+}
+
+function createTrainingGroupRelationship(
+  training: TrainingEntity,
+  group: GroupEntity,
+): RelationshipFromIntegration {
+  return {
+    _class: TRAINING_GROUP_RELATIONSHIP_CLASS,
+    _fromEntityKey: training._key,
+    _key: `${training._key}_assigned_${group._key}`,
+    _toEntityKey: group._key,
+    _type: TRAINING_GROUP_RELATIONSHIP_TYPE,
   };
 }
