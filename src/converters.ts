@@ -21,6 +21,8 @@ import {
   TRAINING_ENTITY_TYPE,
   TRAINING_MODULE_ENTITY_CLASS,
   TRAINING_MODULE_ENTITY_TYPE,
+  TRAINING_MODULE_RELATIONSHIP_CLASS,
+  TRAINING_MODULE_RELATIONSHIP_TYPE,
   TrainingEntity,
   TrainingModuleEntity,
   USER_ENTITY_CLASS,
@@ -150,16 +152,22 @@ export function createTrainingModuleEntities(
   return data.map(d => ({
     ...d,
     _class: TRAINING_MODULE_ENTITY_CLASS,
-    _key: `knowbe4:training:${
-      d.store_purchase_id
-        ? "purchase:" + d.store_purchase_id
-        : d.policy_id
-        ? "policy:" + d.policy_id
-        : "module:" + d.name.toLocaleLowerCase()
-    }`,
+    _key: createTrainingModuleKey(d),
     _type: TRAINING_MODULE_ENTITY_TYPE,
     displayName: d.name,
   }));
+}
+
+function createTrainingModuleKey(
+  d: Partial<TrainingContent | TrainingModuleEntity>,
+) {
+  return `knowbe4:training:${
+    d.store_purchase_id
+      ? "purchase:" + d.store_purchase_id
+      : d.policy_id
+      ? "policy:" + d.policy_id
+      : "module:" + (d.name as string).toLowerCase()
+  }`;
 }
 
 export function createAccountRelationships(
@@ -221,5 +229,43 @@ function createUserDeviceRelationship(
     _key: `${group._key}_has_${user._key}`,
     _toEntityKey: user._key,
     _type: USER_GROUP_RELATIONSHIP_TYPE,
+  };
+}
+
+export function createTrainingModuleRelationships(
+  trainings: TrainingEntity[],
+  modules: TrainingModuleEntity[],
+) {
+  const modulesByKey: { [key: string]: TrainingModuleEntity } = {};
+  for (const m of modules) {
+    modulesByKey[m._key] = m;
+  }
+
+  const relationships = [];
+  for (const t of trainings) {
+    for (const item of t.content) {
+      const m = modulesByKey[createTrainingModuleKey({ policy_id: item })];
+      relationships.push(createTrainingModuleRelationship(t, m));
+    }
+    for (const item of t.modules) {
+      const m =
+        modulesByKey[createTrainingModuleKey({ store_purchase_id: item })];
+      relationships.push(createTrainingModuleRelationship(t, m));
+    }
+  }
+
+  return relationships;
+}
+
+function createTrainingModuleRelationship(
+  t: TrainingEntity,
+  m: TrainingModuleEntity,
+): RelationshipFromIntegration {
+  return {
+    _class: TRAINING_MODULE_RELATIONSHIP_CLASS,
+    _fromEntityKey: t._key,
+    _key: `${t._key}_has_${m._key}`,
+    _toEntityKey: m._key,
+    _type: TRAINING_MODULE_RELATIONSHIP_TYPE,
   };
 }

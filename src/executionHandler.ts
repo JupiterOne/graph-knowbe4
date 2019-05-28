@@ -1,5 +1,4 @@
 import {
-  EntityFromIntegration,
   IntegrationExecutionContext,
   IntegrationExecutionResult,
 } from "@jupiterone/jupiter-managed-integration-sdk";
@@ -9,6 +8,7 @@ import {
   createAccountRelationships,
   createGroupEntities,
   createTrainingEntities,
+  createTrainingModuleRelationships,
   createUserEntities,
   createUserGroupRelationships,
   TrainingCollection,
@@ -24,6 +24,7 @@ import {
   GroupEntity,
   TRAINING_ENTITY_TYPE,
   TRAINING_MODULE_ENTITY_TYPE,
+  TRAINING_MODULE_RELATIONSHIP_TYPE,
   USER_ENTITY_TYPE,
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
@@ -43,10 +44,11 @@ export default async function executionHandler(
     oldGroupEntities,
     oldTrainingEntities,
     oldAccountRelationships,
+    oldTrainingModuleRelationships,
     oldUserGroupRelationships,
     newUserEntities,
     newGroupEntities,
-    newTrainingEntities,
+    newTrainingCollection,
   ] = await Promise.all([
     graph.findEntitiesByType<AccountEntity>(ACCOUNT_ENTITY_TYPE),
     graph.findEntitiesByType<UserEntity>(USER_ENTITY_TYPE),
@@ -59,6 +61,7 @@ export default async function executionHandler(
       ACCOUNT_USER_RELATIONSHIP_TYPE,
       ACCOUNT_GROUP_RELATIONSHIP_TYPE,
     ]),
+    graph.findRelationshipsByType(TRAINING_MODULE_RELATIONSHIP_TYPE),
     graph.findRelationshipsByType(USER_GROUP_RELATIONSHIP_TYPE),
     fetchUserEntitiesFromProvider(provider, accountEntity.admins),
     fetchGroupEntitiesFromProvider(provider),
@@ -78,6 +81,11 @@ export default async function executionHandler(
     ),
   ];
 
+  const newTrainingModuleRelationships = createTrainingModuleRelationships(
+    newTrainingCollection.trainingEntities,
+    newTrainingCollection.trainingModules,
+  );
+
   const newUserGroupRelationships = createUserGroupRelationships(
     newUserEntities,
     newGroupEntities,
@@ -89,7 +97,10 @@ export default async function executionHandler(
         ...persister.processEntities(oldAccountEntities, newAccountEntities),
         ...persister.processEntities(oldUserEntities, newUserEntities),
         ...persister.processEntities(oldGroupEntities, newGroupEntities),
-        ...persister.processEntities(oldTrainingEntities, newTrainingEntities),
+        ...persister.processEntities(oldTrainingEntities, [
+          ...newTrainingCollection.trainingEntities,
+          ...newTrainingCollection.trainingModules,
+        ]),
       ],
       [
         ...persister.processRelationships(
@@ -99,6 +110,10 @@ export default async function executionHandler(
         ...persister.processRelationships(
           oldAccountRelationships,
           newAccountRelationships,
+        ),
+        ...persister.processRelationships(
+          oldTrainingModuleRelationships,
+          newTrainingModuleRelationships,
         ),
       ],
     ]),
@@ -126,9 +141,6 @@ async function fetchGroupEntitiesFromProvider(
 
 async function fetchTrainingEntitiesFromProvider(
   provider: ProviderClient,
-): Promise<EntityFromIntegration[]> {
-  const collection: TrainingCollection = createTrainingEntities(
-    await provider.fetchTraining(),
-  );
-  return [...collection.trainingEntities, ...collection.trainingModules];
+): Promise<TrainingCollection> {
+  return createTrainingEntities(await provider.fetchTraining());
 }

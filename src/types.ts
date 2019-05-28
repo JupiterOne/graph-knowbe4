@@ -27,6 +27,9 @@ export const TRAINING_ENTITY_CLASS = "Training";
 export const TRAINING_MODULE_ENTITY_TYPE = "training_module";
 export const TRAINING_MODULE_ENTITY_CLASS = ["Training", "Module"];
 
+export const TRAINING_MODULE_RELATIONSHIP_TYPE = "training_has_module";
+export const TRAINING_MODULE_RELATIONSHIP_CLASS = "HAS";
+
 export interface IntegrationConfig {
   apiKey: string;
   site: string;
