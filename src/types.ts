@@ -3,6 +3,7 @@ import {
   GraphClient,
   IntegrationExecutionContext,
   PersisterClient,
+  RelationshipFromIntegration,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 
 import ProviderClient, { Group, User } from "./ProviderClient";
@@ -32,6 +33,14 @@ export const TRAINING_GROUP_RELATIONSHIP_CLASS = "ASSIGNED";
 
 export const TRAINING_MODULE_RELATIONSHIP_TYPE = "training_has_module";
 export const TRAINING_MODULE_RELATIONSHIP_CLASS = "HAS";
+
+export const TRAINING_ENROLLMENT_RELATIONSHIP_TYPE =
+  "training_module_assigned_user";
+export const TRAINING_ENROLLMENT_RELATIONSHIP_CLASS = "ASSIGNED";
+
+export const TRAINING_COMPLETION_RELATIONSHIP_TYPE =
+  "user_completed_training_module";
+export const TRAINING_COMPLETION_RELATIONSHIP_CLASS = "COMPLETED";
 
 export interface IntegrationConfig {
   apiKey: string;
@@ -88,6 +97,16 @@ export interface TrainingModuleEntity extends EntityFromIntegration {
   store_purchase_id?: number;
   minimum_time?: number;
   default_language?: string;
+}
+
+export interface TrainingEnrollmentRelationship
+  extends RelationshipFromIntegration {
+  assignedOn?: number;
+  startedOn?: number;
+  completedOn?: number;
+  status: string;
+  time_spent: number;
+  policy_acknowledged: boolean;
 }
 
 export interface ExecutionContext extends IntegrationExecutionContext {

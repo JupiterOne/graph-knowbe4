@@ -8,6 +8,7 @@ import {
   Group,
   TrainingCampaign,
   TrainingContent,
+  TrainingEnrollment,
   User,
 } from "./ProviderClient";
 import {
@@ -17,6 +18,10 @@ import {
   GROUP_ENTITY_CLASS,
   GROUP_ENTITY_TYPE,
   GroupEntity,
+  TRAINING_COMPLETION_RELATIONSHIP_CLASS,
+  TRAINING_COMPLETION_RELATIONSHIP_TYPE,
+  TRAINING_ENROLLMENT_RELATIONSHIP_CLASS,
+  TRAINING_ENROLLMENT_RELATIONSHIP_TYPE,
   TRAINING_ENTITY_CLASS,
   TRAINING_ENTITY_TYPE,
   TRAINING_GROUP_RELATIONSHIP_CLASS,
@@ -25,6 +30,7 @@ import {
   TRAINING_MODULE_ENTITY_TYPE,
   TRAINING_MODULE_RELATIONSHIP_CLASS,
   TRAINING_MODULE_RELATIONSHIP_TYPE,
+  TrainingEnrollmentRelationship,
   TrainingEntity,
   TrainingModuleEntity,
   USER_ENTITY_CLASS,
@@ -33,6 +39,7 @@ import {
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
 } from "./types";
+import getTime from "./util/getTime";
 
 export function createAccountEntity(data: Account): AccountEntity {
   const admins = [];
@@ -304,5 +311,75 @@ function createTrainingGroupRelationship(
     _key: `${training._key}_assigned_${group._key}`,
     _toEntityKey: group._key,
     _type: TRAINING_GROUP_RELATIONSHIP_TYPE,
+  };
+}
+
+export function createTrainingEnrollmentRelationships(
+  enrollments: TrainingEnrollment[],
+  modules: TrainingModuleEntity[],
+  users: UserEntity[],
+) {
+  const modulesByName: { [name: string]: TrainingModuleEntity } = {};
+  for (const m of modules) {
+    modulesByName[m.name] = m;
+  }
+
+  const usersById: { [id: string]: UserEntity } = {};
+  for (const u of users) {
+    usersById[u.id.toString()] = u;
+  }
+
+  const relationships = [];
+  for (const e of enrollments) {
+    const m = modulesByName[e.module_name];
+    const u = usersById[e.user.id];
+    if (m && u) {
+      relationships.push(createTrainingEnrollmentRelationship(e, m, u));
+      if (e.status.toLowerCase() === "passed") {
+        relationships.push(createTrainingCompletionRelationship(e, m, u));
+      }
+    }
+  }
+
+  return relationships;
+}
+
+function createTrainingEnrollmentRelationship(
+  e: TrainingEnrollment,
+  m: TrainingModuleEntity,
+  u: UserEntity,
+): TrainingEnrollmentRelationship {
+  return {
+    _class: TRAINING_ENROLLMENT_RELATIONSHIP_CLASS,
+    _fromEntityKey: m._key,
+    _key: `${m._key}_assigned_${u._key}`,
+    _toEntityKey: u._key,
+    _type: TRAINING_ENROLLMENT_RELATIONSHIP_TYPE,
+    assignedOn: getTime(e.enrollment_date),
+    startedOn: getTime(e.start_date),
+    completedOn: getTime(e.completion_date),
+    status: e.status,
+    time_spent: e.time_spent,
+    policy_acknowledged: e.policy_acknowledged,
+  };
+}
+
+function createTrainingCompletionRelationship(
+  e: TrainingEnrollment,
+  m: TrainingModuleEntity,
+  u: UserEntity,
+): TrainingEnrollmentRelationship {
+  return {
+    _class: TRAINING_COMPLETION_RELATIONSHIP_CLASS,
+    _fromEntityKey: u._key,
+    _key: `${u._key}_completed_${m._key}`,
+    _toEntityKey: m._key,
+    _type: TRAINING_COMPLETION_RELATIONSHIP_TYPE,
+    assignedOn: getTime(e.enrollment_date),
+    startedOn: getTime(e.start_date),
+    completedOn: getTime(e.completion_date),
+    status: e.status,
+    time_spent: e.time_spent,
+    policy_acknowledged: e.policy_acknowledged,
   };
 }

@@ -9,6 +9,7 @@ module.exports = {
     "src/**/*.ts",
     "!src/index.ts",
     "!src/ProviderClient.ts",
+    "!src/util/*",
   ],
   moduleFileExtensions: [...defaults.moduleFileExtensions, "ts"],
   testEnvironment: "node",
@@ -16,16 +17,22 @@ module.exports = {
   collectCoverage: true,
   coverageThreshold: {
     global: {
-      statements: 96,
-      branches: 91,
-      functions: 96,
-      lines: 96,
+      statements: 100,
+      branches: 100,
+      functions: 100,
+      lines: 100,
     },
     "./src/invocationValidator.ts": {
       statements: 78.57,
       branches: 87.5,
       functions: 100,
       lines: 78.57,
+    },
+    "./src/converters.ts": {
+      statements: 93.07,
+      branches: 77.27,
+      functions: 88,
+      lines: 92.86,
     },
   },
 };
