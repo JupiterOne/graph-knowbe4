@@ -158,63 +158,19 @@ export default class ProviderClient {
   }
 
   public async fetchGroups(): Promise<Group[]> {
-    try {
-      this.logger.trace("Fetching KnowBe4 groups...");
-      const result = await this.collectAllPages("groups");
-      this.logger.trace({}, "Fetched KnowBe4 groups");
-      return result;
-    } catch (err) {
-      throw new IntegrationError({
-        cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
-      });
-    }
+    return await this.collectAllPages("groups");
   }
 
   public async fetchUsers(): Promise<User[]> {
-    try {
-      this.logger.trace("Fetching KnowBe4 users...");
-      const result = await this.collectAllPages("users");
-      this.logger.trace({}, "Fetched KnowBe4 users");
-      return result;
-    } catch (err) {
-      throw new IntegrationError({
-        cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
-      });
-    }
+    return await this.collectAllPages("users");
   }
 
   public async fetchTraining(): Promise<TrainingCampaign[]> {
-    try {
-      this.logger.trace("Fetching KnowBe4 training campaigns...");
-      const result = await this.collectAllPages("training/campaigns");
-      this.logger.trace({}, "Fetched KnowBe4 training campaigns");
-      return result;
-    } catch (err) {
-      throw new IntegrationError({
-        cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
-      });
-    }
+    return await this.collectAllPages("training/campaigns");
   }
 
   public async fetchTrainingEnrollments(): Promise<TrainingEnrollment[]> {
-    try {
-      this.logger.trace("Fetching KnowBe4 training enrollments...");
-      const result = await this.collectAllPages("training/enrollments");
-      this.logger.trace({}, "Fetched KnowBe4 training enrollments");
-      return result;
-    } catch (err) {
-      throw new IntegrationError({
-        cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
-      });
-    }
+    return await this.collectAllPages("training/enrollments");
   }
 
   private async forEachPage(
@@ -248,15 +204,25 @@ export default class ProviderClient {
     firstUri: string,
     params?: string,
   ): Promise<any[]> {
-    const results: any[] = [];
+    try {
+      this.logger.trace(`Fetching KnowBe4 ${firstUri}...`);
+      const results: any[] = [];
 
-    await this.forEachPage(firstUri, params, (page: any) => {
-      for (const item of page || []) {
-        results.push(item);
-      }
-    });
+      await this.forEachPage(firstUri, params, (page: any) => {
+        for (const item of page || []) {
+          results.push(item);
+        }
+      });
+      this.logger.trace(`Fetched KnowBe4 ${firstUri}`);
 
-    return results;
+      return results;
+    } catch (err) {
+      throw new IntegrationError({
+        cause: err,
+        expose: false,
+        message: "Error calling KnowBe4 API",
+      });
+    }
   }
 
   private async collectOnePage(path: string, params?: string): Promise<any> {
