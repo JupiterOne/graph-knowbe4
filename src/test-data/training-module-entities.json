@@ -15,7 +15,8 @@
     "publish_date": "2018-02-03T02:20:00.000Z",
     "publisher": "KnowBe4",
     "purchase_date": "2017-06-18T00:00:00.000Z",
-    "policy_url": "https://www.yourcompany.com/phishingawarenesspolicy.pdf"
+    "policy_url": "https://www.yourcompany.com/phishingawarenesspolicy.pdf",
+    "campaign": "Remedial Campaign - Northwest"
   },
   {
     "_key": "knowbe4:training:purchase:9",
@@ -33,7 +34,8 @@
     "publish_date": "2018-02-03T02:20:00.000Z",
     "publisher": "KnowBe4",
     "purchase_date": "2018-06-18T00:00:00.000Z",
-    "policy_url": "https://www.yourcompany.com/employees/acceptableusepolicy.html"
+    "policy_url": "https://www.yourcompany.com/employees/acceptableusepolicy.html",
+    "campaign": "Annual Training"
   },
   {
     "_key": "knowbe4:training:purchase:106",
@@ -51,7 +53,8 @@
     "publish_date": "2017-01-06T02:20:00.000Z",
     "publisher": "Security Awareness Company",
     "purchase_date": "2017-01-09T05:00:00.000Z",
-    "policy_url": "https://www.yourcompany.com/employees/HIPAA-policy.html"
+    "policy_url": "https://www.yourcompany.com/employees/HIPAA-policy.html",
+    "campaign": "Annual Training"
   },
   {
     "_key": "knowbe4:training:policy:150",
@@ -63,7 +66,8 @@
     "name": "Security Awareness Policy",
     "minimum_time": 3,
     "default_language": "en-us",
-    "published": true
+    "published": true,
+    "campaign": "Annual Training"
   },
   {
     "_key": "knowbe4:training:module:random",
@@ -72,6 +76,7 @@
     "displayName": "Random",
     "content_type": "Unknown",
     "content_id": 1,
-    "name": "Random"
+    "name": "Random",
+    "campaign": "Annual Training"
   }
 ]
