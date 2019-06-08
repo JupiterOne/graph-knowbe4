@@ -103,7 +103,7 @@ export function createTrainingEntities(
 
   data.forEach(d => {
     trainingEntities.push(createTrainingEntity(d));
-    trainingModules.push(...createTrainingModuleEntities(d.content));
+    trainingModules.push(...createTrainingModuleEntities(d.content, d.name));
   });
 
   return {
@@ -157,6 +157,7 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
 
 export function createTrainingModuleEntities(
   data: TrainingContent[],
+  campaign: string,
 ): TrainingModuleEntity[] {
   return data.map(d => ({
     ...d,
@@ -164,6 +165,7 @@ export function createTrainingModuleEntities(
     _key: createTrainingModuleKey(d),
     _type: TRAINING_MODULE_ENTITY_TYPE,
     displayName: d.name,
+    campaign,
   }));
 }
 
