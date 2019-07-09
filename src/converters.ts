@@ -76,6 +76,7 @@ export function createUserEntities(
     active: d.status === "active",
     admin: admins.includes(d.id),
     permissions: admins.includes(d.id) ? ["admin"] : [],
+    risk_score_history: undefined,
   }));
 }
 
@@ -87,6 +88,7 @@ export function createGroupEntities(data: Group[]): GroupEntity[] {
     _type: GROUP_ENTITY_TYPE,
     displayName: d.name,
     active: d.status === "active",
+    risk_score_history: undefined,
   }));
 }
 

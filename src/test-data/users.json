@@ -172,7 +172,13 @@
     "custom_field_3": null,
     "custom_field_4": null,
     "custom_date_1": "1979-09-16",
-    "custom_date_2": null
+    "custom_date_2": null,
+    "risk_score_history": [
+      {
+        "risk_score": 45.742,
+        "date": "2019-03-12"
+      }
+    ]
   },
   {
     "id": 974345,
