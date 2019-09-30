@@ -20,5 +20,5 @@ deploy:
   on:
     tags: true
     branch: master
-    repo: JupiterOne/jupiter-integration-knowbe4
+    repo: JupiterOne/graph-knowbe4
     node: '8'
