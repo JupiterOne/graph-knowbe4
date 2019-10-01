@@ -3,7 +3,7 @@
   "version": "0.2.4",
   "description": "A JupiterOne managed integration for https://www.knowbe4.com.",
   "main": "dist/index.js",
-  "repository": "https://github.com/JupiterOne/jupiter-integration-knowbe4",
+  "repository": "https://github.com/JupiterOne/graph-knowbe4",
   "license": "SEE LICENSE IN LICENSE",
   "files": [
     "LICENSE",
