@@ -28,7 +28,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jupiterone/jupiter-managed-integration-sdk": "25.0.0-secretsmanager.0",
+    "@jupiterone/jupiter-managed-integration-sdk": "^26.0.0",
     "@types/uuid": "^3.4.4",
     "request-promise-native": "^1.0.7"
   },
