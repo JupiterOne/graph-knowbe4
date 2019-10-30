@@ -6,7 +6,7 @@ import {
   RelationshipFromIntegration,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 
-import ProviderClient, { Group, User } from "./ProviderClient";
+import ProviderClient from "./ProviderClient";
 
 export const ACCOUNT_ENTITY_TYPE = "knowbe4_account";
 export const ACCOUNT_ENTITY_CLASS = "Account";
@@ -52,51 +52,87 @@ export interface AccountEntity extends EntityFromIntegration {
   type: string;
   domains: string[];
   admins: number[];
-  subscription_level: string;
-  subscription_end_date: string;
-  number_of_seats: number;
-  current_risk_score: number;
+  subscriptionLevel: string;
+  subscriptionEndDate: string;
+  numberOfSeats: number;
+  currentRiskScore: number;
 }
 
-export interface UserEntity extends EntityFromIntegration, User {
+export interface UserEntity extends EntityFromIntegration {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
   admin?: boolean;
   permissions?: string[];
+  employeeNumber: string | null;
+  jobTitle: string | null;
+  phishPronePercentage: number | null;
+  phoneNumber: string | null;
+  extension: string | null;
+  mobilePhoneNumber: string | null;
+  location: string | null;
+  division: string | null;
+  managerName: string | null;
+  managerEmail: string | null;
+  adiManageable: boolean | null;
+  adiGuid: string | null;
+  groups: number[];
+  aliases: string[] | null;
+  joinedOn: string | null;
+  lastSignIn: string | null;
+  status: string | null;
+  organization: string | null;
+  department: string | null;
+  language: string | null;
+  comment: string | null;
+  employeeStartDate: string | null;
+  archivedAt: string | null;
 }
 
-export interface GroupEntity extends EntityFromIntegration, Group {}
+export interface GroupEntity extends EntityFromIntegration {
+  id: number;
+  groupId?: number;
+  name: string;
+  groupType: string;
+  adiGuid: string | null;
+  memberCount: number;
+  status: string;
+}
 
 export interface TrainingEntity extends EntityFromIntegration {
-  campaign_id: number;
+  id: number;
+  campaignId: number;
   name: string;
   groups: number[];
   status: string;
   modules: number[];
   content: number[];
-  duration_type: string;
-  start_date: string;
-  end_date: string | null;
-  relative_duration: string | null;
-  auto_enroll: boolean;
-  allow_multiple_enrollments: boolean;
+  durationType: string;
+  startDate: string;
+  endDate: string | null;
+  duration: string | null;
+  autoEnroll: boolean;
+  allowMultipleEnrollments: boolean;
 }
 
 export interface TrainingModuleEntity extends EntityFromIntegration {
-  content_type: string;
+  contentType: string;
   name: string;
   description?: string;
   type?: string;
   duration?: number;
   retired?: boolean;
-  retirement_date?: string | null;
-  publish_date?: string;
+  retirementDate?: string | null;
+  publishDate?: string;
   publisher?: string;
   published?: boolean;
-  purchase_date?: string;
-  policy_url?: string | null;
-  policy_id?: number;
-  store_purchase_id?: number;
-  minimum_time?: number;
-  default_language?: string;
+  purchaseDate?: string;
+  policyUrl?: string | null;
+  policyId?: number;
+  storePurchaseId?: number;
+  minimumTime?: number;
+  defaultLanguage?: string;
 }
 
 export interface TrainingEnrollmentRelationship
@@ -105,8 +141,8 @@ export interface TrainingEnrollmentRelationship
   startedOn?: number;
   completedOn?: number;
   status: string;
-  time_spent: number;
-  policy_acknowledged: boolean;
+  timeSpent: number;
+  policyAcknowledged: boolean;
 }
 
 export interface ExecutionContext extends IntegrationExecutionContext {
