@@ -7,8 +7,9 @@
   "type": "paid",
   "domains": ["kb4-demo.com"],
   "admins": [974345],
-  "subscription_level": "Diamond",
-  "subscription_end_date": "2021-03-06",
-  "number_of_seats": 25,
-  "current_risk_score": 45.742
+  "subscriptionLevel": "Diamond",
+  "subscriptionEndDate": "2021-03-06",
+  "numberOfSeats": 25,
+  "currentRiskScore": 45.742,
+  "riskScoreHistory": []
 }

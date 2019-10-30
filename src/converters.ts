@@ -40,6 +40,7 @@ import {
   UserEntity,
 } from "./types";
 import getTime from "./util/getTime";
+import toCamelCase from "./util/toCamelCase";
 
 export function createAccountEntity(data: Account): AccountEntity {
   const admins = [];
@@ -48,6 +49,7 @@ export function createAccountEntity(data: Account): AccountEntity {
     admins.push(admin.id);
   }
   return {
+    ...(toCamelCase(data) as any),
     _class: ACCOUNT_ENTITY_CLASS,
     _key: `knowbe4:account:${data.name.toLowerCase()}`,
     _type: ACCOUNT_ENTITY_TYPE,
@@ -56,10 +58,6 @@ export function createAccountEntity(data: Account): AccountEntity {
     type: data.type,
     domains: data.domains,
     admins,
-    subscription_level: data.subscription_level,
-    subscription_end_date: data.subscription_end_date,
-    number_of_seats: data.number_of_seats,
-    current_risk_score: data.current_risk_score,
   };
 }
 
@@ -68,7 +66,7 @@ export function createUserEntities(
   admins: number[],
 ): UserEntity[] {
   return data.map(d => ({
-    ...d,
+    ...(toCamelCase(d) as any),
     _class: USER_ENTITY_CLASS,
     _key: `knowbe4:user:${d.id}`,
     _type: USER_ENTITY_TYPE,
@@ -76,19 +74,17 @@ export function createUserEntities(
     active: d.status === "active",
     admin: admins.includes(d.id),
     permissions: admins.includes(d.id) ? ["admin"] : [],
-    risk_score_history: undefined,
   }));
 }
 
 export function createGroupEntities(data: Group[]): GroupEntity[] {
   return data.map(d => ({
-    ...d,
+    ...(toCamelCase(d) as any),
     _class: GROUP_ENTITY_CLASS,
     _key: `knowbe4:group:${d.id}`,
     _type: GROUP_ENTITY_TYPE,
     displayName: d.name,
     active: d.status === "active",
-    risk_score_history: undefined,
   }));
 }
 
@@ -138,19 +134,12 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
   });
 
   return {
+    ...(toCamelCase(data) as any),
     _class: TRAINING_ENTITY_CLASS,
     _key: `knowbe4:training:campaign:${data.campaign_id}`,
     _type: TRAINING_ENTITY_TYPE,
     displayName: data.name,
-    campaign_id: data.campaign_id,
-    name: data.name,
-    status: data.status,
-    duration_type: data.duration_type,
-    start_date: data.start_date,
-    end_date: data.end_date,
-    relative_duration: data.relative_duration,
-    auto_enroll: data.auto_enroll,
-    allow_multiple_enrollments: data.allow_multiple_enrollments,
+    id: data.campaign_id,
     groups,
     modules,
     content,
@@ -162,7 +151,7 @@ export function createTrainingModuleEntities(
   campaign: string,
 ): TrainingModuleEntity[] {
   return data.map(d => ({
-    ...d,
+    ...(toCamelCase(d) as any),
     _class: TRAINING_MODULE_ENTITY_CLASS,
     _key: createTrainingModuleKey(d),
     _type: TRAINING_MODULE_ENTITY_TYPE,
@@ -171,9 +160,7 @@ export function createTrainingModuleEntities(
   }));
 }
 
-function createTrainingModuleKey(
-  d: Partial<TrainingContent | TrainingModuleEntity>,
-) {
+function createTrainingModuleKey(d: Partial<TrainingContent>) {
   return `knowbe4:training:${
     d.store_purchase_id
       ? "purchase:" + d.store_purchase_id
@@ -363,8 +350,8 @@ function createTrainingEnrollmentRelationship(
     startedOn: getTime(e.start_date),
     completedOn: getTime(e.completion_date),
     status: e.status,
-    time_spent: e.time_spent,
-    policy_acknowledged: e.policy_acknowledged,
+    timeSpent: e.time_spent,
+    policyAcknowledged: e.policy_acknowledged,
   };
 }
 
@@ -383,7 +370,7 @@ function createTrainingCompletionRelationship(
     startedOn: getTime(e.start_date),
     completedOn: getTime(e.completion_date),
     status: e.status,
-    time_spent: e.time_spent,
-    policy_acknowledged: e.policy_acknowledged,
+    timeSpent: e.time_spent,
+    policyAcknowledged: e.policy_acknowledged,
   };
 }
