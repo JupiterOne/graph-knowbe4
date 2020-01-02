@@ -8,7 +8,7 @@
   "domains": ["kb4-demo.com"],
   "admins": [974345],
   "subscriptionLevel": "Diamond",
-  "subscriptionEndDate": "2021-03-06",
+  "subscriptionEndDate": 1614988800000,
   "numberOfSeats": 25,
   "currentRiskScore": 45.742,
   "riskScoreHistory": []

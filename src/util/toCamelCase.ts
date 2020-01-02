@@ -8,7 +8,8 @@ export default function toCamelCase(data: { [key: string]: any }): any {
       typeof value === "number" ||
       typeof value === "boolean"
     ) {
-      e[camelCase(key)] = value;
+      const propertyName = camelCase(key);
+      e[propertyName] = sanitizeValue(propertyName, value);
     } else if (Array.isArray(value)) {
       e[camelCase(key)] = value.filter(
         item =>
@@ -19,4 +20,13 @@ export default function toCamelCase(data: { [key: string]: any }): any {
     }
   }
   return e;
+}
+
+const DATE_PROPERTY_NAME = /(On|Date|SignIn)$/;
+
+function sanitizeValue(name: string, value: any): any {
+  if (DATE_PROPERTY_NAME.exec(name) && typeof value === "string") {
+    return Date.parse(value);
+  }
+  return value;
 }
