@@ -12,7 +12,7 @@
     "modules": [19],
     "content": [],
     "durationType": "Relative Duration",
-    "startDate": "2018-05-04T13:00:00.000Z",
+    "startDate": 1525438800000,
     "relativeDuration": "1 week",
     "autoEnroll": true,
     "allowMultipleEnrollments": true
@@ -30,8 +30,8 @@
     "modules": [9, 106],
     "content": [150],
     "durationType": "Specific End Date",
-    "startDate": "2018-06-26T13:00:00.000Z",
-    "endDate": "2018-07-27T03:59:00.000Z",
+    "startDate": 1530018000000,
+    "endDate": 1532663940000,
     "autoEnroll": true,
     "allowMultipleEnrollments": false
   }
