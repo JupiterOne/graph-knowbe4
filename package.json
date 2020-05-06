@@ -28,7 +28,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jupiterone/jupiter-managed-integration-sdk": "^26.0.0",
+    "@jupiterone/jupiter-managed-integration-sdk": "^33.7.5",
     "@types/uuid": "^3.4.4",
     "lodash.camelcase": "^4.3.0",
     "request-promise-native": "^1.0.7"
