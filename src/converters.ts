@@ -320,7 +320,7 @@ export function createTrainingEnrollmentRelationships(
     usersById[u.id.toString()] = u;
   }
 
-  const relationships = [];
+  const relationships: TrainingEnrollmentRelationship[] = [];
   for (const e of enrollments) {
     const m = modulesByName[e.module_name];
     const u = usersById[e.user.id];

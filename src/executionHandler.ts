@@ -1,6 +1,7 @@
 import {
   IntegrationExecutionContext,
   IntegrationExecutionResult,
+  RelationshipFromIntegration,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 
 import {
@@ -131,23 +132,23 @@ export default async function executionHandler(
       ],
       [
         ...persister.processRelationships(
-          oldUserGroupRelationships,
+          oldUserGroupRelationships as RelationshipFromIntegration[],
           newUserGroupRelationships,
         ),
         ...persister.processRelationships(
-          oldAccountRelationships,
+          oldAccountRelationships as RelationshipFromIntegration[],
           newAccountRelationships,
         ),
         ...persister.processRelationships(
-          oldTrainingEnrollmentRelationships,
+          oldTrainingEnrollmentRelationships as RelationshipFromIntegration[],
           newTrainingEnrollmentRelationships,
         ),
         ...persister.processRelationships(
-          oldTrainingModuleRelationships,
+          oldTrainingModuleRelationships as RelationshipFromIntegration[],
           newTrainingModuleRelationships,
         ),
         ...persister.processRelationships(
-          oldTrainingGroupRelationships,
+          oldTrainingGroupRelationships as RelationshipFromIntegration[],
           newTrainingGroupRelationships,
         ),
       ],
