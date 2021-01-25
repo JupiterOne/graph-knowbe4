@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-knowbe4",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "A JupiterOne managed integration for https://www.knowbe4.com.",
   "main": "dist/index.js",
   "repository": "https://github.com/JupiterOne/graph-knowbe4",
@@ -25,6 +25,7 @@
     "lint:md": "remark .",
     "lint:ts": "tslint --project .",
     "format": "yarn prettier --write '**/*.{ts,js,json,md}'",
+    "prepack": "yarn build",
     "test": "jest"
   },
   "dependencies": {
