@@ -25,6 +25,7 @@
     "lint:md": "remark .",
     "lint:ts": "tslint --project .",
     "format": "yarn prettier --write '**/*.{ts,js,json,md}'",
+    "prepack": "yarn build",
     "test": "jest"
   },
   "dependencies": {
