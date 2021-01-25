@@ -122,35 +122,47 @@ export default async function executionHandler(
   return {
     operations: await persister.publishPersisterOperations([
       [
-        ...persister.processEntities(oldAccountEntities, newAccountEntities),
-        ...persister.processEntities(oldUserEntities, newUserEntities),
-        ...persister.processEntities(oldGroupEntities, newGroupEntities),
-        ...persister.processEntities(oldTrainingEntities, [
-          ...newTrainingCollection.trainingEntities,
-          ...newTrainingCollection.trainingModules,
-        ]),
+        ...persister.processEntities({
+          oldEntities: oldAccountEntities,
+          newEntities: newAccountEntities,
+        }),
+        ...persister.processEntities({
+          oldEntities: oldUserEntities,
+          newEntities: newUserEntities,
+        }),
+        ...persister.processEntities({
+          oldEntities: oldGroupEntities,
+          newEntities: newGroupEntities,
+        }),
+        ...persister.processEntities({
+          oldEntities: oldTrainingEntities,
+          newEntities: [
+            ...newTrainingCollection.trainingEntities,
+            ...newTrainingCollection.trainingModules,
+          ],
+        }),
       ],
       [
-        ...persister.processRelationships(
-          oldUserGroupRelationships as RelationshipFromIntegration[],
-          newUserGroupRelationships,
-        ),
-        ...persister.processRelationships(
-          oldAccountRelationships as RelationshipFromIntegration[],
-          newAccountRelationships,
-        ),
-        ...persister.processRelationships(
-          oldTrainingEnrollmentRelationships as RelationshipFromIntegration[],
-          newTrainingEnrollmentRelationships,
-        ),
-        ...persister.processRelationships(
-          oldTrainingModuleRelationships as RelationshipFromIntegration[],
-          newTrainingModuleRelationships,
-        ),
-        ...persister.processRelationships(
-          oldTrainingGroupRelationships as RelationshipFromIntegration[],
-          newTrainingGroupRelationships,
-        ),
+        ...persister.processRelationships({
+          oldRelationships: oldUserGroupRelationships as RelationshipFromIntegration[],
+          newRelationships: newUserGroupRelationships,
+        }),
+        ...persister.processRelationships({
+          oldRelationships: oldAccountRelationships as RelationshipFromIntegration[],
+          newRelationships: newAccountRelationships,
+        }),
+        ...persister.processRelationships({
+          oldRelationships: oldTrainingEnrollmentRelationships as RelationshipFromIntegration[],
+          newRelationships: newTrainingEnrollmentRelationships,
+        }),
+        ...persister.processRelationships({
+          oldRelationships: oldTrainingModuleRelationships as RelationshipFromIntegration[],
+          newRelationships: newTrainingModuleRelationships,
+        }),
+        ...persister.processRelationships({
+          oldRelationships: oldTrainingGroupRelationships as RelationshipFromIntegration[],
+          newRelationships: newTrainingGroupRelationships,
+        }),
       ],
     ]),
   };
