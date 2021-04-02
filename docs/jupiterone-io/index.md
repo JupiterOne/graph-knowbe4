@@ -6,6 +6,25 @@ JupiterOne provides a managed integration with KnowBe4. The integration connects
 directly to KnowBe4 APIs to obtain account metadata and analyze resource
 relationships. You authorize access by providing an API token to the **KnowBe4 Reporting API**.
 
+## KnowBe4 + JupiterOne Integration Benefits
+
+- Visualize KnowBe4 user groups, users, training campaigns, and modules in the
+  JupiterOne graph.
+- Map KnowBe4 users and their associated trainings to the JupiterOne employee.
+- Monitor changes to user groups, users, training campaigns, and modules using
+  JupiterOne alerts.
+
+## How it Works
+
+- JupiterOne periodically fetches KnowBe4 groups, users, and trainings to update the graph.
+- Write JupiterOne queries to review and monitor updates to the graph.
+- Configure alerts to take action when the JupiterOne graph changes.
+
+## Requirements
+
+- JupiterOne requires the site for where your account is located and an API key/token.
+- You must have permission in JupiterOne to install new integrations.
+
 ## Acquiring an API Token
 You can generate a new key in your [KnowBe4 Account Settings][] under the API section.
 Be sure to request a key for the **Reporting API** not the **User Event API**
