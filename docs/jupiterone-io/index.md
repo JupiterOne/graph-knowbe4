@@ -1,10 +1,4 @@
-# KnowBe4
-
-## Overview
-
-JupiterOne provides a managed integration with KnowBe4. The integration connects
-directly to KnowBe4 APIs to obtain account metadata and analyze resource
-relationships. You authorize access by providing an API token to the **KnowBe4 Reporting API**.
+# Integration with JupiterOne
 
 ## KnowBe4 + JupiterOne Integration Benefits
 
@@ -25,18 +19,46 @@ relationships. You authorize access by providing an API token to the **KnowBe4 R
 - JupiterOne requires the site for where your account is located and an API key/token.
 - You must have permission in JupiterOne to install new integrations.
 
-## Acquiring an API Token
+## Support
+
+If you need help with this integration, please contact
+[JupiterOne Support](https://support.jupiterone.io).
+
+## Integration Walkthrough
+
+### In KnowBe4
+
 You can generate a new key in your [KnowBe4 Account Settings][] under the API section.
 Be sure to request a key for the **Reporting API** not the **User Event API**
 KnowBe4 APIs are available to Platinum and Diamond customers.
 
+### In JupiterOne
 
-## Integration Instance Configuration
+1. From the configuration **Gear Icon**, select **Integrations**.
+2. Scroll to the **KnowBe4** integration tile and click it.
+3. Click the **Add Configuration** button and configure the following settings:
+- Enter the **Account Name** by which you'd like to identify this KnowBe4
+   account in JupiterOne. Ingested entities will have this value stored in
+   `tag.AccountName` when **Tag with Account Name** is checked.
+- Enter a **Description** that will further assist your team when identifying
+   the integration instance.
+- Select a **Polling Interval** that you feel is sufficient for your monitoring
+   needs. You may leave this as `DISABLED` and manually execute the integration.
+- Enter the **Site** of your KnowBe4 account, either US or EU.
+- Enter the **API Key** configured in your KnowBe4 account.
+4. Click **Create Configuration** once all values are provided.
 
-The integration is triggered by an event containing the information for a
-specific integration instance.
+## How to Uninstall
 
-## Entities
+1. From the configuration **Gear Icon**, select **Integrations**.
+2. Scroll to the **KnowBe4** integration tile and click it.
+3. Identify and click the **integration to delete**.
+4. Click the **trash can** icon.
+5. Click the **Remove** button to delete the integration.
+
+## Data Model
+
+### Entities
 
 The following entity resources are ingested when the integration runs:
 
@@ -51,7 +73,7 @@ The following entity resources are ingested when the integration runs:
 _Note a training module from KnowBe4 can be either a "Store Purchase" or an
 "Uploaded Policy"._
 
-## Relationships
+### Relationships
 
 The following relationships are created/mapped:
 
