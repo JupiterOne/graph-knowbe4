@@ -28,9 +28,13 @@ If you need help with this integration, please contact
 
 ### In KnowBe4
 
-You can generate a new key in your [KnowBe4 Account Settings][] under the API section.
+You can generate a new key in your 
+[KnowBe4 Account Settings](https://training.knowbe4.com/account/info) 
+under the API section.
 Be sure to request a key for the **Reporting API** not the **User Event API**
-KnowBe4 APIs are available to Platinum and Diamond customers.
+KnowBe4 APIs are available to Platinum and Diamond customers. See the 
+[KnowBe4 API Reference Guide](https://developer.knowbe4.com/reporting/) for
+more info.
 
 ### In JupiterOne
 
