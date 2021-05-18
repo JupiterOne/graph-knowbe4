@@ -2,6 +2,7 @@ import {
   EntityFromIntegration,
   RelationshipFromIntegration,
 } from "@jupiterone/jupiter-managed-integration-sdk";
+import groupBy from "lodash.groupby";
 
 import {
   Account,
@@ -39,6 +40,8 @@ import {
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
 } from "./types";
+import { filterDuplicateModules } from "./util/filterDuplicateModules";
+import { findMostRelevantEnrollment } from "./util/findMostRelevantEnrollment";
 import getTime from "./util/getTime";
 import toCamelCase from "./util/toCamelCase";
 
@@ -97,16 +100,18 @@ export function createTrainingEntities(
   data: TrainingCampaign[],
 ): TrainingCollection {
   const trainingEntities: TrainingEntity[] = [];
-  const trainingModules: TrainingModuleEntity[] = [];
+  let trainingModules: TrainingModuleEntity[] = [];
 
   data.forEach(d => {
     trainingEntities.push(createTrainingEntity(d));
-    trainingModules.push(...createTrainingModuleEntities(d.content, d.name));
+    trainingModules = trainingModules.concat(
+      createTrainingModuleEntities(d.content),
+    );
   });
 
   return {
     trainingEntities,
-    trainingModules,
+    trainingModules: filterDuplicateModules(trainingModules),
   };
 }
 
@@ -148,16 +153,16 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
 
 export function createTrainingModuleEntities(
   data: TrainingContent[],
-  campaign: string,
 ): TrainingModuleEntity[] {
-  return data.map(d => ({
-    ...(toCamelCase(d) as any),
-    _class: TRAINING_MODULE_ENTITY_CLASS,
-    _key: createTrainingModuleKey(d),
-    _type: TRAINING_MODULE_ENTITY_TYPE,
-    displayName: d.name,
-    campaign,
-  }));
+  return data
+    .filter(d => !d.retired)
+    .map(d => ({
+      ...(toCamelCase(d) as any),
+      _class: TRAINING_MODULE_ENTITY_CLASS,
+      _key: createTrainingModuleKey(d),
+      _type: TRAINING_MODULE_ENTITY_TYPE,
+      displayName: d.name,
+    }));
 }
 
 function createTrainingModuleKey(d: Partial<TrainingContent>) {
@@ -321,7 +326,14 @@ export function createTrainingEnrollmentRelationships(
   }
 
   const relationships: TrainingEnrollmentRelationship[] = [];
-  for (const e of enrollments) {
+  const enrollmentsByUserIdAndModule = groupBy(
+    enrollments,
+    e => `${e.user.id}|${e.module_name}`,
+  );
+  for (const userIdModulePair of Object.keys(enrollmentsByUserIdAndModule)) {
+    const e = findMostRelevantEnrollment(
+      enrollmentsByUserIdAndModule[userIdModulePair],
+    );
     const m = modulesByName[e.module_name];
     const u = usersById[e.user.id];
     if (m && u) {
