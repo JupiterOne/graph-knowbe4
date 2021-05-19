@@ -49,6 +49,55 @@
     "allow_multiple_enrollments": true
   },
   {
+    "campaign_id": 3318,
+    "name": "Remedial Campaign - Northeast",
+    "groups": [
+      {
+        "group_id": 16343,
+        "name": "Northwest Clickers"
+      }
+    ],
+    "status": "Completed",
+    "modules": [
+      {
+        "store_purchase_id": 19,
+        "content_type": "Store Purchase",
+        "name": "2018 Kevin Mitnick Security Awareness Training - 15 min",
+        "description": "This 15-minute module is an advanced, condensed version of the full 45-minute training, often...",
+        "type": "Training Module",
+        "duration": 15,
+        "retired": false,
+        "retirement_date": null,
+        "publish_date": "2018-02-03T02:20:00.000Z",
+        "publisher": "KnowBe4",
+        "purchase_date": "2017-06-18T00:00:00.000Z",
+        "policy_url": "https://www.yourcompany.com/phishingawarenesspolicy.pdf"
+      }
+    ],
+    "content": [
+      {
+        "store_purchase_id": 19,
+        "content_type": "Store Purchase",
+        "name": "2018 Kevin Mitnick Security Awareness Training - 15 min",
+        "description": "This 15-minute module is an advanced, condensed version of the full 45-minute training, often...",
+        "type": "Training Module",
+        "duration": 15,
+        "retired": false,
+        "retirement_date": null,
+        "publish_date": "2018-02-03T02:20:00.000Z",
+        "publisher": "KnowBe4",
+        "purchase_date": "2017-06-18T00:00:00.000Z",
+        "policy_url": "https://www.yourcompany.com/phishingawarenesspolicy.pdf"
+      }
+    ],
+    "duration_type": "Relative Duration",
+    "start_date": "2018-05-04T13:00:00.000Z",
+    "end_date": null,
+    "relative_duration": "1 week",
+    "auto_enroll": true,
+    "allow_multiple_enrollments": true
+  },
+  {
     "campaign_id": 3261,
     "name": "Annual Training",
     "groups": [

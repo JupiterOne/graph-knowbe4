@@ -18,6 +18,24 @@
     "allowMultipleEnrollments": true
   },
   {
+    "_key": "knowbe4:training:campaign:3318",
+    "_type": "training_campaign",
+    "_class": "Training",
+    "displayName": "Remedial Campaign - Northeast",
+    "id": 3318,
+    "campaignId": 3318,
+    "name": "Remedial Campaign - Northeast",
+    "groups": [16343],
+    "status": "Completed",
+    "modules": [19],
+    "content": [],
+    "durationType": "Relative Duration",
+    "startDate": 1525438800000,
+    "relativeDuration": "1 week",
+    "autoEnroll": true,
+    "allowMultipleEnrollments": true
+  },
+  {
     "_key": "knowbe4:training:campaign:3261",
     "_type": "training_campaign",
     "_class": "Training",
