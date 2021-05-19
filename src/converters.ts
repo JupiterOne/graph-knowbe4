@@ -154,15 +154,13 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
 export function createTrainingModuleEntities(
   data: TrainingContent[],
 ): TrainingModuleEntity[] {
-  return data
-    .filter(d => !d.retired)
-    .map(d => ({
-      ...(toCamelCase(d) as any),
-      _class: TRAINING_MODULE_ENTITY_CLASS,
-      _key: createTrainingModuleKey(d),
-      _type: TRAINING_MODULE_ENTITY_TYPE,
-      displayName: d.name,
-    }));
+  return data.map(d => ({
+    ...(toCamelCase(d) as any),
+    _class: TRAINING_MODULE_ENTITY_CLASS,
+    _key: createTrainingModuleKey(d),
+    _type: TRAINING_MODULE_ENTITY_TYPE,
+    displayName: d.name,
+  }));
 }
 
 function createTrainingModuleKey(d: Partial<TrainingContent>) {
