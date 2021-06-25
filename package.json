@@ -28,6 +28,9 @@
   },
   "dependencies": {
     "@jupiterone/integration-sdk-core": "^6.6.0",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.groupby": "^4.6.0",
+    "lodash.maxby": "^4.6.0",
     "node-fetch": "^2.6.1",
     "request-promise-native": "^1.0.7"
   },

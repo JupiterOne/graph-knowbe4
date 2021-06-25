@@ -126,7 +126,7 @@ export interface TrainingEnrollment {
 }
 
 export default class ProviderClient {
-  private BASE_API_URL: string;
+  public BASE_API_URL: string;
   private logger: IntegrationLogger;
   private options: any;
 

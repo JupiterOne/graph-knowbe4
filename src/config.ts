@@ -62,6 +62,12 @@ export async function validateInvocation(
     );
   }
 
+  if (config.site.toLowerCase() !== "us" && config.site.toLowerCase() !== "eu") {
+    throw new IntegrationValidationError(
+      'Invalid {site} in config. Should be `us` or `eu`.',
+    );
+  }
+
   const apiClient = createAPIClient(config, context.logger);
   await apiClient.verifyAuthentication();
 }
