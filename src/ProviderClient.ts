@@ -1,11 +1,11 @@
 import {
   IntegrationError,
   IntegrationLogger,
-} from "@jupiterone/integration-sdk-core";
+} from '@jupiterone/integration-sdk-core';
 
-import { IntegrationConfig } from "./types";
+import { IntegrationConfig } from './types';
 
-import * as request from "request-promise-native";
+import * as request from 'request-promise-native';
 
 export interface Account {
   name: string;
@@ -126,7 +126,7 @@ export interface TrainingEnrollment {
 }
 
 export default class ProviderClient {
-  public BASE_API_URL: string;
+  private BASE_API_URL: string;
   private logger: IntegrationLogger;
   private options: any;
 
@@ -135,8 +135,8 @@ export default class ProviderClient {
     this.logger = logger;
     this.options = {
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         Authorization: `Bearer ${config.apiKey}`,
       },
     };
@@ -144,33 +144,37 @@ export default class ProviderClient {
 
   public async fetchAccountDetails(): Promise<Account> {
     try {
-      this.logger.trace("Fetching KnowBe4 account...");
-      const result = await this.collectOnePage("account");
-      this.logger.trace({}, "Fetched KnowBe4 account");
+      this.logger.trace('Fetching KnowBe4 account...');
+      const result = await this.collectOnePage('account');
+      this.logger.trace({}, 'Fetched KnowBe4 account');
       return JSON.parse(result);
     } catch (err) {
       throw new IntegrationError({
         cause: err,
         code: 'fail',
-        message: "Error calling KnowBe4 API",
+        message: 'Error calling KnowBe4 API',
       });
     }
   }
 
   public async fetchGroups(): Promise<Group[]> {
-    return await this.collectAllPages("groups");
+    return await this.collectAllPages('groups');
   }
 
   public async fetchUsers(): Promise<User[]> {
-    return await this.collectAllPages("users");
+    return await this.collectAllPages('users');
   }
 
   public async fetchTraining(): Promise<TrainingCampaign[]> {
-    return await this.collectAllPages("training/campaigns");
+    return await this.collectAllPages('training/campaigns');
   }
 
   public async fetchTrainingEnrollments(): Promise<TrainingEnrollment[]> {
-    return await this.collectAllPages("training/enrollments");
+    return await this.collectAllPages('training/enrollments');
+  }
+
+  public getBaseApi(): string {
+    return this.BASE_API_URL;
   }
 
   private async forEachPage(
@@ -220,7 +224,7 @@ export default class ProviderClient {
       throw new IntegrationError({
         cause: err,
         code: 'fail',
-        message: "Error calling KnowBe4 API",
+        message: 'Error calling KnowBe4 API',
       });
     }
   }

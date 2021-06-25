@@ -4,11 +4,7 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 import { IntegrationConfig } from './config';
-import {
-  User,
-  Group,
-  TrainingCampaign
-} from './ProviderClient';
+import { User, Group, TrainingCampaign } from './ProviderClient';
 import ProviderClient from './ProviderClient';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
@@ -30,22 +26,10 @@ export class APIClient {
     } catch (err) {
       throw new IntegrationProviderAuthenticationError({
         cause: err,
-        endpoint: this.provider.BASE_API_URL,
+        endpoint: this.provider.getBaseApi(),
         status: err.status,
         statusText: err.statusText,
       });
-    }
-  }
-
-  /**
-   * Iterates each KnowBe4 Group resource.
-   *
-   * @param iteratee receives each resource to produce entities/relationships
-   */
-  public async iterateGroups(iteratee: ResourceIteratee<Group>): Promise<void> {
-    const groups = await this.provider.fetchGroups();
-    for (const group of groups) {
-      await iteratee(group);
     }
   }
 
@@ -58,6 +42,18 @@ export class APIClient {
     const users = await this.provider.fetchUsers();
     for (const user of users) {
       await iteratee(user);
+    }
+  }
+
+  /**
+   * Iterates each KnowBe4 Group resource.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateGroups(iteratee: ResourceIteratee<Group>): Promise<void> {
+    const groups = await this.provider.fetchGroups();
+    for (const group of groups) {
+      await iteratee(group);
     }
   }
 }

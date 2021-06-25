@@ -1,8 +1,10 @@
 import {
   Entity,
+  parseTimePropertyValue,
   Relationship,
-} from "@jupiterone/integration-sdk-core";
-import groupBy from "lodash.groupby";
+  RelationshipClass,
+} from '@jupiterone/integration-sdk-core';
+import groupBy from 'lodash.groupby';
 
 import {
   Account,
@@ -11,7 +13,7 @@ import {
   TrainingContent,
   TrainingEnrollment,
   User,
-} from "./ProviderClient";
+} from './ProviderClient';
 import {
   ACCOUNT_ENTITY_CLASS,
   ACCOUNT_ENTITY_TYPE,
@@ -34,10 +36,10 @@ import {
   USER_ENTITY_TYPE,
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
-} from "./types";
-import { filterDuplicateModules } from "./util/filterDuplicateModules";
-import { findMostRelevantEnrollment } from "./util/findMostRelevantEnrollment";
-import toCamelCase from "./util/toCamelCase";
+} from './types';
+import { filterDuplicateModules } from './util/filterDuplicateModules';
+import { findMostRelevantEnrollment } from './util/findMostRelevantEnrollment';
+import toCamelCase from './util/toCamelCase';
 
 export function createAccountEntity(data: Account): AccountEntity {
   const admins: number[] = [];
@@ -58,30 +60,27 @@ export function createAccountEntity(data: Account): AccountEntity {
   };
 }
 
-export function createUserEntities(
-  data: User[],
-  admins: number[],
-): UserEntity[] {
-  return data.map(d => ({
+export function createUserEntity(d: User, admins: number[]): UserEntity {
+  return {
     ...(toCamelCase(d) as any),
     _class: USER_ENTITY_CLASS,
     _key: `knowbe4:user:${d.id}`,
     _type: USER_ENTITY_TYPE,
     displayName: d.email,
-    active: d.status === "active",
+    active: d.status === 'active',
     admin: admins.includes(d.id),
-    permissions: admins.includes(d.id) ? ["admin"] : [],
-  }));
+    permissions: admins.includes(d.id) ? ['admin'] : [],
+  };
 }
 
 export function createGroupEntities(data: Group[]): GroupEntity[] {
-  return data.map(d => ({
+  return data.map((d) => ({
     ...(toCamelCase(d) as any),
     _class: GROUP_ENTITY_CLASS,
     _key: `knowbe4:group:${d.id}`,
     _type: GROUP_ENTITY_TYPE,
     displayName: d.name,
-    active: d.status === "active",
+    active: d.status === 'active',
   }));
 }
 
@@ -96,7 +95,7 @@ export function createTrainingEntities(
   const trainingEntities: TrainingEntity[] = [];
   let trainingModules: TrainingModuleEntity[] = [];
 
-  data.forEach(d => {
+  data.forEach((d) => {
     trainingEntities.push(createTrainingEntity(d));
     trainingModules = trainingModules.concat(
       createTrainingModuleEntities(d.content),
@@ -114,19 +113,19 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
   const modules: number[] = [];
   const content: number[] = [];
 
-  data.groups.forEach(g => {
+  data.groups.forEach((g) => {
     if (g.group_id !== undefined) {
       groups.push(g.group_id);
     }
   });
 
-  data.modules.forEach(m => {
+  data.modules.forEach((m) => {
     if (m.store_purchase_id !== undefined) {
       modules.push(m.store_purchase_id);
     }
   });
 
-  data.content.forEach(c => {
+  data.content.forEach((c) => {
     if (c.policy_id !== undefined) {
       content.push(c.policy_id);
     }
@@ -148,7 +147,7 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
 export function createTrainingModuleEntities(
   data: TrainingContent[],
 ): TrainingModuleEntity[] {
-  return data.map(d => ({
+  return data.map((d) => ({
     ...(toCamelCase(d) as any),
     _class: TRAINING_MODULE_ENTITY_CLASS,
     _key: createTrainingModuleKey(d),
@@ -160,16 +159,16 @@ export function createTrainingModuleEntities(
 function createTrainingModuleKey(d: Partial<TrainingContent>) {
   return `knowbe4:training:${
     d.store_purchase_id
-      ? "purchase:" + d.store_purchase_id
+      ? 'purchase:' + d.store_purchase_id
       : d.policy_id
-      ? "policy:" + d.policy_id
-      : "module:" + (d.name as string).toLowerCase()
+      ? 'policy:' + d.policy_id
+      : 'module:' + (d.name as string).toLowerCase()
   }`;
 }
 
 export function createAccountRelationships(
   account: AccountEntity,
-  entities: EntityFromIntegration[],
+  entities: Entity[],
   type: string,
 ) {
   const relationships = [];
@@ -182,11 +181,11 @@ export function createAccountRelationships(
 
 export function createAccountRelationship(
   account: AccountEntity,
-  entity: EntityFromIntegration,
+  entity: Entity,
   type: string,
-): RelationshipFromIntegration {
+): Relationship {
   return {
-    _class: "HAS",
+    _class: 'HAS',
     _fromEntityKey: account._key,
     _key: `${account._key}_has_${entity._key}`,
     _toEntityKey: entity._key,
@@ -219,9 +218,9 @@ export function createUserGroupRelationships(
 function createUserGroupRelationship(
   user: UserEntity,
   group: GroupEntity,
-): RelationshipFromIntegration {
+): Relationship {
   return {
-    _class: USER_GROUP_RELATIONSHIP_CLASS,
+    _class: RelationshipClass.HAS,
     _fromEntityKey: group._key,
     _key: `${group._key}_has_${user._key}`,
     _toEntityKey: user._key,
@@ -257,9 +256,9 @@ export function createTrainingModuleRelationships(
 function createTrainingModuleRelationship(
   t: TrainingEntity,
   m: TrainingModuleEntity,
-): RelationshipFromIntegration {
+): Relationship {
   return {
-    _class: TRAINING_MODULE_RELATIONSHIP_CLASS,
+    _class: RelationshipClass.HAS,
     _fromEntityKey: t._key,
     _key: `${t._key}_has_${m._key}`,
     _toEntityKey: m._key,
@@ -292,9 +291,9 @@ export function createTrainingGroupRelationships(
 function createTrainingGroupRelationship(
   training: TrainingEntity,
   group: GroupEntity,
-): RelationshipFromIntegration {
+): Relationship {
   return {
-    _class: TRAINING_GROUP_RELATIONSHIP_CLASS,
+    _class: RelationshipClass.ASSIGNED,
     _fromEntityKey: training._key,
     _key: `${training._key}_assigned_${group._key}`,
     _toEntityKey: group._key,
@@ -320,7 +319,7 @@ export function createTrainingEnrollmentRelationships(
   const relationships: TrainingEnrollmentRelationship[] = [];
   const enrollmentsByUserIdAndModule = groupBy(
     enrollments,
-    e => `${e.user.id}|${e.module_name}`,
+    (e) => `${e.user.id}|${e.module_name}`,
   );
   for (const userIdModulePair of Object.keys(enrollmentsByUserIdAndModule)) {
     const e = findMostRelevantEnrollment(
@@ -330,7 +329,7 @@ export function createTrainingEnrollmentRelationships(
     const u = usersById[e.user.id];
     if (m && u) {
       relationships.push(createTrainingEnrollmentRelationship(e, m, u));
-      if (e.status.toLowerCase() === "passed") {
+      if (e.status.toLowerCase() === 'passed') {
         relationships.push(createTrainingCompletionRelationship(e, m, u));
       }
     }
@@ -345,14 +344,14 @@ function createTrainingEnrollmentRelationship(
   u: UserEntity,
 ): TrainingEnrollmentRelationship {
   return {
-    _class: TRAINING_ENROLLMENT_RELATIONSHIP_CLASS,
+    _class: RelationshipClass.ASSIGNED,
     _fromEntityKey: m._key,
     _key: `${m._key}_assigned_${u._key}`,
     _toEntityKey: u._key,
     _type: TRAINING_ENROLLMENT_RELATIONSHIP_TYPE,
-    assignedOn: getTime(e.enrollment_date),
-    startedOn: getTime(e.start_date),
-    completedOn: getTime(e.completion_date),
+    assignedOn: parseTimePropertyValue(e.enrollment_date),
+    startedOn: parseTimePropertyValue(e.start_date),
+    completedOn: parseTimePropertyValue(e.completion_date),
     status: e.status,
     timeSpent: e.time_spent,
     policyAcknowledged: e.policy_acknowledged,
@@ -365,14 +364,14 @@ function createTrainingCompletionRelationship(
   u: UserEntity,
 ): TrainingEnrollmentRelationship {
   return {
-    _class: TRAINING_COMPLETION_RELATIONSHIP_CLASS,
+    _class: 'COMPLETED', //change to RelationshipClass.COMPLETED when possible
     _fromEntityKey: u._key,
     _key: `${u._key}_completed_${m._key}`,
     _toEntityKey: m._key,
     _type: TRAINING_COMPLETION_RELATIONSHIP_TYPE,
-    assignedOn: getTime(e.enrollment_date),
-    startedOn: getTime(e.start_date),
-    completedOn: getTime(e.completion_date),
+    assignedOn: parseTimePropertyValue(e.enrollment_date),
+    startedOn: parseTimePropertyValue(e.start_date),
+    completedOn: parseTimePropertyValue(e.completion_date),
     status: e.status,
     timeSpent: e.time_spent,
     policyAcknowledged: e.policy_acknowledged,
