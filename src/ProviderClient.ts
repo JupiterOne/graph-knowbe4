@@ -1,7 +1,7 @@
 import {
   IntegrationError,
   IntegrationLogger,
-} from "@jupiterone/jupiter-managed-integration-sdk";
+} from "@jupiterone/integration-sdk-core";
 
 import { IntegrationConfig } from "./types";
 
@@ -151,7 +151,7 @@ export default class ProviderClient {
     } catch (err) {
       throw new IntegrationError({
         cause: err,
-        expose: false,
+        code: 'fail',
         message: "Error calling KnowBe4 API",
       });
     }
@@ -219,7 +219,7 @@ export default class ProviderClient {
     } catch (err) {
       throw new IntegrationError({
         cause: err,
-        expose: false,
+        code: 'fail',
         message: "Error calling KnowBe4 API",
       });
     }

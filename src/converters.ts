@@ -1,7 +1,7 @@
 import {
-  EntityFromIntegration,
-  RelationshipFromIntegration,
-} from "@jupiterone/jupiter-managed-integration-sdk";
+  Entity,
+  Relationship,
+} from "@jupiterone/integration-sdk-core";
 import groupBy from "lodash.groupby";
 
 import {
@@ -19,34 +19,28 @@ import {
   GROUP_ENTITY_CLASS,
   GROUP_ENTITY_TYPE,
   GroupEntity,
-  TRAINING_COMPLETION_RELATIONSHIP_CLASS,
   TRAINING_COMPLETION_RELATIONSHIP_TYPE,
-  TRAINING_ENROLLMENT_RELATIONSHIP_CLASS,
   TRAINING_ENROLLMENT_RELATIONSHIP_TYPE,
   TRAINING_ENTITY_CLASS,
   TRAINING_ENTITY_TYPE,
-  TRAINING_GROUP_RELATIONSHIP_CLASS,
   TRAINING_GROUP_RELATIONSHIP_TYPE,
   TRAINING_MODULE_ENTITY_CLASS,
   TRAINING_MODULE_ENTITY_TYPE,
-  TRAINING_MODULE_RELATIONSHIP_CLASS,
   TRAINING_MODULE_RELATIONSHIP_TYPE,
   TrainingEnrollmentRelationship,
   TrainingEntity,
   TrainingModuleEntity,
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
-  USER_GROUP_RELATIONSHIP_CLASS,
   USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
 } from "./types";
 import { filterDuplicateModules } from "./util/filterDuplicateModules";
 import { findMostRelevantEnrollment } from "./util/findMostRelevantEnrollment";
-import getTime from "./util/getTime";
 import toCamelCase from "./util/toCamelCase";
 
 export function createAccountEntity(data: Account): AccountEntity {
-  const admins = [];
+  const admins: number[] = [];
 
   for (const admin of data.admins) {
     admins.push(admin.id);
