@@ -3,7 +3,7 @@ import {
   IntegrationLogger,
 } from '@jupiterone/integration-sdk-core';
 
-import { IntegrationConfig } from './types';
+import { IntegrationConfig } from './config';
 
 import * as request from 'request-promise-native';
 
@@ -25,7 +25,7 @@ export interface RiskScore {
 }
 
 export interface UserBase {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -44,7 +44,7 @@ export interface User extends UserBase {
   manager_email: string | null;
   adi_manageable: boolean | null;
   adi_guid: string | null;
-  groups: number[];
+  groups: string[];
   aliases: string[] | null;
   joined_on: string | null;
   last_sign_in: string | null;
@@ -58,7 +58,7 @@ export interface User extends UserBase {
 }
 
 export interface GroupBase {
-  id: number;
+  id: string;
   group_id?: number;
   name: string;
 }

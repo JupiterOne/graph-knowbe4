@@ -14,12 +14,13 @@ import {
   ACCOUNT_ENTITY_TYPE,
   GROUP_ENTITY_TYPE,
   ACCOUNT_USER_RELATIONSHIP_TYPE,
-  USER_GROUP_RELATIONSHIP_TYPE,
+  GROUP_USER_RELATIONSHIP_TYPE,
   UserEntity,
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
   GroupEntity,
   AccountEntity,
+  IdEntityMap,
 } from '../types';
 
 export async function fetchUsers({
@@ -39,6 +40,16 @@ export async function fetchUsers({
     );
   }
 
+  const groupByIdMap = await jobState.getData<IdEntityMap<GroupEntity>>(
+    'GROUP_BY_ID_MAP',
+  );
+
+  if (!groupByIdMap) {
+    throw new IntegrationMissingKeyError(
+      `Expected to find groupByIdMap in jobState.`,
+    );
+  }
+
   //for use later in other steps
   const userEntities: UserEntity[] = [];
 
@@ -55,6 +66,19 @@ export async function fetchUsers({
         to: userEntity,
       }),
     );
+
+    for (const group of user.groups) {
+      const groupEntity = groupByIdMap[group];
+      if (groupEntity) {
+        await jobState.addRelationship(
+          createDirectRelationship({
+            _class: RelationshipClass.HAS,
+            from: groupEntity,
+            to: userEntity,
+          }),
+        );
+      }
+    }
   });
 
   await jobState.setData('USER_ARRAY', userEntities);
@@ -78,8 +102,14 @@ export const userSteps: IntegrationStep<IntegrationConfig>[] = [
         sourceType: ACCOUNT_ENTITY_TYPE,
         targetType: USER_ENTITY_TYPE,
       },
+      {
+        _type: GROUP_USER_RELATIONSHIP_TYPE,
+        _class: RelationshipClass.HAS,
+        sourceType: GROUP_ENTITY_TYPE,
+        targetType: USER_ENTITY_TYPE,
+      },
     ],
-    dependsOn: ['fetch-account'],
+    dependsOn: ['fetch-groups'],
     executionHandler: fetchUsers,
   },
 ];

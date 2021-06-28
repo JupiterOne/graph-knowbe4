@@ -42,7 +42,7 @@ import { findMostRelevantEnrollment } from './util/findMostRelevantEnrollment';
 import toCamelCase from './util/toCamelCase';
 
 export function createAccountEntity(data: Account): AccountEntity {
-  const admins: number[] = [];
+  const admins: string[] = [];
 
   for (const admin of data.admins) {
     admins.push(admin.id);
@@ -60,7 +60,7 @@ export function createAccountEntity(data: Account): AccountEntity {
   };
 }
 
-export function createUserEntity(d: User, admins: number[]): UserEntity {
+export function createUserEntity(d: User, admins: string[]): UserEntity {
   return {
     ...(toCamelCase(d) as any),
     _class: USER_ENTITY_CLASS,
@@ -73,15 +73,15 @@ export function createUserEntity(d: User, admins: number[]): UserEntity {
   };
 }
 
-export function createGroupEntities(data: Group[]): GroupEntity[] {
-  return data.map((d) => ({
+export function createGroupEntity(d: Group): GroupEntity {
+  return {
     ...(toCamelCase(d) as any),
     _class: GROUP_ENTITY_CLASS,
     _key: `knowbe4:group:${d.id}`,
     _type: GROUP_ENTITY_TYPE,
     displayName: d.name,
     active: d.status === 'active',
-  }));
+  };
 }
 
 export interface TrainingCollection {
@@ -164,68 +164,6 @@ function createTrainingModuleKey(d: Partial<TrainingContent>) {
       ? 'policy:' + d.policy_id
       : 'module:' + (d.name as string).toLowerCase()
   }`;
-}
-
-export function createAccountRelationships(
-  account: AccountEntity,
-  entities: Entity[],
-  type: string,
-) {
-  const relationships = [];
-  for (const entity of entities) {
-    relationships.push(createAccountRelationship(account, entity, type));
-  }
-
-  return relationships;
-}
-
-export function createAccountRelationship(
-  account: AccountEntity,
-  entity: Entity,
-  type: string,
-): Relationship {
-  return {
-    _class: 'HAS',
-    _fromEntityKey: account._key,
-    _key: `${account._key}_has_${entity._key}`,
-    _toEntityKey: entity._key,
-    _type: type,
-  };
-}
-
-export function createUserGroupRelationships(
-  users: UserEntity[],
-  groups: GroupEntity[],
-) {
-  const groupsById: { [id: string]: GroupEntity } = {};
-  for (const group of groups) {
-    groupsById[group.id.toString()] = group;
-  }
-
-  const relationships = [];
-  for (const user of users) {
-    for (const groupId of user.groups) {
-      const group = groupsById[groupId.toString()];
-      if (group) {
-        relationships.push(createUserGroupRelationship(user, group));
-      }
-    }
-  }
-
-  return relationships;
-}
-
-function createUserGroupRelationship(
-  user: UserEntity,
-  group: GroupEntity,
-): Relationship {
-  return {
-    _class: RelationshipClass.HAS,
-    _fromEntityKey: group._key,
-    _key: `${group._key}_has_${user._key}`,
-    _toEntityKey: user._key,
-    _type: USER_GROUP_RELATIONSHIP_TYPE,
-  };
 }
 
 export function createTrainingModuleRelationships(

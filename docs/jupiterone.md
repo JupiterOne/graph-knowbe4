@@ -113,10 +113,11 @@ https://github.com/JupiterOne/sdk/blob/master/docs/integrations/development.md
 
 The following entities are created:
 
-| Resources       | Entity `_type`    | Entity `_class` |
-| --------------- | ----------------- | --------------- |
-| KnowBe4 Account | `knowbe4_account` | `Account`       |
-| KnowBe4 User    | `knowbe4_user`    | `User`          |
+| Resources       | Entity `_type`       | Entity `_class` |
+| --------------- | -------------------- | --------------- |
+| KnowBe4 Account | `knowbe4_account`    | `Account`       |
+| KnowBe4 Group   | `knowbe4_user_group` | `UserGroup`     |
+| KnowBe4 User    | `knowbe4_user`       | `User`          |
 
 ### Relationships
 
@@ -125,6 +126,8 @@ The following relationships are created/mapped:
 | Source Entity `_type` | Relationship `_class` | Target Entity `_type` |
 | --------------------- | --------------------- | --------------------- |
 | `knowbe4_account`     | **HAS**               | `knowbe4_user`        |
+| `knowbe4_account`     | **HAS**               | `knowbe4_user_group`  |
+| `knowbe4_user_group`  | **HAS**               | `knowbe4_user`        |
 
 <!--
 ********************************************************************************

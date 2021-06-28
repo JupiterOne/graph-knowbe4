@@ -1,46 +1,39 @@
-import {
-  Entity,
-  ExplicitRelationship
-} from "@jupiterone/integration-sdk-core";
+import { Entity, ExplicitRelationship } from '@jupiterone/integration-sdk-core';
 
-export const ACCOUNT_ENTITY_TYPE = "knowbe4_account";
-export const ACCOUNT_ENTITY_CLASS = [ "Account" ];
+export const ACCOUNT_ENTITY_TYPE = 'knowbe4_account';
+export const ACCOUNT_ENTITY_CLASS = ['Account'];
 
-export const USER_ENTITY_TYPE = "knowbe4_user";
-export const USER_ENTITY_CLASS = [ "User" ];
-export const ACCOUNT_USER_RELATIONSHIP_TYPE = "knowbe4_account_has_user";
+export const USER_ENTITY_TYPE = 'knowbe4_user';
+export const USER_ENTITY_CLASS = ['User'];
+export const ACCOUNT_USER_RELATIONSHIP_TYPE = 'knowbe4_account_has_user';
 
-export const GROUP_ENTITY_TYPE = "knowbe4_user_group";
-export const GROUP_ENTITY_CLASS = [ "UserGroup" ];
+export const GROUP_ENTITY_TYPE = 'knowbe4_user_group';
+export const GROUP_ENTITY_CLASS = ['UserGroup'];
+export const ACCOUNT_GROUP_RELATIONSHIP_TYPE = 'knowbe4_account_has_user_group';
 
-export const USER_GROUP_RELATIONSHIP_TYPE = "knowbe4_user_group_has_user";
+export const GROUP_USER_RELATIONSHIP_TYPE = 'knowbe4_user_group_has_user';
 
-export const TRAINING_ENTITY_TYPE = "training_campaign";
-export const TRAINING_ENTITY_CLASS = [ "Training" ];
+export const TRAINING_ENTITY_TYPE = 'training_campaign';
+export const TRAINING_ENTITY_CLASS = ['Training'];
 
-export const TRAINING_MODULE_ENTITY_TYPE = "training_module";
-export const TRAINING_MODULE_ENTITY_CLASS = ["Training", "Module"];
+export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
+export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
 
-export const TRAINING_GROUP_RELATIONSHIP_TYPE = "training_assigned_user_group";
+export const TRAINING_GROUP_RELATIONSHIP_TYPE = 'training_assigned_user_group';
 
-export const TRAINING_MODULE_RELATIONSHIP_TYPE = "training_has_module";
+export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_has_module';
 
 export const TRAINING_ENROLLMENT_RELATIONSHIP_TYPE =
-  "training_module_assigned_user";
+  'training_module_assigned_user';
 
 export const TRAINING_COMPLETION_RELATIONSHIP_TYPE =
-  "user_completed_training_module";
-
-export interface IntegrationConfig {
-  apiKey: string;
-  site: string;
-}
+  'user_completed_training_module';
 
 export interface AccountEntity extends Entity {
   name: string;
   type: string;
   domains: string[];
-  admins: number[];
+  admins: string[];
   subscriptionLevel: string;
   subscriptionEndDate: string;
   numberOfSeats: number;
@@ -66,7 +59,7 @@ export interface UserEntity extends Entity {
   managerEmail: string | null;
   adiManageable: boolean | null;
   adiGuid: string | null;
-  groups: number[];
+  groups: string[];
   aliases: string[] | null;
   joinedOn: string | null;
   lastSignIn: string | null;
@@ -93,9 +86,9 @@ export interface TrainingEntity extends Entity {
   id: string;
   campaignId: number;
   name: string;
-  groups: number[];
+  groups: string[];
   status: string;
-  modules: number[];
+  modules: string[];
   content: number[];
   durationType: string;
   startDate: string;
@@ -124,12 +117,15 @@ export interface TrainingModuleEntity extends Entity {
   defaultLanguage?: string;
 }
 
-export interface TrainingEnrollmentRelationship
-  extends ExplicitRelationship {
+export interface TrainingEnrollmentRelationship extends ExplicitRelationship {
   assignedOn?: number;
   startedOn?: number;
   completedOn?: number;
   status: string;
   timeSpent: number;
   policyAcknowledged: boolean;
+}
+
+export interface IdEntityMap<V> {
+  [key: string]: V;
 }
