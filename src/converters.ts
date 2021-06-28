@@ -1,5 +1,4 @@
 import {
-  Entity,
   parseTimePropertyValue,
   Relationship,
   RelationshipClass,
@@ -34,10 +33,8 @@ import {
   TrainingModuleEntity,
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
-  USER_GROUP_RELATIONSHIP_TYPE,
   UserEntity,
 } from './types';
-import { filterDuplicateModules } from './util/filterDuplicateModules';
 import { findMostRelevantEnrollment } from './util/findMostRelevantEnrollment';
 import toCamelCase from './util/toCamelCase';
 
@@ -89,25 +86,6 @@ export interface TrainingCollection {
   trainingModules: TrainingModuleEntity[];
 }
 
-export function createTrainingEntities(
-  data: TrainingCampaign[],
-): TrainingCollection {
-  const trainingEntities: TrainingEntity[] = [];
-  let trainingModules: TrainingModuleEntity[] = [];
-
-  data.forEach((d) => {
-    trainingEntities.push(createTrainingEntity(d));
-    trainingModules = trainingModules.concat(
-      createTrainingModuleEntities(d.content),
-    );
-  });
-
-  return {
-    trainingEntities,
-    trainingModules: filterDuplicateModules(trainingModules),
-  };
-}
-
 export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
   const groups: number[] = [];
   const modules: number[] = [];
@@ -144,19 +122,19 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
   };
 }
 
-export function createTrainingModuleEntities(
-  data: TrainingContent[],
-): TrainingModuleEntity[] {
-  return data.map((d) => ({
+export function createTrainingModuleEntity(
+  d: TrainingContent,
+): TrainingModuleEntity {
+  return {
     ...(toCamelCase(d) as any),
     _class: TRAINING_MODULE_ENTITY_CLASS,
     _key: createTrainingModuleKey(d),
     _type: TRAINING_MODULE_ENTITY_TYPE,
     displayName: d.name,
-  }));
+  };
 }
 
-function createTrainingModuleKey(d: Partial<TrainingContent>) {
+export function createTrainingModuleKey(d: Partial<TrainingContent>) {
   return `knowbe4:training:${
     d.store_purchase_id
       ? 'purchase:' + d.store_purchase_id
@@ -302,7 +280,7 @@ function createTrainingCompletionRelationship(
   u: UserEntity,
 ): TrainingEnrollmentRelationship {
   return {
-    _class: 'COMPLETED', //change to RelationshipClass.COMPLETED when possible
+    _class: RelationshipClass.COMPLETED,
     _fromEntityKey: u._key,
     _key: `${u._key}_completed_${m._key}`,
     _toEntityKey: m._key,

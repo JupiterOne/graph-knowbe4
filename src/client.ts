@@ -34,6 +34,18 @@ export class APIClient {
   }
 
   /**
+   * Iterates each KnowBe4 Group resource.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateGroups(iteratee: ResourceIteratee<Group>): Promise<void> {
+    const groups = await this.provider.fetchGroups();
+    for (const group of groups) {
+      await iteratee(group);
+    }
+  }
+
+  /**
    * Iterates each KnowBe4 User resource.
    *
    * @param iteratee receives each resource to produce entities/relationships
@@ -46,14 +58,16 @@ export class APIClient {
   }
 
   /**
-   * Iterates each KnowBe4 Group resource.
+   * Iterates each KnowBe4 TrainingCampaign resource.
    *
    * @param iteratee receives each resource to produce entities/relationships
    */
-  public async iterateGroups(iteratee: ResourceIteratee<Group>): Promise<void> {
-    const groups = await this.provider.fetchGroups();
-    for (const group of groups) {
-      await iteratee(group);
+  public async iterateTrainingCampaigns(
+    iteratee: ResourceIteratee<TrainingCampaign>,
+  ): Promise<void> {
+    const trainingCampaigns = await this.provider.fetchTraining();
+    for (const trainingCampaign of trainingCampaigns) {
+      await iteratee(trainingCampaign);
     }
   }
 }

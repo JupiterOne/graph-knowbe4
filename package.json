@@ -27,7 +27,7 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@jupiterone/integration-sdk-core": "^6.6.0",
+    "@jupiterone/integration-sdk-core": "^6.7.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.maxby": "^4.6.0",
@@ -35,9 +35,9 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
-    "@jupiterone/integration-sdk-core": "^6.6.0",
-    "@jupiterone/integration-sdk-dev-tools": "^6.6.0",
-    "@jupiterone/integration-sdk-testing": "^6.6.0",
+    "@jupiterone/integration-sdk-core": "^6.7.0",
+    "@jupiterone/integration-sdk-dev-tools": "^6.7.0",
+    "@jupiterone/integration-sdk-testing": "^6.7.0",
     "@types/bunyan": "^1.8.5",
     "@types/fs-extra": "^5.0.5",
     "@types/gremlin": "^3.4.2",
