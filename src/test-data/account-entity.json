@@ -1,7 +1,7 @@
 {
   "_key": "knowbe4:account:kb4-demo",
   "_type": "knowbe4_account",
-  "_class": "Account",
+  "_class": [ "Account" ],
   "displayName": "KB4-Demo",
   "name": "KB4-Demo",
   "type": "paid",

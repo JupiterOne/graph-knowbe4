@@ -1,11 +1,11 @@
 import {
   IntegrationError,
   IntegrationLogger,
-} from "@jupiterone/jupiter-managed-integration-sdk";
+} from '@jupiterone/integration-sdk-core';
 
-import { IntegrationConfig } from "./types";
+import { IntegrationConfig } from './config';
 
-import * as request from "request-promise-native";
+import * as request from 'request-promise-native';
 
 export interface Account {
   name: string;
@@ -25,7 +25,7 @@ export interface RiskScore {
 }
 
 export interface UserBase {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -44,7 +44,7 @@ export interface User extends UserBase {
   manager_email: string | null;
   adi_manageable: boolean | null;
   adi_guid: string | null;
-  groups: number[];
+  groups: string[];
   aliases: string[] | null;
   joined_on: string | null;
   last_sign_in: string | null;
@@ -58,7 +58,7 @@ export interface User extends UserBase {
 }
 
 export interface GroupBase {
-  id: number;
+  id: string;
   group_id?: number;
   name: string;
 }
@@ -135,8 +135,8 @@ export default class ProviderClient {
     this.logger = logger;
     this.options = {
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         Authorization: `Bearer ${config.apiKey}`,
       },
     };
@@ -144,33 +144,37 @@ export default class ProviderClient {
 
   public async fetchAccountDetails(): Promise<Account> {
     try {
-      this.logger.trace("Fetching KnowBe4 account...");
-      const result = await this.collectOnePage("account");
-      this.logger.trace({}, "Fetched KnowBe4 account");
+      this.logger.trace('Fetching KnowBe4 account...');
+      const result = await this.collectOnePage('account');
+      this.logger.trace({}, 'Fetched KnowBe4 account');
       return JSON.parse(result);
     } catch (err) {
       throw new IntegrationError({
         cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
+        code: 'fail',
+        message: 'Error calling KnowBe4 API',
       });
     }
   }
 
   public async fetchGroups(): Promise<Group[]> {
-    return await this.collectAllPages("groups");
+    return await this.collectAllPages('groups');
   }
 
   public async fetchUsers(): Promise<User[]> {
-    return await this.collectAllPages("users");
+    return await this.collectAllPages('users');
   }
 
   public async fetchTraining(): Promise<TrainingCampaign[]> {
-    return await this.collectAllPages("training/campaigns");
+    return await this.collectAllPages('training/campaigns');
   }
 
   public async fetchTrainingEnrollments(): Promise<TrainingEnrollment[]> {
-    return await this.collectAllPages("training/enrollments");
+    return await this.collectAllPages('training/enrollments');
+  }
+
+  public getBaseApi(): string {
+    return this.BASE_API_URL;
   }
 
   private async forEachPage(
@@ -219,8 +223,8 @@ export default class ProviderClient {
     } catch (err) {
       throw new IntegrationError({
         cause: err,
-        expose: false,
-        message: "Error calling KnowBe4 API",
+        code: 'fail',
+        message: 'Error calling KnowBe4 API',
       });
     }
   }

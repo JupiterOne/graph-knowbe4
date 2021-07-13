@@ -1,11 +1,14 @@
-import { IntegrationInvocationConfig } from "@jupiterone/jupiter-managed-integration-sdk";
+import { IntegrationInvocationConfig } from '@jupiterone/integration-sdk-core';
+import { integrationSteps } from './steps'
+import {
+  validateInvocation,
+  IntegrationConfig,
+  instanceConfigFields,
+} from './config';
 
-import executionHandler from "./executionHandler";
-import invocationValidator from "./invocationValidator";
-
-const invocationConfig: IntegrationInvocationConfig = {
-  executionHandler,
-  invocationValidator,
-};
-
-export default invocationConfig;
+export const invocationConfig: IntegrationInvocationConfig<IntegrationConfig> =
+  {
+    instanceConfigFields,
+    validateInvocation,
+    integrationSteps,
+  };

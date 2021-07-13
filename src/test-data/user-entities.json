@@ -2,7 +2,7 @@
   {
     "_key": "knowbe4:user:667548",
     "_type": "knowbe4_user",
-    "_class": "User",
+    "_class": [ "User" ],
     "displayName": "wscott@kb4-demo.com",
     "id": 667548,
     "employeeNumber": "19586",
@@ -37,7 +37,7 @@
   {
     "_key": "knowbe4:user:141862",
     "_type": "knowbe4_user",
-    "_class": "User",
+    "_class": [ "User" ],
     "displayName": "LStephens@kb4-demo.com",
     "id": 141862,
     "employeeNumber": "19583",
@@ -73,7 +73,7 @@
   {
     "_key": "knowbe4:user:796713",
     "_type": "knowbe4_user",
-    "_class": "User",
+    "_class": [ "User" ],
     "displayName": "jblake@kb4-demo.com",
     "id": 796713,
     "employeeNumber": "12345",
@@ -109,7 +109,7 @@
   {
     "_key": "knowbe4:user:796706",
     "_type": "knowbe4_user",
-    "_class": "User",
+    "_class": [ "User" ],
     "displayName": "bjones@kb4-demo.com",
     "id": 796706,
     "employeeNumber": "23456",
@@ -145,7 +145,7 @@
   {
     "_key": "knowbe4:user:796702",
     "_type": "knowbe4_user",
-    "_class": "User",
+    "_class": [ "User" ],
     "displayName": "sfisher@kb4-demo.com",
     "id": 796702,
     "employeeNumber": "34567",
@@ -182,7 +182,7 @@
   {
     "_key": "knowbe4:user:974345",
     "_type": "knowbe4_user",
-    "_class": "User",
+    "_class": [ "User" ],
     "displayName": "shea.o@kb4-demo.com",
     "id": 974345,
     "employeeNumber": "00000",
