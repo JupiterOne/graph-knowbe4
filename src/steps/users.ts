@@ -50,14 +50,14 @@ export async function fetchUsers({
     );
   }
 
-  //for use later in other steps
-  const userEntities: UserEntity[] = [];
+  //for use later in trainingEnrollments
+  const userByIdMap: IdEntityMap<UserEntity> = {};
 
   await apiClient.iterateUsers(async (user) => {
     const userEntity = (await jobState.addEntity(
       createUserEntity(user, accountEntity.admins),
     )) as UserEntity;
-    userEntities.push(userEntity);
+    userByIdMap[user.id.toString()] = userEntity;
 
     await jobState.addRelationship(
       createDirectRelationship({
@@ -81,7 +81,7 @@ export async function fetchUsers({
     }
   });
 
-  await jobState.setData('USER_ARRAY', userEntities);
+  await jobState.setData('USER_BY_ID_MAP', userByIdMap);
 }
 
 export const userSteps: IntegrationStep<IntegrationConfig>[] = [

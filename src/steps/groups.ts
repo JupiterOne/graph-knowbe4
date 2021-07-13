@@ -17,6 +17,7 @@ import {
   GROUP_ENTITY_CLASS,
   GROUP_ENTITY_TYPE,
   ACCOUNT_GROUP_RELATIONSHIP_TYPE,
+  IdEntityMap,
 } from '../types';
 
 export async function fetchGroups({
@@ -34,8 +35,8 @@ export async function fetchGroups({
     );
   }
 
-  //for use later in other steps
-  const groupByIdMap = {};
+  //for use later in users.ts and trainingCampaigns.ts
+  const groupByIdMap: IdEntityMap<GroupEntity> = {};
 
   await apiClient.iterateGroups(async (group) => {
     const groupEntity = (await jobState.addEntity(

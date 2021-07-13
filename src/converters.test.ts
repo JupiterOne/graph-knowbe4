@@ -3,6 +3,7 @@ import {
   createGroupEntity,
   createTrainingEntity,
   createUserEntity,
+  createTrainingModuleEntity,
 } from './converters';
 import { Account, Group, TrainingCampaign, User } from './ProviderClient';
 import {
@@ -48,11 +49,17 @@ test('createGroupEntities', () => {
   expect(receivedGroupEntities).toEqual(groupEntities);
 });
 
-/* this one will need tweaking
-test("createTrainingEntities", () => {
-  expect(createTrainingEntities(trainingCampaigns)).toEqual({
-    trainingEntities,
-    trainingModules,
-  });
+test('createTrainingEntities', () => {
+  const receivedTrainingCampaignEntities: TrainingEntity[] = [];
+  const receivedTrainingModuleEntities: TrainingModuleEntity[] = [];
+  for (const trainingCampaign of trainingCampaigns) {
+    receivedTrainingCampaignEntities.push(
+      createTrainingEntity(trainingCampaign),
+    );
+    for (const module of trainingCampaign.content) {
+      receivedTrainingModuleEntities.push(createTrainingModuleEntity(module));
+    }
+  }
+  expect(receivedTrainingCampaignEntities).toEqual(trainingEntities);
+  expect(receivedTrainingModuleEntities).toEqual(trainingModules);
 });
-*/

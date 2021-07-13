@@ -23,11 +23,9 @@ export const TRAINING_GROUP_RELATIONSHIP_TYPE = 'training_assigned_user_group';
 
 export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_has_module';
 
-export const TRAINING_ENROLLMENT_RELATIONSHIP_TYPE =
-  'training_module_assigned_user';
+export const MODULE_USER_RELATIONSHIP_TYPE = 'training_module_assigned_user';
 
-export const TRAINING_COMPLETION_RELATIONSHIP_TYPE =
-  'user_completed_training_module';
+export const USER_MODULE_RELATIONSHIP_TYPE = 'user_completed_training_module';
 
 export interface AccountEntity extends Entity {
   name: string;

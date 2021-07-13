@@ -132,6 +132,8 @@ The following relationships are created/mapped:
 | `knowbe4_user_group`  | **HAS**               | `knowbe4_user`        |
 | `training_campaign`   | **ASSIGNED**          | `knowbe4_user_group`  |
 | `training_campaign`   | **HAS**               | `training_module`     |
+| `training_module`     | **ASSIGNED**          | `knowbe4_user`        |
+| `knowbe4_user`        | **COMPLETED**         | `training_module`     |
 
 <!--
 ********************************************************************************

@@ -10,7 +10,6 @@ import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
 import {
   createTrainingEntity,
-  createTrainingModuleKey,
   createTrainingModuleEntity,
 } from '../converters';
 import {
@@ -44,7 +43,8 @@ export async function fetchTrainingCampaigns({
     );
   }
 
-  const trainingModulesByKey: IdEntityMap<TrainingModuleEntity> = {};
+  //for use later in the TrainingEnrollments step
+  const trainingModulesByName: IdEntityMap<TrainingModuleEntity> = {};
 
   await apiClient.iterateTrainingCampaigns(async (trainingCampaign) => {
     const trainingCampaignEntity = (await jobState.addEntity(
@@ -66,17 +66,14 @@ export async function fetchTrainingCampaigns({
     }
 
     //trainingCampaign.content is an array of type TrainingContent
-    //load all modules here, though some will be the same, overwriting previous onces
-    //when all campaigns are processed, we should have a map of uniques
     for (const module of trainingCampaign.content) {
-      //if a module with that key does not exist, create it
+      //if a module with that name does not exist, create it
       let trainingModuleEntity;
-      if (!trainingModulesByKey[createTrainingModuleKey(module)]) {
+      if (!trainingModulesByName[module.name]) {
         trainingModuleEntity = (await jobState.addEntity(
           createTrainingModuleEntity(module),
         )) as TrainingModuleEntity;
-        trainingModulesByKey[createTrainingModuleKey(module)] =
-          trainingModuleEntity;
+        trainingModulesByName[module.name] = trainingModuleEntity;
       }
       await jobState.addRelationship(
         createDirectRelationship({
@@ -88,9 +85,7 @@ export async function fetchTrainingCampaigns({
     }
   });
 
-  //this might need to be an array instead of a map or something... still need to figure out
-  //TrainingEnrollments that come from provider via .fetchTrainingEnrollments
-  await jobState.setData('MODULE_MAP_BY_KEY', trainingModulesByKey);
+  await jobState.setData('MODULE_BY_NAME_MAP', trainingModulesByName);
 }
 
 export const trainingCampaignSteps: IntegrationStep<IntegrationConfig>[] = [
