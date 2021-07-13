@@ -52,12 +52,16 @@ test('createGroupEntities', () => {
 test('createTrainingEntities', () => {
   const receivedTrainingCampaignEntities: TrainingEntity[] = [];
   const receivedTrainingModuleEntities: TrainingModuleEntity[] = [];
+  const alreadyReceivedModules = {};
   for (const trainingCampaign of trainingCampaigns) {
     receivedTrainingCampaignEntities.push(
       createTrainingEntity(trainingCampaign),
     );
     for (const module of trainingCampaign.content) {
-      receivedTrainingModuleEntities.push(createTrainingModuleEntity(module));
+      if (!alreadyReceivedModules[module.name]) {
+        alreadyReceivedModules[module.name] = module;
+        receivedTrainingModuleEntities.push(createTrainingModuleEntity(module));
+      }
     }
   }
   expect(receivedTrainingCampaignEntities).toEqual(trainingEntities);
