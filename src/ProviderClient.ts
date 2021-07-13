@@ -5,7 +5,7 @@ import {
 
 import { IntegrationConfig } from './config';
 
-import * as request from 'request-promise-native';
+import fetch from 'node-fetch';
 
 export interface Account {
   name: string;
@@ -191,7 +191,7 @@ export default class ProviderClient {
     let more = true;
 
     while (more) {
-      const response = await request.get(nextPageUrl, this.options);
+      const response = await fetch.get(nextPageUrl, this.options);
       const page = JSON.parse(response);
       more = page && page.length && page.length > 0;
       if (more) {
@@ -233,6 +233,6 @@ export default class ProviderClient {
     const url = params
       ? `${this.BASE_API_URL}/${path}?${params}`
       : `${this.BASE_API_URL}/${path}`;
-    return await request.get(url, this.options);
+    return await fetch.get(url, this.options);
   }
 }

@@ -18,6 +18,19 @@ it('requires valid config', async () => {
   );
 });
 
+it('site value error', async () => {
+  const executionContext = createMockExecutionContext({
+    instanceConfig: {
+      site: 'INVALID',
+      apiKey: 'INVALID',
+    },
+  });
+
+  await expect(validateInvocation(executionContext)).rejects.toThrow(
+    IntegrationValidationError,
+  );
+});
+
 it('auth error', async () => {
   const recording = setupRecording({
     directory: '__recordings__',
@@ -30,7 +43,7 @@ it('auth error', async () => {
 
   const executionContext = createMockExecutionContext({
     instanceConfig: {
-      site: 'INVALID',
+      site: 'us',
       apiKey: 'INVALID',
     },
   });
