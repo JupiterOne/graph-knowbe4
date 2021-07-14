@@ -37,9 +37,12 @@ import toCamelCase from './util/toCamelCase';
 export function createAccountEntity(data: Account): AccountEntity {
   const admins: string[] = [];
 
-  for (const admin of data.admins) {
-    admins.push(admin.id);
+  if (data.admins) {
+    for (const admin of data.admins) {
+      admins.push(admin.id);
+    }
   }
+
   return {
     ...(toCamelCase(data) as any),
     _class: ACCOUNT_ENTITY_CLASS,

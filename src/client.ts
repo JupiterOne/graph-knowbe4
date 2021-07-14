@@ -28,14 +28,25 @@ export class APIClient {
 
   public async verifyAuthentication(): Promise<void> {
     //lightweight authen check
+    let reply;
     try {
-      await this.provider.fetchAccountDetails();
+      reply = await this.provider.fetchAccountDetails();
     } catch (err) {
       throw new IntegrationProviderAuthenticationError({
         cause: err,
         endpoint: this.provider.getBaseApi(),
         status: err.status,
         statusText: err.statusText,
+      });
+    }
+    //the API actually returns a 200 response for bad credentials,
+    //but the object returned is just { message: 'Invalid Token' }
+    if (reply.message === 'Invalid Token') {
+      throw new IntegrationProviderAuthenticationError({
+        cause: undefined,
+        endpoint: this.provider.getBaseApi(),
+        status: 401,
+        statusText: 'Invalid Token',
       });
     }
   }

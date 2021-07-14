@@ -17,9 +17,11 @@ export async function fetchAccountDetails({
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const apiClient = createAPIClient(instance.config, logger);
   const account = await apiClient.provider.fetchAccountDetails();
+  if (!account.admins) {
+    logger.warn('Warning: No admins detected for this account');
+  }
   const accountEntity = await jobState.addEntity(createAccountEntity(account));
   await jobState.setData(DATA_ACCOUNT_ENTITY, accountEntity);
-  console.log(accountEntity);
 }
 
 export const accountSteps: IntegrationStep<IntegrationConfig>[] = [

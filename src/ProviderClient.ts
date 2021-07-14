@@ -147,7 +147,7 @@ export default class ProviderClient {
       this.logger.trace('Fetching KnowBe4 account...');
       const result = await this.collectOnePage('account');
       this.logger.trace({}, 'Fetched KnowBe4 account');
-      return JSON.parse(result);
+      return await result.json();
     } catch (err) {
       throw new IntegrationError({
         cause: err,
@@ -191,8 +191,8 @@ export default class ProviderClient {
     let more = true;
 
     while (more) {
-      const response = await fetch.get(nextPageUrl, this.options);
-      const page = JSON.parse(response);
+      const response = await fetch(nextPageUrl, this.options);
+      const page = await response.json();
       more = page && page.length && page.length > 0;
       if (more) {
         eachFn(page);
@@ -233,6 +233,6 @@ export default class ProviderClient {
     const url = params
       ? `${this.BASE_API_URL}/${path}?${params}`
       : `${this.BASE_API_URL}/${path}`;
-    return await fetch.get(url, this.options);
+    return await fetch(url, this.options);
   }
 }
