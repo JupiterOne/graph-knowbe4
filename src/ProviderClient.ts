@@ -1,6 +1,7 @@
 import {
   IntegrationError,
   IntegrationLogger,
+  IntegrationProviderAPIError,
 } from '@jupiterone/integration-sdk-core';
 
 import { IntegrationConfig } from './config';
@@ -191,7 +192,22 @@ export default class ProviderClient {
     let more = true;
 
     while (more) {
-      const response = await fetch(nextPageUrl, this.options);
+      let response = await fetch(nextPageUrl, this.options);
+      if (response.status === 429) {
+        //KnowBe4 API rate limits to 4/sec and 1000/day
+        //let's see if this was just the 4/sec limit
+        const delayMs = 250;
+        await new Promise((resolve) => setTimeout(resolve, delayMs, {}));
+        response = await fetch(nextPageUrl, this.options);
+        if (response.status === 429) {
+          throw new IntegrationProviderAPIError({
+            cause: undefined,
+            endpoint: nextPageUrl,
+            status: response.status,
+            statusText: `Failure requesting '${nextPageUrl}' due to daily rate-limits of 1000 API calls.`,
+          });
+        }
+      }
       const page = await response.json();
       more = page && page.length && page.length > 0;
       if (more) {
