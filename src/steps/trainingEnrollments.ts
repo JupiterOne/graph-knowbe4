@@ -82,7 +82,7 @@ export const trainingEnrollmentSteps: IntegrationStep<IntegrationConfig>[] = [
         targetType: TRAINING_MODULE_ENTITY_TYPE,
       },
     ],
-    dependsOn: ['fetch-campaigns'],
+    dependsOn: ['fetch-campaigns', 'fetch-users'],
     executionHandler: fetchTrainingEnrollments,
   },
 ];

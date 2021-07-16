@@ -6,6 +6,7 @@ import {
 
 import { IntegrationConfig } from './config';
 
+import { retry } from '@lifeomic/attempt';
 import fetch from 'node-fetch';
 
 export interface Account {
@@ -192,22 +193,7 @@ export default class ProviderClient {
     let more = true;
 
     while (more) {
-      let response = await fetch(nextPageUrl, this.options);
-      if (response.status === 429) {
-        //KnowBe4 API rate limits to 4/sec and 1000/day
-        //let's see if this was just the 4/sec limit
-        const delayMs = 250;
-        await new Promise((resolve) => setTimeout(resolve, delayMs, {}));
-        response = await fetch(nextPageUrl, this.options);
-        if (response.status === 429) {
-          throw new IntegrationProviderAPIError({
-            cause: undefined,
-            endpoint: nextPageUrl,
-            status: response.status,
-            statusText: `Failure requesting '${nextPageUrl}' due to daily rate-limits of 1000 API calls.`,
-          });
-        }
-      }
+      const response = await this.fetchWithBackoff(nextPageUrl, this.options);
       const page = await response.json();
       more = page && page.length && page.length > 0;
       if (more) {
@@ -249,6 +235,37 @@ export default class ProviderClient {
     const url = params
       ? `${this.BASE_API_URL}/${path}?${params}`
       : `${this.BASE_API_URL}/${path}`;
-    return await fetch(url, this.options);
+    return await this.fetchWithBackoff(url, this.options);
+  }
+
+  private async fetchWithBackoff(url, fetchOptions) {
+    //KnowBe4 API rate limits to 4/sec and 1000/day
+    const retryOptions = {
+      delay: 250,
+      maxAttempts: 8,
+      initialDelay: 0,
+      minDelay: 0,
+      maxDelay: 0,
+      factor: 2,
+      timeout: 0,
+      jitter: false,
+      handleError: null,
+      handleTimeout: null,
+      beforeAttempt: null,
+      calculateDelay: null,
+    }; // 8 attempts with 250 ms start and factor 2 means longest wait is 32 seconds
+    return await retry(async () => {
+      const reply = await fetch(url, fetchOptions);
+      this.logger.warn(`Rate limiting encountered. Waiting and trying again.`);
+      if (reply.status === 429) {
+        throw new IntegrationProviderAPIError({
+          cause: undefined,
+          endpoint: url,
+          status: reply.status,
+          statusText: `Failure requesting '${url}' due to rate-limiting.`,
+        });
+      }
+      return reply;
+    }, retryOptions);
   }
 }

@@ -20,7 +20,7 @@ export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
 export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
 
 export const TRAINING_GROUP_RELATIONSHIP_TYPE =
-  'training_assigned_knowbe4_user_group';
+  'training_campaign_assigned_knowbe4_user_group';
 
 export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_campaign_has_module';
 

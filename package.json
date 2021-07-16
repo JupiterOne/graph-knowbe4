@@ -31,7 +31,8 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.maxby": "^4.6.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "@lifeomic/attempt": "^3.0.0"
   },
   "devDependencies": {
     "@jupiterone/integration-sdk-core": "^6.10.0",
