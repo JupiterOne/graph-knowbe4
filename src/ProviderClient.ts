@@ -1,5 +1,4 @@
 import {
-  IntegrationError,
   IntegrationLogger,
   IntegrationProviderAPIError,
 } from '@jupiterone/integration-sdk-core';
@@ -146,15 +145,17 @@ export default class ProviderClient {
 
   public async fetchAccountDetails(): Promise<Account> {
     try {
-      this.logger.trace('Fetching KnowBe4 account...');
+      this.logger.info('Fetching KnowBe4 account...');
       const result = await this.collectOnePage('account');
       this.logger.trace({}, 'Fetched KnowBe4 account');
       return await result.json();
     } catch (err) {
-      throw new IntegrationError({
+      const url = this.BASE_API_URL + '/account';
+      throw new IntegrationProviderAPIError({
         cause: err,
-        code: 'fail',
-        message: 'Error calling KnowBe4 API',
+        endpoint: url,
+        status: 'fail',
+        statusText: `Error calling KnowBe4 API at '${url}'.`,
       });
     }
   }
@@ -211,7 +212,7 @@ export default class ProviderClient {
     params?: string,
   ): Promise<any[]> {
     try {
-      this.logger.trace(`Fetching KnowBe4 ${firstUri}...`);
+      this.logger.info(`Fetching KnowBe4 ${firstUri}...`);
       const results: any[] = [];
 
       await this.forEachPage(firstUri, params, (page: any) => {
@@ -223,10 +224,11 @@ export default class ProviderClient {
 
       return results;
     } catch (err) {
-      throw new IntegrationError({
+      throw new IntegrationProviderAPIError({
         cause: err,
-        code: 'fail',
-        message: 'Error calling KnowBe4 API',
+        endpoint: firstUri,
+        status: 'fail',
+        statusText: `Error calling KnowBe4 API at '${firstUri}'.`,
       });
     }
   }
