@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "repository": "https://github.com/JupiterOne/graph-knowbe4",
   "license": "SEE LICENSE IN LICENSE",
+  "types": "src/index.d.ts",
   "files": [
-    "LICENSE",
-    "dist"
+    "src"
   ],
   "publishConfig": {
     "access": "public"
@@ -23,7 +23,7 @@
     "test:env": "LOAD_ENV=1 yarn test",
     "test:ci": "yarn lint && yarn type-check && yarn test",
     "build": "tsc -p tsconfig.dist.json --declaration",
-    "prepush": "yarn lint && yarn type-check && jest --changedSince master",
+    "prepush": "yarn lint && yarn type-check && jest --changedSince main",
     "prepack": "yarn build"
   },
   "dependencies": {
