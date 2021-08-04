@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-knowbe4",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A JupiterOne managed integration for https://www.knowbe4.com.",
   "main": "dist/index.js",
   "repository": "https://github.com/JupiterOne/graph-knowbe4",
@@ -28,11 +28,11 @@
   },
   "dependencies": {
     "@jupiterone/integration-sdk-core": "^6.13.0",
+    "@lifeomic/attempt": "^3.0.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.maxby": "^4.6.0",
-    "node-fetch": "^2.6.1",
-    "@lifeomic/attempt": "^3.0.0"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@jupiterone/integration-sdk-core": "^6.13.0",
