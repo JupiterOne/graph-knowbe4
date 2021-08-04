@@ -1,65 +1,46 @@
-import {
-  EntityFromIntegration,
-  GraphClient,
-  IntegrationExecutionContext,
-  PersisterClient,
-  RelationshipFromIntegration,
-} from "@jupiterone/jupiter-managed-integration-sdk";
+import { Entity, ExplicitRelationship } from '@jupiterone/integration-sdk-core';
 
-import ProviderClient from "./ProviderClient";
+export const ACCOUNT_ENTITY_TYPE = 'knowbe4_account';
+export const ACCOUNT_ENTITY_CLASS = ['Account'];
 
-export const ACCOUNT_ENTITY_TYPE = "knowbe4_account";
-export const ACCOUNT_ENTITY_CLASS = "Account";
+export const USER_ENTITY_TYPE = 'knowbe4_user';
+export const USER_ENTITY_CLASS = ['User'];
+export const ACCOUNT_USER_RELATIONSHIP_TYPE = 'knowbe4_account_has_user';
 
-export const USER_ENTITY_TYPE = "knowbe4_user";
-export const USER_ENTITY_CLASS = "User";
-export const ACCOUNT_USER_RELATIONSHIP_TYPE = "knowbe4_account_has_user";
+export const GROUP_ENTITY_TYPE = 'knowbe4_user_group';
+export const GROUP_ENTITY_CLASS = ['UserGroup'];
+export const ACCOUNT_GROUP_RELATIONSHIP_TYPE = 'knowbe4_account_has_user_group';
 
-export const GROUP_ENTITY_TYPE = "knowbe4_user_group";
-export const GROUP_ENTITY_CLASS = "UserGroup";
-export const ACCOUNT_GROUP_RELATIONSHIP_TYPE = "knowbe4_account_has_user_group";
+export const GROUP_USER_RELATIONSHIP_TYPE = 'knowbe4_user_group_has_user';
 
-export const USER_GROUP_RELATIONSHIP_TYPE = "knowbe4_user_group_membership";
-export const USER_GROUP_RELATIONSHIP_CLASS = "HAS";
+export const TRAINING_ENTITY_TYPE = 'training_campaign';
+export const TRAINING_ENTITY_CLASS = ['Training'];
 
-export const TRAINING_ENTITY_TYPE = "training_campaign";
-export const TRAINING_ENTITY_CLASS = "Training";
+export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
+export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
 
-export const TRAINING_MODULE_ENTITY_TYPE = "training_module";
-export const TRAINING_MODULE_ENTITY_CLASS = ["Training", "Module"];
+export const TRAINING_GROUP_RELATIONSHIP_TYPE =
+  'training_campaign_assigned_knowbe4_user_group';
 
-export const TRAINING_GROUP_RELATIONSHIP_TYPE = "training_assigned_user_group";
-export const TRAINING_GROUP_RELATIONSHIP_CLASS = "ASSIGNED";
+export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_campaign_has_module';
 
-export const TRAINING_MODULE_RELATIONSHIP_TYPE = "training_has_module";
-export const TRAINING_MODULE_RELATIONSHIP_CLASS = "HAS";
+export const MODULE_USER_RELATIONSHIP_TYPE = 'training_module_assigned_user';
 
-export const TRAINING_ENROLLMENT_RELATIONSHIP_TYPE =
-  "training_module_assigned_user";
-export const TRAINING_ENROLLMENT_RELATIONSHIP_CLASS = "ASSIGNED";
+export const USER_MODULE_RELATIONSHIP_TYPE = 'user_completed_training_module';
 
-export const TRAINING_COMPLETION_RELATIONSHIP_TYPE =
-  "user_completed_training_module";
-export const TRAINING_COMPLETION_RELATIONSHIP_CLASS = "COMPLETED";
-
-export interface IntegrationConfig {
-  apiKey: string;
-  site: string;
-}
-
-export interface AccountEntity extends EntityFromIntegration {
+export interface AccountEntity extends Entity {
   name: string;
   type: string;
   domains: string[];
-  admins: number[];
+  admins: string[];
   subscriptionLevel: string;
   subscriptionEndDate: string;
   numberOfSeats: number;
   currentRiskScore: number;
 }
 
-export interface UserEntity extends EntityFromIntegration {
-  id: number;
+export interface UserEntity extends Entity {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -77,7 +58,7 @@ export interface UserEntity extends EntityFromIntegration {
   managerEmail: string | null;
   adiManageable: boolean | null;
   adiGuid: string | null;
-  groups: number[];
+  groups: string[];
   aliases: string[] | null;
   joinedOn: string | null;
   lastSignIn: string | null;
@@ -90,8 +71,8 @@ export interface UserEntity extends EntityFromIntegration {
   archivedAt: string | null;
 }
 
-export interface GroupEntity extends EntityFromIntegration {
-  id: number;
+export interface GroupEntity extends Entity {
+  id: string;
   groupId?: number;
   name: string;
   groupType: string;
@@ -100,13 +81,13 @@ export interface GroupEntity extends EntityFromIntegration {
   status: string;
 }
 
-export interface TrainingEntity extends EntityFromIntegration {
-  id: number;
+export interface TrainingEntity extends Entity {
+  id: string;
   campaignId: number;
   name: string;
-  groups: number[];
+  groups: string[];
   status: string;
-  modules: number[];
+  modules: string[];
   content: number[];
   durationType: string;
   startDate: string;
@@ -116,7 +97,7 @@ export interface TrainingEntity extends EntityFromIntegration {
   allowMultipleEnrollments: boolean;
 }
 
-export interface TrainingModuleEntity extends EntityFromIntegration {
+export interface TrainingModuleEntity extends Entity {
   contentType: string;
   name: string;
   description?: string;
@@ -135,8 +116,7 @@ export interface TrainingModuleEntity extends EntityFromIntegration {
   defaultLanguage?: string;
 }
 
-export interface TrainingEnrollmentRelationship
-  extends RelationshipFromIntegration {
+export interface TrainingEnrollmentRelationship extends ExplicitRelationship {
   assignedOn?: number;
   startedOn?: number;
   completedOn?: number;
@@ -145,8 +125,6 @@ export interface TrainingEnrollmentRelationship
   policyAcknowledged: boolean;
 }
 
-export interface ExecutionContext extends IntegrationExecutionContext {
-  graph: GraphClient;
-  persister: PersisterClient;
-  provider: ProviderClient;
+export interface IdEntityMap<V> {
+  [key: string]: V;
 }
