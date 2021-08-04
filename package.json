@@ -1,10 +1,10 @@
 {
   "name": "@jupiterone/graph-knowbe4",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A JupiterOne managed integration for https://www.knowbe4.com.",
-  "main": "dist/index.js",
   "repository": "https://github.com/JupiterOne/graph-knowbe4",
   "license": "SEE LICENSE IN LICENSE",
+  "main": "src/index.js",
   "types": "src/index.d.ts",
   "files": [
     "src"
@@ -22,9 +22,8 @@
     "test": "jest",
     "test:env": "LOAD_ENV=1 yarn test",
     "test:ci": "yarn lint && yarn type-check && yarn test",
-    "build": "tsc -p tsconfig.dist.json --declaration",
-    "prepush": "yarn lint && yarn type-check && jest --changedSince main",
-    "prepack": "yarn build"
+    "build": "tsc -p tsconfig.dist.json --declaration && cp README.md dist/README.md",
+    "prepush": "yarn lint && yarn type-check && jest --changedSince main"
   },
   "dependencies": {
     "@jupiterone/integration-sdk-core": "^6.13.0",
