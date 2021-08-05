@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Showing how release will be created
+
 ## 2.0.0 - 2021-08-04
 
 ### Changed
