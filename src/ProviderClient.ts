@@ -240,34 +240,45 @@ export default class ProviderClient {
     return await this.fetchWithBackoff(url, this.options);
   }
 
-  private async fetchWithBackoff(url, fetchOptions) {
-    //KnowBe4 API rate limits to 4/sec and 1000/day
-    const retryOptions = {
-      delay: 250,
-      maxAttempts: 8,
-      initialDelay: 0,
-      minDelay: 0,
-      maxDelay: 0,
-      factor: 2,
-      timeout: 0,
-      jitter: false,
-      handleError: null,
-      handleTimeout: null,
-      beforeAttempt: null,
-      calculateDelay: null,
-    }; // 8 attempts with 250 ms start and factor 2 means longest wait is 32 seconds
-    return await retry(async () => {
-      const reply = await fetch(url, fetchOptions);
-      this.logger.warn(`Rate limiting encountered. Waiting and trying again.`);
-      if (reply.status === 429) {
-        throw new IntegrationProviderAPIError({
-          cause: undefined,
-          endpoint: url,
-          status: reply.status,
-          statusText: `Failure requesting '${url}' due to rate-limiting.`,
-        });
-      }
-      return reply;
-    }, retryOptions);
+  private async fetchWithBackoff(url, fetchOptions): Promise<any> {
+    let reply;
+    reply = await fetch(url, fetchOptions);
+    if (reply.status === 429) {
+      //KnowBe4 API rate limits to 4/sec and 1000/day
+      this.logger.warn(
+        `Status 429 (rate limiting) encountered. Engaging backoff function.`,
+      );
+      const retryOptions = {
+        delay: 250,
+        maxAttempts: 8,
+        initialDelay: 0,
+        minDelay: 0,
+        maxDelay: 0,
+        factor: 2,
+        timeout: 0,
+        jitter: false,
+        handleError: null,
+        handleTimeout: null,
+        beforeAttempt: null,
+        calculateDelay: null,
+      }; // 8 attempts with 250 ms start and factor 2 means longest wait is 32 seconds
+      reply = await retry(async () => {
+        const response = await fetch(url, fetchOptions);
+        if (response.status === 429) {
+          this.logger.warn(`Backoff: Another 429. Waiting and trying again.`);
+          //this error will get swallowed by the retry function, but triggers the retry to retry
+          //when retry finally totally fails, this will be the error that gets passed up the stack
+          throw new IntegrationProviderAPIError({
+            cause: undefined,
+            endpoint: url,
+            status: reply.status,
+            statusText: `Failure requesting '${url}' due to rate-limiting.`,
+          });
+        }
+        return response;
+      }, retryOptions);
+      this.logger.warn(`Backoff: Successfully retrieved data.`);
+    }
+    return reply;
   }
 }

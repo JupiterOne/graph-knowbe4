@@ -101,8 +101,9 @@ export class APIClient {
     //there can be multiple enrollments for a given user to a given module,
     //so we must group them by unique user-module pairs and select the most
     //revelant enrollment to use as the basis for relationships
+    const filteredEnrollments = enrollments.filter((e) => e.user !== null);
     const enrollmentsByUserIdAndModule = groupBy(
-      enrollments,
+      filteredEnrollments,
       (e) => `${e.user.id}|${e.module_name}`,
     );
     for (const userIdModulePair of Object.keys(enrollmentsByUserIdAndModule)) {
