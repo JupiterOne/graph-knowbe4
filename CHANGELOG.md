@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- Null users returned from certain KnowBe4 API calls no longer cause crash.
+- Logs no longer incorrectly report all fetch errors as rate-limiting errors.
+- Non-rate-limiting errors no longer invoke backoff-retry function.
+
+## Updated
+
+- Package versions.
+
 ## 2.0.0 - 2021-08-04
 
 ### Changed
