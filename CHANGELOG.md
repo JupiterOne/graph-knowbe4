@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## 2.0.2 - 2021-08-11
+
 ### Fixed
 
 - Null users returned from certain KnowBe4 API calls no longer cause crash.
@@ -18,7 +20,7 @@ and this project adheres to
 
 - Package versions.
 
-## 2.0.0 - 2021-08-04
+## 2.0.1 - 2021-08-04
 
 ### Changed
 
