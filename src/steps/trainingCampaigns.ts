@@ -74,6 +74,8 @@ export async function fetchTrainingCampaigns({
           createTrainingModuleEntity(module),
         )) as TrainingModuleEntity;
         trainingModulesByName[module.name] = trainingModuleEntity;
+      } else {
+        trainingModuleEntity = trainingModulesByName[module.name];
       }
       await jobState.addRelationship(
         createDirectRelationship({
