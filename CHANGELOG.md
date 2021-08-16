@@ -8,13 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.0.3] - 2021-08-16
+
 ### Fixed
 
 - Repeated entries for training modules no longer cause crash.
 - Invalid users or modules listed in enrollments no longer cause crash.
 - Users with undefined or null groups property no longer cause crash.
 
-## 2.0.2 - 2021-08-11
+## [2.0.2] - 2021-08-11
 
 ### Fixed
 
@@ -26,7 +28,7 @@ and this project adheres to
 
 - Package versions.
 
-## 2.0.1 - 2021-08-04
+## [2.0.1] - 2021-08-04
 
 ### Changed
 
