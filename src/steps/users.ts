@@ -67,16 +67,18 @@ export async function fetchUsers({
       }),
     );
 
-    for (const group of user.groups) {
-      const groupEntity = groupByIdMap[group];
-      if (groupEntity) {
-        await jobState.addRelationship(
-          createDirectRelationship({
-            _class: RelationshipClass.HAS,
-            from: groupEntity,
-            to: userEntity,
-          }),
-        );
+    if (user.groups) {
+      for (const group of user.groups) {
+        const groupEntity = groupByIdMap[group];
+        if (groupEntity) {
+          await jobState.addRelationship(
+            createDirectRelationship({
+              _class: RelationshipClass.HAS,
+              from: groupEntity,
+              to: userEntity,
+            }),
+          );
+        }
       }
     }
   });

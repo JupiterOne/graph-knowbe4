@@ -51,13 +51,20 @@ export async function fetchTrainingEnrollments({
   await apiClient.iterateTrainingEnrollments(async (enrollment) => {
     const module = moduleByNameMap[enrollment.module_name];
     const user = userByIdMap[enrollment.user.id];
-    await jobState.addRelationship(
-      createTrainingEnrollmentRelationship(enrollment, module, user),
-    );
-
-    if (enrollment.status.toLowerCase() === 'passed') {
+    if (module && user) {
       await jobState.addRelationship(
-        createTrainingCompletionRelationship(enrollment, module, user),
+        createTrainingEnrollmentRelationship(enrollment, module, user),
+      );
+
+      if (enrollment.status.toLowerCase() === 'passed') {
+        await jobState.addRelationship(
+          createTrainingCompletionRelationship(enrollment, module, user),
+        );
+      }
+    } else {
+      logger.warn(
+        {},
+        `Expected to find module ${enrollment.module_name} and user ${enrollment.user.id} in jobState maps`,
       );
     }
   });
