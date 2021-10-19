@@ -29,7 +29,7 @@ export async function fetchPhishingCampaign({
   const apiClient = createAPIClient(instance.config, logger);
   console.log('------------------- String TEST --------------------');
 
-  const accountEntity = await jobState.getData<Entity>(DATA_ACCOUNT_ENTITY);
+  const accountEntity = (await jobState.getData(DATA_ACCOUNT_ENTITY)) as Entity;
 
   await apiClient.iteratePhishingCampaigns(async (campaign) => {
     const phishingCampaignEntity = await jobState.addEntity(
