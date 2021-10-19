@@ -112,6 +112,31 @@ export interface TrainingCampaign {
   allow_multiple_enrollments: boolean;
 }
 
+export interface PhishingCampaign {
+  campaign_id: number;
+  name: string;
+  groups: GroupBase[];
+  last_phish_prone_percentage: number;
+  last_run: string | null;
+  status: string;
+  hidden: boolean;
+  send_duration: string;
+  track_duration: string;
+  frequency: string;
+  difficulty_filter: number[];
+  create_date: string;
+  psts_count: number;
+  psts: Psts[];
+}
+
+export interface Psts {
+  pst_id: number;
+  status: string;
+  start_date: string;
+  users_count: number;
+  phish_prone_percentage: number;
+}
+
 export interface TrainingEnrollment {
   enrollment_id: number;
   content_type: string;
@@ -170,6 +195,10 @@ export default class ProviderClient {
 
   public async fetchTraining(): Promise<TrainingCampaign[]> {
     return await this.collectAllPages('training/campaigns');
+  }
+
+  public async fetchPhishing(): Promise<PhishingCampaign[]> {
+    return await this.collectAllPages('phishing/campaigns');
   }
 
   public async fetchTrainingEnrollments(): Promise<TrainingEnrollment[]> {

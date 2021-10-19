@@ -9,6 +9,7 @@ import {
   Group,
   TrainingCampaign,
   TrainingEnrollment,
+  PhishingCampaign,
 } from './ProviderClient';
 import ProviderClient from './ProviderClient';
 import groupBy from 'lodash.groupby';
@@ -86,6 +87,20 @@ export class APIClient {
     const trainingCampaigns = await this.provider.fetchTraining();
     for (const trainingCampaign of trainingCampaigns) {
       await iteratee(trainingCampaign);
+    }
+  }
+
+  /**
+   * Iterates each KnowBe4 PhishingCampaign resource.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iteratePhishingCampaigns(
+    iteratee: ResourceIteratee<PhishingCampaign>,
+  ): Promise<void> {
+    const phishingCampaigns = await this.provider.fetchPhishing();
+    for (const phishingCampaign of phishingCampaigns) {
+      await iteratee(phishingCampaign);
     }
   }
 
