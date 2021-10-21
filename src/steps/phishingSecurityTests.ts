@@ -1,6 +1,5 @@
 import {
   createDirectRelationship,
-  Entity,
   getRawData,
   IntegrationStep,
   IntegrationStepExecutionContext,
@@ -9,17 +8,12 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import {
-  createPhishingEntity,
-  createPhishingSecurityTestEntity,
-} from '../converters';
+import { createPhishingSecurityTestEntity } from '../converters';
 import { PhishingCampaign } from '../ProviderClient';
 
 import {
-  ACCOUNT_ENTITY_TYPE,
   PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
-  USER_PHISHING_SECURITY_TEST_RELATIONSHIP_TYPE,
   TRAINING_ENTITY_CLASS,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
 } from '../types';
