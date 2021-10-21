@@ -1,4 +1,6 @@
 import {
+  createIntegrationEntity,
+  Entity,
   parseTimePropertyValue,
   RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
@@ -6,6 +8,8 @@ import {
 import {
   Account,
   Group,
+  PhishingCampaign,
+  PhishingSecurityTest,
   TrainingCampaign,
   TrainingContent,
   TrainingEnrollment,
@@ -30,6 +34,8 @@ import {
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
   UserEntity,
+  PHISHING_CAMPAIGN_ENTITY_TYPE,
+  PHISHING_SECURITY_TEST_ENTITY_TYPE,
 } from './types';
 
 import toCamelCase from './util/toCamelCase';
@@ -119,6 +125,60 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
     modules,
     content,
   };
+}
+
+export function createPhishingEntity(data: PhishingCampaign): Entity {
+  return createIntegrationEntity({
+    entityData: {
+      source: data,
+      assign: {
+        _class: TRAINING_ENTITY_CLASS,
+        _type: PHISHING_CAMPAIGN_ENTITY_TYPE,
+        _key: `knowbe4:phishing:campaign:${data.campaign_id}`,
+        name: data.name,
+        displayName: data.name,
+        id: data.campaign_id.toString(),
+        lastPhishPronePercentage: data.last_phish_prone_percentage,
+        lastRun: data.last_run,
+        status: data.status,
+        hidden: data.hidden,
+        sendDuration: data.send_duration,
+        trackDuration: data.track_duration,
+        frequency: data.frequency,
+        difficultyFilter: data.difficulty_filter,
+        createdOn: parseTimePropertyValue(data.create_date),
+        pstsCount: data.psts_count,
+      },
+    },
+  });
+}
+
+export function createPhishingSecurityTestEntity(
+  data: PhishingSecurityTest,
+): Entity {
+  return createIntegrationEntity({
+    entityData: {
+      source: data,
+      assign: {
+        _class: TRAINING_ENTITY_CLASS,
+        _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
+        _key: `knowbe4:phishing:security:${data.campaign_id}`,
+        name: data.name,
+        displayName: data.name,
+        // id: data.campaign_id.toString(),
+        // lastPhishPronePercentage: data.last_phish_prone_percentage,
+        // lastRun: data.last_run,
+        // status: data.status,
+        // hidden: data.hidden,
+        // sendDuration: data.send_duration,
+        // trackDuration: data.track_duration,
+        // frequency: data.frequency,
+        // difficultyFilter: data.difficulty_filter,
+        // createdOn: parseTimePropertyValue(data.create_date),
+        // pstsCount: data.psts_count,
+      },
+    },
+  });
 }
 
 export function createTrainingModuleEntity(

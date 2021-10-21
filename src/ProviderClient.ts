@@ -112,6 +112,72 @@ export interface TrainingCampaign {
   allow_multiple_enrollments: boolean;
 }
 
+export interface PhishingCampaign {
+  campaign_id: number;
+  name: string;
+  groups: GroupBase[];
+  last_phish_prone_percentage: number;
+  last_run: string | null;
+  status: string;
+  hidden: boolean;
+  send_duration: string;
+  track_duration: string;
+  frequency: string;
+  difficulty_filter: number[];
+  create_date: string;
+  psts_count: number;
+  psts: Psts[];
+}
+
+export interface Psts {
+  pst_id: number;
+  status: string;
+  start_date: string;
+  users_count: number;
+  phish_prone_percentage: number;
+}
+
+export interface PhishingSecurityTest {
+  campaign_id: number;
+  pst_id: number;
+  status: string;
+  name: string;
+  groups: GroupBase[];
+  phish_prone_percentage: string;
+  started_at: string;
+  duration: number;
+  categories: Categories[];
+  template: Template;
+  landingPage: LandingPage;
+  scheduled_count: number;
+  delivered_count: number;
+  opened_count: number;
+  clicked_count: number;
+  replied_count: number;
+  attachment_open_count: number;
+  macro_enabled_count: number;
+  data_entered_count: number;
+  vulnerable_plugin_count: number;
+  exploited_count: number;
+  reported_count: number;
+  bounced_count: number;
+}
+
+export interface Categories {
+  category_id: number;
+  name: string;
+}
+
+export interface Template {
+  id: number;
+  name: string;
+}
+
+export interface LandingPage {
+  id: number;
+  name: string;
+}
+
 export interface TrainingEnrollment {
   enrollment_id: number;
   content_type: string;
@@ -170,6 +236,18 @@ export default class ProviderClient {
 
   public async fetchTraining(): Promise<TrainingCampaign[]> {
     return await this.collectAllPages('training/campaigns');
+  }
+
+  public async fetchPhishing(): Promise<PhishingCampaign[]> {
+    return await this.collectAllPages('phishing/campaigns');
+  }
+
+  public async fetchPhishingSecurityTest(
+    campaignId: number,
+  ): Promise<PhishingSecurityTest[]> {
+    return await this.collectAllPages(
+      `phishing/campaigns/${campaignId}/security_tests`,
+    );
   }
 
   public async fetchTrainingEnrollments(): Promise<TrainingEnrollment[]> {

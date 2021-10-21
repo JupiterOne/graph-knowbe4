@@ -16,6 +16,16 @@ export const GROUP_USER_RELATIONSHIP_TYPE = 'knowbe4_user_group_has_user';
 export const TRAINING_ENTITY_TYPE = 'training_campaign';
 export const TRAINING_ENTITY_CLASS = ['Training'];
 
+export const PHISHING_CAMPAIGN_ENTITY_TYPE = 'phishing_campaign';
+export const ACCOUNT_PHISHING_CAMPAIGN_RELATIONSHIP_TYPE =
+  'knowbe4_account_has_phishing_campaign';
+
+export const PHISHING_SECURITY_TEST_ENTITY_TYPE = 'phishing_security_test';
+export const PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE =
+  'phishing_campaign_has_phishing_security_test';
+export const USER_PHISHING_SECURITY_TEST_RELATIONSHIP_TYPE =
+  'knowbe4_user_recieved_phishing_security_test';
+
 export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
 export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
 
