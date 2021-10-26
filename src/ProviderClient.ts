@@ -148,7 +148,7 @@ export interface PhishingSecurityTest {
   duration: number;
   categories: Categories[];
   template: Template;
-  landingPage: LandingPage;
+  landing_page: Landing_page;
   scheduled_count: number;
   delivered_count: number;
   opened_count: number;
@@ -173,7 +173,7 @@ export interface Template {
   name: string;
 }
 
-export interface LandingPage {
+export interface Landing_page {
   id: number;
   name: string;
 }

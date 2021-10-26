@@ -156,6 +156,28 @@ export function createPhishingEntity(data: PhishingCampaign): Entity {
 export function createPhishingSecurityTestEntity(
   data: PhishingSecurityTest,
 ): Entity {
+  const groups: number[] = [];
+  data.groups.forEach((g) => {
+    if (g.group_id !== undefined) {
+      groups.push(g.group_id);
+    }
+  });
+
+  const categories: number[] = [];
+  data.categories.forEach((c) => {
+    if (c.category_id !== undefined) {
+      categories.push(c.category_id);
+    }
+  });
+
+  const template: number[] = [];
+  if (data.template.id !== undefined) {
+    template.push(data.template.id);
+  }
+
+  const landingPage: number =
+    data.landing_page.id !== undefined ? data.landing_page.id : null;
+
   return createIntegrationEntity({
     entityData: {
       source: data,
@@ -167,13 +189,13 @@ export function createPhishingSecurityTestEntity(
         displayName: data.name,
         id: data.campaign_id.toString(),
         status: data.status,
-        // groups: data.groups.toString(),
+        groups: groups,
         phishPronePercentage: data.phish_prone_percentage,
         startedAt: data.started_at,
         sendDuration: data.duration,
-        // categories: data.categories.toString(),
-        // template: data.template.name,
-        // landing_page: data.landingPage.toString(),
+        categories: categories,
+        template: template,
+        landingPage: landingPage,
         scheduledCount: data.scheduled_count,
         deliveredCount: data.delivered_count,
         openedCount: data.opened_count,

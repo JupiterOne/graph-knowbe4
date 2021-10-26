@@ -1,4 +1,3 @@
-// import { convertNameValuePairs } from '@jupiterone/integration-sdk-core';
 import {
   createAccountEntity,
   createGroupEntity,
@@ -40,9 +39,6 @@ const groupEntities: GroupEntity[] = require('./test-data/group-entities.json');
 const trainingCampaigns: TrainingCampaign[] = require('./test-data/training-campaigns.json');
 const trainingEntities: TrainingEntity[] = require('./test-data/training-entities.json');
 const trainingModules: TrainingModuleEntity[] = require('./test-data/training-module-entities.json');
-
-// const phishingCampaigns: PhishingCampaign[] = require('./test-data/phishing-campaigns.json');
-// const PhishingSecurityTests: PhishingSecurityTest[] = require('./test-data/phishing-security-tests.json');
 /* tslint:enable */
 
 test('createAccountEntity', () => {
@@ -87,13 +83,17 @@ test('createTrainingEntities', () => {
 test('should convert phishingSecurityTest to entity', () => {
   const phishingSecurityTest = {
     campaign_id: 242333,
-    pst_id: 16142,
+    pst_id: 509579,
     status: 'Closed',
     name: 'Corporate Test 001',
     groups: [
       {
         group_id: 16342,
         name: 'Corporate Employees',
+      },
+      {
+        group_id: 22222,
+        name: 'Corporate Bosses',
       },
     ],
     phish_prone_percentage: 0.5,
@@ -108,6 +108,10 @@ test('should convert phishingSecurityTest to entity', () => {
     template: {
       id: 11428,
       name: 'CNN Breaking News',
+    },
+    landing_page: {
+      id: 4072,
+      name: 'Verify Java',
     },
     scheduled_count: 42,
     delivered_count: 4,
@@ -127,14 +131,17 @@ test('should convert phishingSecurityTest to entity', () => {
     expect.objectContaining({
       _class: TRAINING_ENTITY_CLASS,
       _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
-      _key: 'knowbe4:phishing:security:16142',
+      _key: 'knowbe4:phishing:security:509579',
       id: '242333',
-      // pst_id: 16142,
       status: 'Closed',
       name: 'Corporate Test 001',
       displayName: 'Corporate Test 001',
       phishPronePercentage: 0.5,
       startedAt: '2019-04-02T15:02:38.000Z',
+      groups: [16342, 22222],
+      categories: [4237],
+      template: [11428],
+      landingPage: 4072,
       sendDuration: 1,
       scheduledCount: 42,
       deliveredCount: 4,

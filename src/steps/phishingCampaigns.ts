@@ -9,9 +9,6 @@ import {
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
 import { createPhishingEntity } from '../converters';
-// import {
-//   createPhishingEntity
-// } from '../converters';
 import {
   ACCOUNT_ENTITY_TYPE,
   ACCOUNT_PHISHING_CAMPAIGN_RELATIONSHIP_TYPE,
@@ -27,7 +24,6 @@ export async function fetchPhishingCampaign({
   logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const apiClient = createAPIClient(instance.config, logger);
-  console.log('------------------- String TEST --------------------');
 
   const accountEntity = (await jobState.getData(DATA_ACCOUNT_ENTITY)) as Entity;
 
