@@ -176,7 +176,7 @@ export function createPhishingSecurityTestEntity(
   }
 
   const landingPage: number =
-    data.landing_page.id !== undefined ? data.landing_page.id : null;
+    data.landing_page.id !== undefined ? data.landing_page.id : undefined;
 
   return createIntegrationEntity({
     entityData: {
