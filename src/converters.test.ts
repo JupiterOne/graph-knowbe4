@@ -1,4 +1,4 @@
-import { convertNameValuePairs } from '@jupiterone/integration-sdk-core';
+// import { convertNameValuePairs } from '@jupiterone/integration-sdk-core';
 import {
   createAccountEntity,
   createGroupEntity,
@@ -22,8 +22,6 @@ import {
   TrainingEntity,
   TrainingModuleEntity,
   UserEntity,
-  PhishingCampaignEntity,
-  phishingSecurityTestEntity,
   TRAINING_ENTITY_CLASS,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
@@ -43,8 +41,8 @@ const trainingCampaigns: TrainingCampaign[] = require('./test-data/training-camp
 const trainingEntities: TrainingEntity[] = require('./test-data/training-entities.json');
 const trainingModules: TrainingModuleEntity[] = require('./test-data/training-module-entities.json');
 
-const phishingCampaigns: PhishingCampaign[] = require('./test-data/phishing-campaigns.json');
-const PhishingSecurityTests: PhishingSecurityTest[] = require('./test-data/phishing-security-tests.json');
+// const phishingCampaigns: PhishingCampaign[] = require('./test-data/phishing-campaigns.json');
+// const PhishingSecurityTests: PhishingSecurityTest[] = require('./test-data/phishing-security-tests.json');
 /* tslint:enable */
 
 test('createAccountEntity', () => {

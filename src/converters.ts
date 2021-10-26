@@ -36,7 +36,6 @@ import {
   UserEntity,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
-  PhishingCampaignEntity,
 } from './types';
 
 import toCamelCase from './util/toCamelCase';
