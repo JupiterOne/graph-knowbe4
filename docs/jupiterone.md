@@ -102,7 +102,7 @@ The following relationships are created:
 | `knowbe4_account`     | **HAS**               | `knowbe4_user`           |
 | `knowbe4_account`     | **HAS**               | `knowbe4_user_group`     |
 | `knowbe4_user_group`  | **HAS**               | `knowbe4_user`           |
-| `phishing_campaign`   | **HAS**               | `phishing_security_test` |
+| `phishing_campaign`   | **CONTAINS**          | `phishing_security_test` |
 | `training_campaign`   | **ASSIGNED**          | `knowbe4_user_group`     |
 | `training_campaign`   | **HAS**               | `training_module`        |
 | `training_module`     | **ASSIGNED**          | `knowbe4_user`           |

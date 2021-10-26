@@ -1,0 +1,73 @@
+[
+  {
+    "campaign_id": 242333,
+    "name": "One Time Phishing Security Test",
+    "groups": [
+      {
+        "group_id": 0,
+        "name": "All Users"
+      }
+    ],
+    "last_phish_prone_percentage": 0.3,
+    "last_run": "2019-04-02T15:02:38.000Z",
+    "status": "Closed",
+    "hidden": false,
+    "send_duration": "3 Business Days",
+    "track_duration": "3 Days",
+    "frequency": "One Time",
+    "difficulty_filter": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "create_date": "2019-04-02T15:02:38.000Z",
+    "psts_count": 1,
+    "psts": [
+      {
+        "pst_id": 1,
+        "status": "Closed",
+        "start_date": "2019-04-02T15:02:38.000Z",
+        "users_count": 123,
+        "phish_prone_percentage": 0.3
+      }
+    ]
+  },
+  {
+    "campaign_id": 242334,
+    "name": "Another Phishing Security Test",
+    "groups": [
+      {
+        "group_id": 0,
+        "name": "All Users"
+      }
+    ],
+    "last_phish_prone_percentage": 0.3,
+    "last_run": "2019-04-02T15:02:38.000Z",
+    "status": "Closed",
+    "hidden": false,
+    "send_duration": "3 Business Days",
+    "track_duration": "3 Days",
+    "frequency": "One Time",
+    "difficulty_filter": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "create_date": "2019-04-02T15:02:38.000Z",
+    "psts_count": 1,
+    "psts": [
+      {
+        "pst_id": 1,
+        "status": "Closed",
+        "start_date": "2019-04-02T15:02:38.000Z",
+        "users_count": 123,
+        "phish_prone_percentage": 0.3
+      }
+    ]
+  }
+]
+

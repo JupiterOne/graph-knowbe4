@@ -44,9 +44,12 @@ export async function fetchPhishingSecurityTest({
             );
             await jobState.addRelationship(
               createDirectRelationship({
-                _class: RelationshipClass.HAS,
+                _class: RelationshipClass.CONTAINS,
                 from: phishingCampaignEntity,
                 to: phishingSecurityTestEntity,
+                properties: {
+                  _type: PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE,
+                },
               }),
             );
           },
@@ -70,7 +73,7 @@ export const phishingSecurityTestsSteps: IntegrationStep<IntegrationConfig>[] =
       relationships: [
         {
           _type: PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE,
-          _class: RelationshipClass.HAS,
+          _class: RelationshipClass.CONTAINS,
           sourceType: PHISHING_CAMPAIGN_ENTITY_TYPE,
           targetType: PHISHING_SECURITY_TEST_ENTITY_TYPE,
         },

@@ -143,7 +143,7 @@ export interface PhishingSecurityTest {
   status: string;
   name: string;
   groups: GroupBase[];
-  phish_prone_percentage: string;
+  phish_prone_percentage: number;
   started_at: string;
   duration: number;
   categories: Categories[];
