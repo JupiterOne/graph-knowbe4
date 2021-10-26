@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+## Changed
+
+- Error handler during fetch now accounts for 4xx and 5xx errors better, and
+  waits longer during the retry
+
 ## [2.0.3] - 2021-08-16
 
 ### Fixed

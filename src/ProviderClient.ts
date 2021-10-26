@@ -241,44 +241,67 @@ export default class ProviderClient {
   }
 
   private async fetchWithBackoff(url, fetchOptions): Promise<any> {
-    let reply;
-    reply = await fetch(url, fetchOptions);
-    if (reply.status === 429) {
+    //everything in fetchWithErrorLogging is going into the retry function below
+    const fetchWithErrorLogging = async () => {
+      let response;
+      //check for fundamental errors (network not available, DNS fail, etc)
+      //fetch doesn't error on 4xx/5xx response codes
+      try {
+        response = await fetch(url, fetchOptions);
+      } catch (err) {
+        throw new IntegrationProviderAPIError({
+          message: `Error during fetch from ${url}`,
+          status: err.status,
+          statusText: `Error msg: ${err.statusText}, url: ${url}`,
+          cause: err,
+          endpoint: url,
+        });
+      }
+
+      const responseStatus: string = response.status;
+
       //KnowBe4 API rate limits to 4/sec and 1000/day
-      this.logger.warn(
-        `Status 429 (rate limiting) encountered. Engaging backoff function.`,
-      );
-      const retryOptions = {
-        delay: 250,
-        maxAttempts: 8,
-        initialDelay: 0,
-        minDelay: 0,
-        maxDelay: 0,
-        factor: 2,
-        timeout: 0,
-        jitter: false,
-        handleError: null,
-        handleTimeout: null,
-        beforeAttempt: null,
-        calculateDelay: null,
-      }; // 8 attempts with 250 ms start and factor 2 means longest wait is 32 seconds
-      reply = await retry(async () => {
-        const response = await fetch(url, fetchOptions);
-        if (response.status === 429) {
-          this.logger.warn(`Backoff: Another 429. Waiting and trying again.`);
-          //this error will get swallowed by the retry function, but triggers the retry to retry
-          //when retry finally totally fails, this will be the error that gets passed up the stack
-          throw new IntegrationProviderAPIError({
-            cause: undefined,
-            endpoint: url,
-            status: reply.status,
-            statusText: `Failure requesting '${url}' due to rate-limiting.`,
-          });
-        }
-        return response;
-      }, retryOptions);
-      this.logger.warn(`Backoff: Successfully retrieved data.`);
-    }
-    return reply;
+      if (responseStatus === '429') {
+        this.logger.warn(
+          `Status 429 (rate limiting) encountered. Engaging backoff function.`,
+        );
+        //this error will get swallowed by the retry function, but triggers the retry to retry
+        //when retry finally totally fails, this will be the error that gets passed up the stack
+        throw new IntegrationProviderAPIError({
+          cause: undefined,
+          endpoint: url,
+          status: responseStatus,
+          statusText: `Failure requesting '${url}' due to rate-limiting.`,
+        });
+      }
+
+      //fetch doesn't throw errors on HTTP 4xx or 5xx codes, so you have to do that yourself
+      if (responseStatus.startsWith('5') || responseStatus.startsWith('4')) {
+        throw new IntegrationProviderAPIError({
+          cause: undefined,
+          endpoint: url,
+          status: responseStatus,
+          statusText: `Failure requesting '${url}', error code ${responseStatus}.`,
+        });
+      }
+      return response;
+    };
+
+    const retryOptions = {
+      delay: 1000,
+      maxAttempts: 10,
+      initialDelay: 0,
+      minDelay: 0,
+      maxDelay: 0,
+      factor: 2,
+      timeout: 0,
+      jitter: false,
+      handleError: null,
+      handleTimeout: null,
+      beforeAttempt: null,
+      calculateDelay: null,
+    }; // 10 attempts with 1000 ms start and factor 2 means longest wait is 20 minutes
+
+    return await retry(fetchWithErrorLogging, retryOptions);
   }
 }
