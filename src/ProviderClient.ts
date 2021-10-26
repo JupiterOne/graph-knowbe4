@@ -243,7 +243,7 @@ export default class ProviderClient {
   private async fetchWithBackoff(url, fetchOptions): Promise<any> {
     const logger = this.logger;
 
-    //everything in fetchWithErrorLogging is going into the retry function below
+    //everything in fetchWithErrorAwareness is going into the retry function below
     const fetchWithErrorAwareness = async () => {
       let response;
       //check for fundamental errors (network not available, DNS fail, etc)
