@@ -1,6 +1,6 @@
 import { accountSteps } from './account';
 import { groupSteps } from './groups';
-import { phishingSteps } from './phishingCampaigns';
+import { phishingCampaignSteps } from './phishingCampaigns';
 import { trainingCampaignSteps } from './trainingCampaigns';
 import { trainingEnrollmentSteps } from './trainingEnrollments';
 import { userSteps } from './users';
@@ -12,7 +12,7 @@ const integrationSteps = [
   ...userSteps,
   ...trainingCampaignSteps,
   ...trainingEnrollmentSteps,
-  ...phishingSteps,
+  ...phishingCampaignSteps,
   ...phishingSecurityTestsSteps,
 ];
 

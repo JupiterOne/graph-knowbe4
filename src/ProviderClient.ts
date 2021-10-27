@@ -148,7 +148,7 @@ export interface PhishingSecurityTest {
   duration: number;
   categories: Categories[];
   template: Template;
-  landing_page: Landing_page;
+  landing_page: LandingPage;
   scheduled_count: number;
   delivered_count: number;
   opened_count: number;
@@ -173,7 +173,7 @@ export interface Template {
   name: string;
 }
 
-export interface Landing_page {
+export interface LandingPage {
   id: number;
   name: string;
 }
@@ -238,7 +238,7 @@ export default class ProviderClient {
     return await this.collectAllPages('training/campaigns');
   }
 
-  public async fetchPhishing(): Promise<PhishingCampaign[]> {
+  public async fetchPhishingCampaign(): Promise<PhishingCampaign[]> {
     return await this.collectAllPages('phishing/campaigns');
   }
 

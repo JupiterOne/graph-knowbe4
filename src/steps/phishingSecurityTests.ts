@@ -18,8 +18,6 @@ import {
   PHISHING_CAMPAIGN_ENTITY_TYPE,
 } from '../types';
 
-export const DATA_ACCOUNT_ENTITY = 'DATA_ACCOUNT_ENTITY';
-// export const PHISHING_CAMPAIGN_ENTITY_TYPE = 'PHISHING_CAMPAIGN_ENTITY_TYPE';
 export async function fetchPhishingSecurityTest({
   instance,
   jobState,

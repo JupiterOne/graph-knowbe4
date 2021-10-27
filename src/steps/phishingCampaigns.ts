@@ -8,15 +8,16 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import { createPhishingEntity } from '../converters';
+import { createPhishingCampaignEntity } from '../converters';
 import {
   ACCOUNT_ENTITY_TYPE,
   ACCOUNT_PHISHING_CAMPAIGN_RELATIONSHIP_TYPE,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   TRAINING_ENTITY_CLASS,
 } from '../types';
+import { DATA_ACCOUNT_ENTITY } from './account';
 
-export const DATA_ACCOUNT_ENTITY = 'DATA_ACCOUNT_ENTITY';
+// export const DATA_ACCOUNT_ENTITY = 'DATA_ACCOUNT_ENTITY';
 
 export async function fetchPhishingCampaign({
   instance,
@@ -29,7 +30,7 @@ export async function fetchPhishingCampaign({
 
   await apiClient.iteratePhishingCampaigns(async (campaign) => {
     const phishingCampaignEntity = await jobState.addEntity(
-      createPhishingEntity(campaign),
+      createPhishingCampaignEntity(campaign),
     );
 
     await jobState.addRelationship(
@@ -41,7 +42,7 @@ export async function fetchPhishingCampaign({
     );
   });
 }
-export const phishingSteps: IntegrationStep<IntegrationConfig>[] = [
+export const phishingCampaignSteps: IntegrationStep<IntegrationConfig>[] = [
   {
     id: 'fetch-phishing-campaigns',
     name: 'Fetch Phishing Campaigns',

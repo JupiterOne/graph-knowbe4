@@ -127,7 +127,7 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
   };
 }
 
-export function createPhishingEntity(data: PhishingCampaign): Entity {
+export function createPhishingCampaignEntity(data: PhishingCampaign): Entity {
   return createIntegrationEntity({
     entityData: {
       source: data,
@@ -175,9 +175,6 @@ export function createPhishingSecurityTestEntity(
     template.push(data.template.id);
   }
 
-  const landingPage: number =
-    data.landing_page.id !== undefined ? data.landing_page.id : -1;
-
   return createIntegrationEntity({
     entityData: {
       source: data,
@@ -195,7 +192,7 @@ export function createPhishingSecurityTestEntity(
         sendDuration: data.duration,
         categories: categories,
         template: template,
-        landingPage: landingPage,
+        landingPage: data.landing_page?.id,
         scheduledCount: data.scheduled_count,
         deliveredCount: data.delivered_count,
         openedCount: data.opened_count,

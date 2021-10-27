@@ -23,8 +23,6 @@ export const ACCOUNT_PHISHING_CAMPAIGN_RELATIONSHIP_TYPE =
 export const PHISHING_SECURITY_TEST_ENTITY_TYPE = 'phishing_security_test';
 export const PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE =
   'phishing_campaign_contains_phishing_security_test';
-export const USER_PHISHING_SECURITY_TEST_RELATIONSHIP_TYPE =
-  'knowbe4_user_recieved_phishing_security_test';
 
 export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
 export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
@@ -156,7 +154,7 @@ export interface PhishingCampaignEntity extends Entity {
   psts: string[];
 }
 
-export interface phishingSecurityTestEntity extends Entity {
+export interface PhishingSecurityTestEntity extends Entity {
   campaign_id: number;
   pst_id: number;
   status: string;

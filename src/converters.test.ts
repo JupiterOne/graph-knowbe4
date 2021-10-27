@@ -4,7 +4,7 @@ import {
   createTrainingEntity,
   createUserEntity,
   createTrainingModuleEntity,
-  createPhishingEntity,
+  createPhishingCampaignEntity,
   createPhishingSecurityTestEntity,
 } from './converters';
 import {
@@ -165,7 +165,7 @@ test('should convert phishingSecurityTest to entity', () => {
   );
 });
 
-test('should convert phishingCampaing to entity', () => {
+test('should convert phishingCampaign to entity', () => {
   const phishingCampaign = {
     campaign_id: 242333,
     name: 'One Time Phishing Security Test',
@@ -196,7 +196,7 @@ test('should convert phishingCampaing to entity', () => {
     ],
   } as PhishingCampaign;
 
-  const entity = createPhishingEntity(phishingCampaign);
+  const entity = createPhishingCampaignEntity(phishingCampaign);
 
   expect(entity).toEqual(
     expect.objectContaining({

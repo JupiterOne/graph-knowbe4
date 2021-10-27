@@ -99,7 +99,7 @@ export class APIClient {
   public async iteratePhishingCampaigns(
     iteratee: ResourceIteratee<PhishingCampaign>,
   ): Promise<void> {
-    const phishingCampaigns = await this.provider.fetchPhishing();
+    const phishingCampaigns = await this.provider.fetchPhishingCampaign();
     for (const phishingCampaign of phishingCampaigns) {
       await iteratee(phishingCampaign);
     }

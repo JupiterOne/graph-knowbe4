@@ -62,7 +62,6 @@ describe('#fetchPhishingSecurityTest', () => {
           campaign_id: { type: 'number' },
           pst_id: { type: 'number' },
           status: { type: 'string' },
-
           groups: { type: 'array' },
           phish_prone_percentage: { type: 'number' },
           started_at: { type: 'string' },
