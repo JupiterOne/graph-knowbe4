@@ -90,19 +90,19 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
   const modules: number[] = [];
   const content: number[] = [];
 
-  data.groups.forEach((g) => {
+  data.groups?.forEach((g) => {
     if (g.group_id !== undefined) {
       groups.push(g.group_id);
     }
   });
 
-  data.modules.forEach((m) => {
+  data.modules?.forEach((m) => {
     if (m.store_purchase_id !== undefined) {
       modules.push(m.store_purchase_id);
     }
   });
 
-  data.content.forEach((c) => {
+  data.content?.forEach((c) => {
     if (c.policy_id !== undefined) {
       content.push(c.policy_id);
     }
