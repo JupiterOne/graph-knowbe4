@@ -22,6 +22,7 @@ import {
   TrainingModuleEntity,
   UserEntity,
   TRAINING_ENTITY_CLASS,
+  ASSESSMENT_ENTITY_CLASS,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
 } from './types';
@@ -129,7 +130,7 @@ test('should convert phishingSecurityTest to entity', () => {
   const entity = createPhishingSecurityTestEntity(phishingSecurityTest);
   expect(entity).toEqual(
     expect.objectContaining({
-      _class: TRAINING_ENTITY_CLASS,
+      _class: ASSESSMENT_ENTITY_CLASS,
       _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
       _key: 'knowbe4:phishing:security:509579',
       id: '242333',

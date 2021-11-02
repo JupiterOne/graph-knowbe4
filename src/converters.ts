@@ -36,6 +36,7 @@ import {
   UserEntity,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
+  ASSESSMENT_ENTITY_CLASS,
 } from './types';
 
 import toCamelCase from './util/toCamelCase';
@@ -179,9 +180,12 @@ export function createPhishingSecurityTestEntity(
     entityData: {
       source: data,
       assign: {
-        _class: TRAINING_ENTITY_CLASS,
+        _class: ASSESSMENT_ENTITY_CLASS,
         _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
         _key: `knowbe4:phishing:security:${data.pst_id}`,
+        category: 'Phishing Assessment',
+        summary: 'Phishing Assessment',
+        internal: true,
         name: data.name,
         displayName: data.name,
         id: data.campaign_id.toString(),

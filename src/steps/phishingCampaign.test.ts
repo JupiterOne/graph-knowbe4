@@ -52,7 +52,7 @@ describe('#fetchPhishingCampaign', () => {
       schema: {
         additionalProperties: true,
         properties: {
-          _type: { const: 'phishing_campaign' },
+          _type: { const: 'knowbe4_phishing_campaign' },
           _key: { type: 'string' },
           name: { type: 'string' },
           displayName: { type: 'string' },

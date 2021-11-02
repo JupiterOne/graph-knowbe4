@@ -14,8 +14,8 @@ import { PhishingCampaign } from '../ProviderClient';
 import {
   PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
-  TRAINING_ENTITY_CLASS,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
+  ASSESSMENT_ENTITY_CLASS,
 } from '../types';
 
 export async function fetchPhishingSecurityTest({
@@ -60,12 +60,12 @@ export const phishingSecurityTestsSteps: IntegrationStep<IntegrationConfig>[] =
   [
     {
       id: 'fetch-phishing-security-tests',
-      name: 'Fetch Phishing Security Tests',
+      name: 'Fetch Phishing Security Test',
       entities: [
         {
-          resourceName: 'KnowBe4 Phishing Security Tests',
+          resourceName: 'KnowBe4 Phishing Security Test',
           _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
-          _class: TRAINING_ENTITY_CLASS,
+          _class: ASSESSMENT_ENTITY_CLASS,
         },
       ],
       relationships: [

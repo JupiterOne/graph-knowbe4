@@ -51,11 +51,11 @@ describe('#fetchPhishingSecurityTest', () => {
         (r) => r._type === PHISHING_SECURITY_TEST_ENTITY_TYPE,
       ),
     ).toMatchGraphObjectSchema({
-      _class: ['Training'],
+      _class: ['Assessment'],
       schema: {
         additionalProperties: true,
         properties: {
-          _type: { const: 'phishing_security_test' },
+          _type: { const: 'knowbe4_phishing_security_test' },
           _key: { type: 'string' },
           name: { type: 'string' },
           displayName: { type: 'string' },
@@ -81,6 +81,9 @@ describe('#fetchPhishingSecurityTest', () => {
           exploited_count: { type: 'number' },
           reported_count: { type: 'number' },
           bounced_count: { type: 'number' },
+          category: { type: 'string' },
+          summary: { type: 'string' },
+          internal: { type: 'boolean' },
           _rawData: {
             type: 'array',
             items: { type: 'object' },

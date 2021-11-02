@@ -16,13 +16,14 @@ export const GROUP_USER_RELATIONSHIP_TYPE = 'knowbe4_user_group_has_user';
 export const TRAINING_ENTITY_TYPE = 'training_campaign';
 export const TRAINING_ENTITY_CLASS = ['Training'];
 
-export const PHISHING_CAMPAIGN_ENTITY_TYPE = 'phishing_campaign';
+export const PHISHING_CAMPAIGN_ENTITY_TYPE = 'knowbe4_phishing_campaign';
 export const ACCOUNT_PHISHING_CAMPAIGN_RELATIONSHIP_TYPE =
   'knowbe4_account_has_phishing_campaign';
 
-export const PHISHING_SECURITY_TEST_ENTITY_TYPE = 'phishing_security_test';
+export const PHISHING_SECURITY_TEST_ENTITY_TYPE =
+  'knowbe4_phishing_security_test';
 export const PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE =
-  'phishing_campaign_contains_phishing_security_test';
+  'knowbe4_phishing_campaign_contains_phishing_security_test';
 
 export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
 export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
@@ -35,6 +36,8 @@ export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_campaign_has_module';
 export const MODULE_USER_RELATIONSHIP_TYPE = 'training_module_assigned_user';
 
 export const USER_MODULE_RELATIONSHIP_TYPE = 'user_completed_training_module';
+
+export const ASSESSMENT_ENTITY_CLASS = ['Assessment'];
 
 export interface AccountEntity extends Entity {
   name: string;
