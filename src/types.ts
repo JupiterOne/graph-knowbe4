@@ -31,6 +31,9 @@ export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
 export const TRAINING_GROUP_RELATIONSHIP_TYPE =
   'training_campaign_assigned_knowbe4_user_group';
 
+export const ACCOUNT_TRAINING_RELATIONSHIP_TYPE =
+  'knowbe4_account_has_training_campaign';
+
 export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_campaign_has_module';
 
 export const MODULE_USER_RELATIONSHIP_TYPE = 'training_module_assigned_user';

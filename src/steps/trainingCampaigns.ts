@@ -4,6 +4,7 @@ import {
   IntegrationStepExecutionContext,
   RelationshipClass,
   IntegrationMissingKeyError,
+  Entity,
 } from '@jupiterone/integration-sdk-core';
 
 import { createAPIClient } from '../client';
@@ -24,7 +25,10 @@ import {
   TrainingEntity,
   TrainingModuleEntity,
   IdEntityMap,
+  ACCOUNT_TRAINING_RELATIONSHIP_TYPE,
+  ACCOUNT_ENTITY_TYPE,
 } from '../types';
+import { DATA_ACCOUNT_ENTITY } from './account';
 
 export async function fetchTrainingCampaigns({
   instance,
@@ -36,6 +40,8 @@ export async function fetchTrainingCampaigns({
   const groupByIdMap = await jobState.getData<IdEntityMap<GroupEntity>>(
     'GROUP_BY_ID_MAP',
   );
+
+  const accountEntity = (await jobState.getData(DATA_ACCOUNT_ENTITY)) as Entity;
 
   if (!groupByIdMap) {
     throw new IntegrationMissingKeyError(
@@ -85,6 +91,14 @@ export async function fetchTrainingCampaigns({
         }),
       );
     }
+    // add relationship between training campaign and account
+    await jobState.addRelationship(
+      createDirectRelationship({
+        _class: RelationshipClass.HAS,
+        from: accountEntity,
+        to: trainingCampaignEntity,
+      }),
+    );
   });
 
   await jobState.setData('MODULE_BY_NAME_MAP', trainingModulesByName);
@@ -119,8 +133,14 @@ export const trainingCampaignSteps: IntegrationStep<IntegrationConfig>[] = [
         sourceType: TRAINING_ENTITY_TYPE,
         targetType: TRAINING_MODULE_ENTITY_TYPE,
       },
+      {
+        _type: ACCOUNT_TRAINING_RELATIONSHIP_TYPE,
+        _class: RelationshipClass.HAS,
+        sourceType: ACCOUNT_ENTITY_TYPE,
+        targetType: TRAINING_ENTITY_TYPE,
+      },
     ],
-    dependsOn: ['fetch-groups'],
+    dependsOn: ['fetch-groups', 'fetch-account'],
     executionHandler: fetchTrainingCampaigns,
   },
 ];

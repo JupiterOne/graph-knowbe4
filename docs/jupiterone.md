@@ -99,6 +99,7 @@ The following relationships are created:
 | Source Entity `_type`       | Relationship `_class` | Target Entity `_type`            |
 | --------------------------- | --------------------- | -------------------------------- |
 | `knowbe4_account`           | **HAS**               | `knowbe4_phishing_campaign`      |
+| `knowbe4_account`           | **HAS**               | `training_campaign`              |
 | `knowbe4_account`           | **HAS**               | `knowbe4_user`                   |
 | `knowbe4_account`           | **HAS**               | `knowbe4_user_group`             |
 | `knowbe4_phishing_campaign` | **CONTAINS**          | `knowbe4_phishing_security_test` |
