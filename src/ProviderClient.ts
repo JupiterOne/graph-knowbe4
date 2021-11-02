@@ -5,7 +5,7 @@ import {
 
 import { IntegrationConfig } from './config';
 
-import { retry } from '@lifeomic/attempt';
+import { retry, AttemptContext } from '@lifeomic/attempt';
 import fetch from 'node-fetch';
 
 export interface Account {
@@ -319,44 +319,77 @@ export default class ProviderClient {
   }
 
   private async fetchWithBackoff(url, fetchOptions): Promise<any> {
-    let reply;
-    reply = await fetch(url, fetchOptions);
-    if (reply.status === 429) {
-      //KnowBe4 API rate limits to 4/sec and 1000/day
-      this.logger.warn(
-        `Status 429 (rate limiting) encountered. Engaging backoff function.`,
-      );
-      const retryOptions = {
-        delay: 250,
-        maxAttempts: 8,
-        initialDelay: 0,
-        minDelay: 0,
-        maxDelay: 0,
-        factor: 2,
-        timeout: 0,
-        jitter: false,
-        handleError: null,
-        handleTimeout: null,
-        beforeAttempt: null,
-        calculateDelay: null,
-      }; // 8 attempts with 250 ms start and factor 2 means longest wait is 32 seconds
-      reply = await retry(async () => {
-        const response = await fetch(url, fetchOptions);
-        if (response.status === 429) {
-          this.logger.warn(`Backoff: Another 429. Waiting and trying again.`);
-          //this error will get swallowed by the retry function, but triggers the retry to retry
-          //when retry finally totally fails, this will be the error that gets passed up the stack
-          throw new IntegrationProviderAPIError({
-            cause: undefined,
-            endpoint: url,
-            status: reply.status,
-            statusText: `Failure requesting '${url}' due to rate-limiting.`,
-          });
+    const logger = this.logger;
+
+    //everything in fetchWithErrorAwareness is going into the retry function below
+    const fetchWithErrorAwareness = async () => {
+      let response;
+      //check for fundamental errors (network not available, DNS fail, etc)
+      try {
+        response = await fetch(url, fetchOptions);
+      } catch (err) {
+        throw new IntegrationProviderAPIError({
+          message: `Error during fetch from ${url}`,
+          status: err.status,
+          statusText: `Error msg: ${err.statusText}, url: ${url}`,
+          cause: err,
+          endpoint: url,
+        });
+      }
+
+      // fetch doesn't error on 4xx/5xx HTTP codes, so you have to do that yourself
+      if (response.status !== 200) {
+        throw new IntegrationProviderAPIError({
+          cause: undefined,
+          endpoint: url,
+          status: response.status,
+          statusText: `Failure requesting '${url}' due to error code ${response.status}.`,
+        });
+      }
+      return response;
+    };
+
+    const retryOptions = {
+      delay: 1000,
+      maxAttempts: 10,
+      initialDelay: 0,
+      minDelay: 0,
+      maxDelay: 0,
+      factor: 2,
+      timeout: 0,
+      jitter: false,
+      handleError: null,
+      handleTimeout: null,
+      beforeAttempt: null,
+      calculateDelay: null,
+    }; // 10 attempts with 1000 ms start and factor 2 means longest wait is 20 minutes
+
+    return await retry(fetchWithErrorAwareness, {
+      ...retryOptions,
+      handleError(error: any, attemptContext: AttemptContext) {
+        //retry will keep trying to the limits of retryOptions
+        //but it lets you intervene in this function - if you throw an error from in here,
+        //it stops retrying. Otherwise you can just log the attempts.
+        if (error.retryable === false || error.status === 401) {
+          attemptContext.abort();
+          throw error;
         }
-        return response;
-      }, retryOptions);
-      this.logger.warn(`Backoff: Successfully retrieved data.`);
-    }
-    return reply;
+
+        //KnowBe4 API rate limits to 4/sec and 1000/day
+        if (error.status === 429) {
+          logger.warn(
+            `Status 429 (rate limiting) encountered. Engaging backoff function.`,
+          );
+        }
+
+        //test for 5xx HTTP codes
+        if (Math.floor(error.status / 100) === 5) {
+          logger.warn(
+            `Status 5xx (server errors) encountered. Engaging backoff function.`,
+          );
+        }
+        logger.info(`Retrying on ${error.endpoint}`);
+      },
+    });
   }
 }

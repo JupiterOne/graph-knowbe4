@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.0.4] - 2021-10-29
+
+## Fixed
+
+- Error handler during fetch now accounts for 4xx and 5xx errors better, and
+  waits longer during the retry
+
+- Handle `undefined` properties on training campaigns that was prevent the full
+  set of `phishing_campaign` entities from being ingested
+
 ## [2.0.3] - 2021-08-16
 
 ### Fixed
