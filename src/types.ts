@@ -16,17 +16,31 @@ export const GROUP_USER_RELATIONSHIP_TYPE = 'knowbe4_user_group_has_user';
 export const TRAINING_ENTITY_TYPE = 'training_campaign';
 export const TRAINING_ENTITY_CLASS = ['Training'];
 
+export const PHISHING_CAMPAIGN_ENTITY_TYPE = 'knowbe4_phishing_campaign';
+export const ACCOUNT_PHISHING_CAMPAIGN_RELATIONSHIP_TYPE =
+  'knowbe4_account_has_phishing_campaign';
+
+export const PHISHING_SECURITY_TEST_ENTITY_TYPE =
+  'knowbe4_phishing_security_test';
+export const PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE =
+  'knowbe4_phishing_campaign_contains_phishing_security_test';
+
 export const TRAINING_MODULE_ENTITY_TYPE = 'training_module';
 export const TRAINING_MODULE_ENTITY_CLASS = ['Training', 'Module'];
 
 export const TRAINING_GROUP_RELATIONSHIP_TYPE =
   'training_campaign_assigned_knowbe4_user_group';
 
+export const ACCOUNT_TRAINING_RELATIONSHIP_TYPE =
+  'knowbe4_account_has_training_campaign';
+
 export const TRAINING_MODULE_RELATIONSHIP_TYPE = 'training_campaign_has_module';
 
 export const MODULE_USER_RELATIONSHIP_TYPE = 'training_module_assigned_user';
 
 export const USER_MODULE_RELATIONSHIP_TYPE = 'user_completed_training_module';
+
+export const ASSESSMENT_ENTITY_CLASS = ['Assessment'];
 
 export interface AccountEntity extends Entity {
   name: string;
@@ -127,4 +141,47 @@ export interface TrainingEnrollmentRelationship extends ExplicitRelationship {
 
 export interface IdEntityMap<V> {
   [key: string]: V;
+}
+
+export interface PhishingCampaignEntity extends Entity {
+  campaign_id: number;
+  name: string;
+  groups: string[];
+  last_phish_prone_percentage: number;
+  last_run: string | null;
+  status: string;
+  hidden: boolean;
+  send_duration: string;
+  track_duration: string;
+  frequency: string;
+  difficulty_filter: number[];
+  create_date: string;
+  psts_count: number;
+  psts: string[];
+}
+
+export interface PhishingSecurityTestEntity extends Entity {
+  campaign_id: number;
+  pst_id: number;
+  status: string;
+  name: string;
+  groups: string[];
+  phish_prone_percentage: string;
+  started_at: string;
+  duration: number;
+  categories: string[];
+  template: string;
+  landingPage: string;
+  scheduled_count: number;
+  delivered_count: number;
+  opened_count: number;
+  clicked_count: number;
+  replied_count: number;
+  attachment_open_count: number;
+  macro_enabled_count: number;
+  data_entered_count: number;
+  vulnerable_plugin_count: number;
+  exploited_count: number;
+  reported_count: number;
+  bounced_count: number;
 }

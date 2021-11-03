@@ -4,14 +4,27 @@ import {
   createTrainingEntity,
   createUserEntity,
   createTrainingModuleEntity,
+  createPhishingCampaignEntity,
+  createPhishingSecurityTestEntity,
 } from './converters';
-import { Account, Group, TrainingCampaign, User } from './ProviderClient';
+import {
+  Account,
+  Group,
+  PhishingCampaign,
+  PhishingSecurityTest,
+  TrainingCampaign,
+  User,
+} from './ProviderClient';
 import {
   AccountEntity,
   GroupEntity,
   TrainingEntity,
   TrainingModuleEntity,
   UserEntity,
+  TRAINING_ENTITY_CLASS,
+  ASSESSMENT_ENTITY_CLASS,
+  PHISHING_CAMPAIGN_ENTITY_TYPE,
+  PHISHING_SECURITY_TEST_ENTITY_TYPE,
 } from './types';
 
 /* tslint:disable */
@@ -66,4 +79,150 @@ test('createTrainingEntities', () => {
   }
   expect(receivedTrainingCampaignEntities).toEqual(trainingEntities);
   expect(receivedTrainingModuleEntities).toEqual(trainingModules);
+});
+
+test('should convert phishingSecurityTest to entity', () => {
+  const phishingSecurityTest = {
+    campaign_id: 242333,
+    pst_id: 509579,
+    status: 'Closed',
+    name: 'Corporate Test 001',
+    groups: [
+      {
+        group_id: 16342,
+        name: 'Corporate Employees',
+      },
+      {
+        group_id: 22222,
+        name: 'Corporate Bosses',
+      },
+    ],
+    phish_prone_percentage: 0.5,
+    started_at: '2019-04-02T15:02:38.000Z',
+    duration: 1,
+    categories: [
+      {
+        category_id: 4237,
+        name: 'Current Events',
+      },
+    ],
+    template: {
+      id: 11428,
+      name: 'CNN Breaking News',
+    },
+    landing_page: {
+      id: 4072,
+      name: 'Verify Java',
+    },
+    scheduled_count: 42,
+    delivered_count: 4,
+    opened_count: 24,
+    clicked_count: 20,
+    replied_count: 0,
+    attachment_open_count: 3,
+    macro_enabled_count: 0,
+    data_entered_count: 0,
+    vulnerable_plugin_count: 0,
+    exploited_count: 2,
+    reported_count: 0,
+    bounced_count: 0,
+  } as PhishingSecurityTest;
+  const entity = createPhishingSecurityTestEntity(phishingSecurityTest);
+  expect(entity).toEqual(
+    expect.objectContaining({
+      _class: ASSESSMENT_ENTITY_CLASS,
+      _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
+      _key: 'knowbe4:phishing:security:509579',
+      id: '242333',
+      status: 'Closed',
+      name: 'Corporate Test 001',
+      displayName: 'Corporate Test 001',
+      phishPronePercentage: 0.5,
+      startedAt: '2019-04-02T15:02:38.000Z',
+      groups: [16342, 22222],
+      categories: [4237],
+      template: [11428],
+      landingPage: 4072,
+      sendDuration: 1,
+      scheduledCount: 42,
+      deliveredCount: 4,
+      openedCount: 24,
+      clickedCount: 20,
+      repliedCount: 0,
+      attachmentOpenCount: 3,
+      macroEnabledCount: 0,
+      dataEnteredCount: 0,
+      vulnerablePluginCount: 0,
+      exploitedCount: 2,
+      reportedCount: 0,
+      bouncedCount: 0,
+      _rawData: [
+        {
+          name: 'default',
+          rawData: phishingSecurityTest,
+        },
+      ],
+    }),
+  );
+});
+
+test('should convert phishingCampaign to entity', () => {
+  const phishingCampaign = {
+    campaign_id: 242333,
+    name: 'One Time Phishing Security Test',
+    groups: [
+      {
+        group_id: 0,
+        name: 'All Users',
+      },
+    ],
+    last_phish_prone_percentage: 0.3,
+    last_run: '2019-04-02T15:02:38.000Z',
+    status: 'Closed',
+    hidden: false,
+    send_duration: '3 Business Days',
+    track_duration: '3 Days',
+    frequency: 'One Time',
+    difficulty_filter: [1, 2, 3, 4, 5],
+    create_date: '2019-04-02T15:02:38.000Z',
+    psts_count: 1,
+    psts: [
+      {
+        pst_id: 1,
+        status: 'Closed',
+        start_date: '2019-04-02T15:02:38.000Z',
+        users_count: 123,
+        phish_prone_percentage: 0.3,
+      },
+    ],
+  } as PhishingCampaign;
+
+  const entity = createPhishingCampaignEntity(phishingCampaign);
+
+  expect(entity).toEqual(
+    expect.objectContaining({
+      _class: TRAINING_ENTITY_CLASS,
+      _type: PHISHING_CAMPAIGN_ENTITY_TYPE,
+      _key: 'knowbe4:phishing:campaign:242333',
+      name: 'One Time Phishing Security Test',
+      displayName: 'One Time Phishing Security Test',
+      id: '242333',
+      lastPhishPronePercentage: 0.3,
+      lastRun: '2019-04-02T15:02:38.000Z',
+      status: 'Closed',
+      hidden: false,
+      sendDuration: '3 Business Days',
+      trackDuration: '3 Days',
+      frequency: 'One Time',
+      difficultyFilter: [1, 2, 3, 4, 5],
+      createdOn: 1554217358000,
+      pstsCount: 1,
+      _rawData: [
+        {
+          name: 'default',
+          rawData: phishingCampaign,
+        },
+      ],
+    }),
+  );
 });

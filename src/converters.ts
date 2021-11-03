@@ -1,4 +1,6 @@
 import {
+  createIntegrationEntity,
+  Entity,
   parseTimePropertyValue,
   RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
@@ -6,6 +8,8 @@ import {
 import {
   Account,
   Group,
+  PhishingCampaign,
+  PhishingSecurityTest,
   TrainingCampaign,
   TrainingContent,
   TrainingEnrollment,
@@ -30,6 +34,9 @@ import {
   USER_ENTITY_CLASS,
   USER_ENTITY_TYPE,
   UserEntity,
+  PHISHING_CAMPAIGN_ENTITY_TYPE,
+  PHISHING_SECURITY_TEST_ENTITY_TYPE,
+  ASSESSMENT_ENTITY_CLASS,
 } from './types';
 
 import toCamelCase from './util/toCamelCase';
@@ -119,6 +126,92 @@ export function createTrainingEntity(data: TrainingCampaign): TrainingEntity {
     modules,
     content,
   };
+}
+
+export function createPhishingCampaignEntity(data: PhishingCampaign): Entity {
+  return createIntegrationEntity({
+    entityData: {
+      source: data,
+      assign: {
+        _class: TRAINING_ENTITY_CLASS,
+        _type: PHISHING_CAMPAIGN_ENTITY_TYPE,
+        _key: `knowbe4:phishing:campaign:${data.campaign_id}`,
+        name: data.name,
+        displayName: data.name,
+        id: data.campaign_id.toString(),
+        lastPhishPronePercentage: data.last_phish_prone_percentage,
+        lastRun: data.last_run,
+        status: data.status,
+        hidden: data.hidden,
+        sendDuration: data.send_duration,
+        trackDuration: data.track_duration,
+        frequency: data.frequency,
+        difficultyFilter: data.difficulty_filter,
+        createdOn: parseTimePropertyValue(data.create_date),
+        pstsCount: data.psts_count,
+      },
+    },
+  });
+}
+
+export function createPhishingSecurityTestEntity(
+  data: PhishingSecurityTest,
+): Entity {
+  const groups: number[] = [];
+  data.groups.forEach((g) => {
+    if (g.group_id !== undefined) {
+      groups.push(g.group_id);
+    }
+  });
+
+  const categories: number[] = [];
+  data.categories.forEach((c) => {
+    if (c.category_id !== undefined) {
+      categories.push(c.category_id);
+    }
+  });
+
+  const template: number[] = [];
+  if (data.template.id !== undefined) {
+    template.push(data.template.id);
+  }
+
+  return createIntegrationEntity({
+    entityData: {
+      source: data,
+      assign: {
+        _class: ASSESSMENT_ENTITY_CLASS,
+        _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
+        _key: `knowbe4:phishing:security:${data.pst_id}`,
+        category: 'Phishing Assessment',
+        summary: 'Phishing Assessment',
+        internal: true,
+        name: data.name,
+        displayName: data.name,
+        id: data.campaign_id.toString(),
+        status: data.status,
+        groups: groups,
+        phishPronePercentage: data.phish_prone_percentage,
+        startedAt: data.started_at,
+        sendDuration: data.duration,
+        categories: categories,
+        template: template,
+        landingPage: data.landing_page?.id,
+        scheduledCount: data.scheduled_count,
+        deliveredCount: data.delivered_count,
+        openedCount: data.opened_count,
+        clickedCount: data.clicked_count,
+        repliedCount: data.replied_count,
+        attachmentOpenCount: data.attachment_open_count,
+        macroEnabledCount: data.macro_enabled_count,
+        dataEnteredCount: data.data_entered_count,
+        vulnerablePluginCount: data.vulnerable_plugin_count,
+        exploitedCount: data.exploited_count,
+        reportedCount: data.reported_count,
+        bouncedCount: data.bounced_count,
+      },
+    },
+  });
 }
 
 export function createTrainingModuleEntity(
