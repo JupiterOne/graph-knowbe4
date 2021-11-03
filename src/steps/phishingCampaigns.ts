@@ -17,8 +17,6 @@ import {
 } from '../types';
 import { DATA_ACCOUNT_ENTITY } from './account';
 
-// export const DATA_ACCOUNT_ENTITY = 'DATA_ACCOUNT_ENTITY';
-
 export async function fetchPhishingCampaign({
   instance,
   jobState,
