@@ -214,6 +214,63 @@ export function createPhishingSecurityTestEntity(
   });
 }
 
+export function createPhishingSecurityTestResultEntity(
+  data: PhishingSecurityTest,
+): Entity {
+  const groups: number[] = [];
+  data.groups.forEach((g) => {
+    if (g.group_id !== undefined) {
+      groups.push(g.group_id);
+    }
+  });
+
+  const categories: number[] = [];
+  data.categories.forEach((c) => {
+    if (c.category_id !== undefined) {
+      categories.push(c.category_id);
+    }
+  });
+
+  const template: number[] = [];
+  if (data.template.id !== undefined) {
+    template.push(data.template.id);
+  }
+
+  return createIntegrationEntity({
+    entityData: {
+      source: data,
+      assign: {
+        _class: TRAINING_ENTITY_CLASS,
+        _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
+        _key: `knowbe4:phishing:security:${data.pst_id}`,
+        name: data.name,
+        displayName: data.name,
+        id: data.campaign_id.toString(),
+        status: data.status,
+        groups: groups,
+        phishPronePercentage: data.phish_prone_percentage,
+        startedAt: data.started_at,
+        sendDuration: data.duration,
+        categories: categories,
+        template: template,
+        landingPage: data.landing_page?.id,
+        scheduledCount: data.scheduled_count,
+        deliveredCount: data.delivered_count,
+        openedCount: data.opened_count,
+        clickedCount: data.clicked_count,
+        repliedCount: data.replied_count,
+        attachmentOpenCount: data.attachment_open_count,
+        macroEnabledCount: data.macro_enabled_count,
+        dataEnteredCount: data.data_entered_count,
+        vulnerablePluginCount: data.vulnerable_plugin_count,
+        exploitedCount: data.exploited_count,
+        reportedCount: data.reported_count,
+        bouncedCount: data.bounced_count,
+      },
+    },
+  });
+}
+
 export function createTrainingModuleEntity(
   d: TrainingContent,
 ): TrainingModuleEntity {
