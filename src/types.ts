@@ -1,5 +1,4 @@
 import { Entity, ExplicitRelationship } from '@jupiterone/integration-sdk-core';
-import { Template, User } from './ProviderClient';
 
 export const ACCOUNT_ENTITY_TYPE = 'knowbe4_account';
 export const ACCOUNT_ENTITY_CLASS = ['Account'];
