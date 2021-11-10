@@ -11,6 +11,7 @@ import {
   TrainingEnrollment,
   PhishingCampaign,
   PhishingSecurityTest,
+  PhishingSecurityTestResult,
 } from './ProviderClient';
 import ProviderClient from './ProviderClient';
 import groupBy from 'lodash.groupby';
@@ -119,6 +120,22 @@ export class APIClient {
     );
     for (const PhishingSecurityTest of PhishingSecurityTests) {
       await iteratee(PhishingSecurityTest);
+    }
+  }
+
+  /**
+   * Iterates each KnowBe4 PhishingSecurityTestResult resource.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iteratePhishingSecurityTestResults(
+    pstsId: number,
+    iteratee: ResourceIteratee<PhishingSecurityTestResult>,
+  ): Promise<void> {
+    const PhishingSecurityTestResults =
+      await this.provider.fetchPhishingSecurityTestResults(pstsId);
+    for (const PhishingSecurityTestResult of PhishingSecurityTestResults) {
+      await iteratee(PhishingSecurityTestResult);
     }
   }
 

@@ -10,6 +10,7 @@ import {
   Group,
   PhishingCampaign,
   PhishingSecurityTest,
+  PhishingSecurityTestResult,
   TrainingCampaign,
   TrainingContent,
   TrainingEnrollment,
@@ -37,6 +38,7 @@ import {
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
   ASSESSMENT_ENTITY_CLASS,
+  PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
 } from './types';
 
 import toCamelCase from './util/toCamelCase';
@@ -215,21 +217,12 @@ export function createPhishingSecurityTestEntity(
 }
 
 export function createPhishingSecurityTestResultEntity(
-  data: PhishingSecurityTest,
+  data: PhishingSecurityTestResult,
 ): Entity {
-  const groups: number[] = [];
-  data.groups.forEach((g) => {
-    if (g.group_id !== undefined) {
-      groups.push(g.group_id);
-    }
-  });
-
-  const categories: number[] = [];
-  data.categories.forEach((c) => {
-    if (c.category_id !== undefined) {
-      categories.push(c.category_id);
-    }
-  });
+  let user: string = '';
+  if (data.user.id !== undefined) {
+    user = data.user.id;
+  }
 
   const template: number[] = [];
   if (data.template.id !== undefined) {
@@ -240,32 +233,32 @@ export function createPhishingSecurityTestResultEntity(
     entityData: {
       source: data,
       assign: {
-        _class: TRAINING_ENTITY_CLASS,
-        _type: PHISHING_SECURITY_TEST_ENTITY_TYPE,
-        _key: `knowbe4:phishing:security:${data.pst_id}`,
-        name: data.name,
-        displayName: data.name,
-        id: data.campaign_id.toString(),
-        status: data.status,
-        groups: groups,
-        phishPronePercentage: data.phish_prone_percentage,
-        startedAt: data.started_at,
-        sendDuration: data.duration,
-        categories: categories,
+        _class: ASSESSMENT_ENTITY_CLASS,
+        _type: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+        _key: `knowbe4:phishing:security_tests:${data.recipient_id}:recepients`,
+        category: 'Phishing Assessment Result',
+        summary: 'Phishing Assessment Result',
+        name: 'Phishing Assessment Result',
+        internal: true,
+        recipientId: data.recipient_id,
+        pstId: data.pst_id,
+        user: user,
         template: template,
-        landingPage: data.landing_page?.id,
-        scheduledCount: data.scheduled_count,
-        deliveredCount: data.delivered_count,
-        openedCount: data.opened_count,
-        clickedCount: data.clicked_count,
-        repliedCount: data.replied_count,
-        attachmentOpenCount: data.attachment_open_count,
-        macroEnabledCount: data.macro_enabled_count,
-        dataEnteredCount: data.data_entered_count,
-        vulnerablePluginCount: data.vulnerable_plugin_count,
-        exploitedCount: data.exploited_count,
-        reportedCount: data.reported_count,
-        bouncedCount: data.bounced_count,
+        scheduledAt: data.scheduled_at,
+        deliveredAt: data.delivered_at,
+        openedAt: data.opened_at,
+        clickedAt: data.clicked_at,
+        repliedAt: data.replied_at,
+        attachmentOpenedAt: data.attachment_opened_at,
+        macroEnabledAt: data.macro_enabled_at,
+        dataEnteredAt: data.data_entered_at,
+        reportedAt: data.reported_at,
+        bouncedAt: data.bounced_at,
+        ip: data.ip,
+        ipLocation: data.ip_location,
+        browser: data.browser,
+        browserVersion: data.browser_version,
+        os: data.os,
       },
     },
   });

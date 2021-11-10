@@ -8,19 +8,12 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import {
-  createPhishingSecurityTestEntity,
-  createPhishingSecurityTestResultEntity,
-} from '../converters';
-import { PhishingCampaign, PhishingSecurityTest } from '../ProviderClient';
+import { createPhishingSecurityTestResultEntity } from '../converters';
+import { PhishingSecurityTest } from '../ProviderClient';
 
 import {
-  PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
-  TRAINING_ENTITY_CLASS,
   PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
-  // PHISHING_SECURITY_TEST_RESULT_ENTITY_CLASS,
-  PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
   ASSESSMENT_ENTITY_CLASS,
 } from '../types';
@@ -41,7 +34,7 @@ export async function fetchPhishingSecurityTestResults({
         phishingSecurityTestEntity,
       );
       if (phishingSecurityTest?.pst_id) {
-        await apiClient.iteratePhishingSecurityTests(
+        await apiClient.iteratePhishingSecurityTestResults(
           phishingSecurityTest.pst_id,
           async (PhishingSecurityTestResult) => {
             const phishingSecurityTestResultEntity = await jobState.addEntity(
@@ -79,7 +72,7 @@ export const phishingSecurityTestResultSteps: IntegrationStep<IntegrationConfig>
       ],
       relationships: [
         {
-          _type: PHISHING_CAMPAIGN_SECURITY_TEST_RELATIONSHIP_TYPE,
+          _type: PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
           _class: RelationshipClass.CONTAINS,
           sourceType: PHISHING_SECURITY_TEST_ENTITY_TYPE,
           targetType: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
