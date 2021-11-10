@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+## Fixed
+
+- Fetch data in larger batches to prevent API rate limiting
+
 ## [2.1.0] - 2021-11-03
 
 ### Added
