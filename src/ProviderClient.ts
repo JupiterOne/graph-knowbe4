@@ -192,6 +192,14 @@ export interface TrainingEnrollment {
   policy_acknowledged: boolean;
 }
 
+/**
+ * The default number of results from a single API request is 100. The maximum
+ * number of results that can be requested in a single API call is 500.
+ *
+ * See: https://developer.knowbe4.com/reporting/#tag/Pagination
+ */
+const DEFAULT_PAGE_BATCH_SIZE = 500;
+
 export default class ProviderClient {
   private BASE_API_URL: string;
   private logger: IntegrationLogger;
@@ -266,8 +274,8 @@ export default class ProviderClient {
     let pageCount = 1;
 
     let nextPageUrl: string | null = params
-      ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}`
-      : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}`;
+      ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`
+      : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`;
 
     let more = true;
 
