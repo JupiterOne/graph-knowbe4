@@ -273,22 +273,27 @@ export default class ProviderClient {
   ) {
     let pageCount = 1;
 
-    let nextPageUrl: string | null = params
-      ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`
-      : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`;
+    const getNextPageUrl = (
+      pageCount: number,
+      params: string | null | undefined,
+    ) => {
+      return params
+        ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`
+        : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`;
+    };
 
     let more = true;
+    let nextPageUrl: string = getNextPageUrl(pageCount, params);
 
     while (more) {
       const response = await this.fetchWithBackoff(nextPageUrl, this.options);
       const page = await response.json();
       more = page && page.length && page.length > 0;
+
       if (more) {
         eachFn(page);
         pageCount++;
-        nextPageUrl = params
-          ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}`
-          : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}`;
+        nextPageUrl = getNextPageUrl(pageCount, params);
       }
     }
   }
