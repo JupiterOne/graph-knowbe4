@@ -266,42 +266,35 @@ export default class ProviderClient {
     return this.BASE_API_URL;
   }
 
-  private async forEachPage(
-    firstUri: string,
-    params: string | null | undefined,
-    eachFn: (page: any) => void,
-  ) {
-    let pageCount = 1;
+  private async forEachPage(firstUri: string, eachFn: (page: any) => void) {
+    let pageNumber = 1;
 
-    let nextPageUrl: string | null = params
-      ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`
-      : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`;
+    const getNextPageUrl = (pageNumber: number) => {
+      return `${this.BASE_API_URL}/${firstUri}?page=${pageNumber}&per_page=${DEFAULT_PAGE_BATCH_SIZE}`;
+    };
 
     let more = true;
+    let nextPageUrl: string = getNextPageUrl(pageNumber);
 
     while (more) {
       const response = await this.fetchWithBackoff(nextPageUrl, this.options);
       const page = await response.json();
       more = page && page.length && page.length > 0;
+
       if (more) {
         eachFn(page);
-        pageCount++;
-        nextPageUrl = params
-          ? `${this.BASE_API_URL}/${firstUri}?${params}&page=${pageCount}`
-          : `${this.BASE_API_URL}/${firstUri}?page=${pageCount}`;
+        pageNumber++;
+        nextPageUrl = getNextPageUrl(pageNumber);
       }
     }
   }
 
-  private async collectAllPages(
-    firstUri: string,
-    params?: string,
-  ): Promise<any[]> {
+  private async collectAllPages(firstUri: string): Promise<any[]> {
     try {
       this.logger.info(`Fetching KnowBe4 ${firstUri}...`);
       const results: any[] = [];
 
-      await this.forEachPage(firstUri, params, (page: any) => {
+      await this.forEachPage(firstUri, (page: any) => {
         for (const item of page || []) {
           results.push(item);
         }

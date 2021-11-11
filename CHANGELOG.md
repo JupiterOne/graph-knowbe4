@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.1.2] - 2021-11-11
+
+## Fixed
+
+- Fixed pagination logic for subsequent pages
+
 ## [2.1.1] - 2021-11-10
 
 ## Fixed
