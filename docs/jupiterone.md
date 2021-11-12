@@ -88,7 +88,7 @@ The following entities are created:
 | KnowBe4 Group                          | `knowbe4_user_group`                    | `UserGroup`          |
 | KnowBe4 Phishing Campaign              | `knowbe4_phishing_campaign`             | `Training`           |
 | KnowBe4 Phishing Security Test         | `knowbe4_phishing_security_test`        | `Assessment`         |
-| KnowBe4 Phishing Security Test Results | `knowbe4_phishing_security_test_result` | `Assessment`         |
+| KnowBe4 Phishing Security Test Results | `knowbe4_phishing_security_test_result` | `Record`             |
 | KnowBe4 Training Campaign              | `training_campaign`                     | `Training`           |
 | KnowBe4 Training Module                | `training_module`                       | `Training`, `Module` |
 | KnowBe4 User                           | `knowbe4_user`                          | `User`               |

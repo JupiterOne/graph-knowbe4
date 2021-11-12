@@ -37,7 +37,6 @@ describe('#fetchPhishingSecurityTestResult', () => {
       instanceConfig: integrationConfig,
     });
 
-    // await fetchAccountDetails(context);
     await fetchPhishingSecurityTestResults(context);
     await fetchPhishingSecurityTest(context);
 
@@ -47,16 +46,13 @@ describe('#fetchPhishingSecurityTestResult', () => {
         (r) => r._type === PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
       ),
     ).toMatchGraphObjectSchema({
-      _class: ['Assessment'],
+      _class: ['Record'],
       schema: {
         additionalProperties: true,
         properties: {
           _type: { const: 'knowbe4_phishing_security_test_result' },
           _key: { type: 'string' },
-          category: { type: 'string' },
-          summary: { type: 'string' },
           name: { type: 'string' },
-          internal: { type: 'boolean' },
           recipient_Id: { type: 'string' },
           pstId: { type: 'number' },
           user: { type: 'string' },

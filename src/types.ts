@@ -48,6 +48,8 @@ export const PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE =
 export const PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE =
   'phishing_security_test_contains_phishing_security_test_result';
 
+export const RECORD_ENTITY_CLASS = ['Record'];
+
 export interface AccountEntity extends Entity {
   name: string;
   type: string;

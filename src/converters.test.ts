@@ -28,6 +28,7 @@ import {
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+  RECORD_ENTITY_CLASS,
 } from './types';
 
 /* tslint:disable */
@@ -205,7 +206,7 @@ test('should convert phishingSecurityTestResult to entity', () => {
   );
   expect(entity).toEqual(
     expect.objectContaining({
-      _class: ASSESSMENT_ENTITY_CLASS,
+      _class: RECORD_ENTITY_CLASS,
       _type: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
       _key: 'knowbe4:phishing:security_tests:3077742:recepients',
       recipientId: '3077742',

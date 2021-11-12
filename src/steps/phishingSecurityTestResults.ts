@@ -15,7 +15,7 @@ import {
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
-  ASSESSMENT_ENTITY_CLASS,
+  RECORD_ENTITY_CLASS,
 } from '../types';
 
 export async function fetchPhishingSecurityTestResults({
@@ -67,7 +67,7 @@ export const phishingSecurityTestResultSteps: IntegrationStep<IntegrationConfig>
         {
           resourceName: 'KnowBe4 Phishing Security Test Results',
           _type: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
-          _class: ASSESSMENT_ENTITY_CLASS,
+          _class: RECORD_ENTITY_CLASS,
         },
       ],
       relationships: [
