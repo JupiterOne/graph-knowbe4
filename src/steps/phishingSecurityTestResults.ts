@@ -8,7 +8,10 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import { createPhishingSecurityTestResultEntity } from '../converters';
+import {
+  createPhishingSecurityTestResultEntity,
+  createUserBaseEntity,
+} from '../converters';
 import { PhishingSecurityTest } from '../ProviderClient';
 
 import {
@@ -16,6 +19,8 @@ import {
   PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
   RECORD_ENTITY_CLASS,
+  USER_ENTITY_TYPE,
+  USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
 } from '../types';
 
 export async function fetchPhishingSecurityTestResults({
@@ -52,6 +57,18 @@ export async function fetchPhishingSecurityTestResults({
                 },
               }),
             );
+
+            await jobState.addRelationship(
+              createDirectRelationship({
+                _class: RelationshipClass.HAS,
+                from: createUserBaseEntity(PhishingSecurityTestResult.user),
+                to: phishingSecurityTestResultEntity,
+                properties: {
+                  _type:
+                    USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
+                },
+              }),
+            );
           },
         );
       }
@@ -77,8 +94,14 @@ export const phishingSecurityTestResultSteps: IntegrationStep<IntegrationConfig>
           sourceType: PHISHING_SECURITY_TEST_ENTITY_TYPE,
           targetType: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
         },
+        {
+          _type: USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
+          _class: RelationshipClass.HAS,
+          sourceType: USER_ENTITY_TYPE,
+          targetType: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+        },
       ],
-      dependsOn: ['fetch-phishing-security-tests'],
+      dependsOn: ['fetch-phishing-security-tests', 'fetch-users'],
       executionHandler: fetchPhishingSecurityTestResults,
     },
   ];

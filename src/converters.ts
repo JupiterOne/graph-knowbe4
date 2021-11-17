@@ -15,6 +15,7 @@ import {
   TrainingContent,
   TrainingEnrollment,
   User,
+  UserBase,
 } from './ProviderClient';
 import {
   ACCOUNT_ENTITY_CLASS,
@@ -63,6 +64,19 @@ export function createAccountEntity(data: Account): AccountEntity {
     type: data.type,
     domains: data.domains,
     admins,
+  };
+}
+
+export function createUserBaseEntity(data: UserBase): UserEntity {
+  return {
+    ...(toCamelCase(data) as any),
+    _class: USER_ENTITY_CLASS,
+    _key: `knowbe4:user:${data.id}`,
+    _type: USER_ENTITY_TYPE,
+    id: data.id.toString(),
+    firstName: data.first_name,
+    lastName: data.last_name,
+    email: data.email,
   };
 }
 

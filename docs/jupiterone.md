@@ -105,6 +105,7 @@ The following relationships are created:
 | `knowbe4_account`                | **HAS**               | `knowbe4_user_group`                    |
 | `knowbe4_phishing_campaign`      | **CONTAINS**          | `knowbe4_phishing_security_test`        |
 | `knowbe4_user_group`             | **HAS**               | `knowbe4_user`                          |
+| `knowbe4_user`                   | **HAS**               | `knowbe4_phishing_security_test_result` |
 | `knowbe4_phishing_security_test` | **CONTAINS**          | `knowbe4_phishing_security_test_result` |
 | `training_campaign`              | **ASSIGNED**          | `knowbe4_user_group`                    |
 | `training_campaign`              | **HAS**               | `training_module`                       |

@@ -48,6 +48,9 @@ export const PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE =
 export const PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE =
   'phishing_security_test_contains_phishing_security_test_result';
 
+export const USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE =
+  'knowbe4_user_has_phishing_security_test_result';
+
 export const RECORD_ENTITY_CLASS = ['Record'];
 
 export interface AccountEntity extends Entity {

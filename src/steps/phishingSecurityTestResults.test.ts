@@ -10,6 +10,7 @@ import { fetchPhishingSecurityTestResults } from './phishingSecurityTestResults'
 import {
   PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
+  USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
 } from '../types';
 
 describe('#fetchPhishingSecurityTestResult', () => {
@@ -90,6 +91,22 @@ describe('#fetchPhishingSecurityTestResult', () => {
         properties: {
           _class: { const: RelationshipClass.CONTAINS },
           _type: { const: PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE },
+        },
+      },
+    });
+    expect(
+      context.jobState.collectedRelationships.filter(
+        (r) =>
+          r._type === USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
+        PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+      ),
+    ).toMatchDirectRelationshipSchema({
+      schema: {
+        properties: {
+          _class: { const: RelationshipClass.HAS },
+          _type: {
+            const: USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE,
+          },
         },
       },
     });
