@@ -26,12 +26,14 @@
     "prepush": "yarn lint && yarn type-check && jest --changedSince main"
   },
   "dependencies": {
-    "@jupiterone/integration-sdk-core": "^7.3.1",
     "@lifeomic/attempt": "^3.0.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.maxby": "^4.6.0",
     "node-fetch": "^2.6.1"
+  },
+  "peerDependencies": {
+    "@jupiterone/integration-sdk-core": "^7.3.1"
   },
   "devDependencies": {
     "@jupiterone/integration-sdk-core": "^7.3.1",
