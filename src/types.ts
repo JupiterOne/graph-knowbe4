@@ -42,6 +42,17 @@ export const USER_MODULE_RELATIONSHIP_TYPE = 'user_completed_training_module';
 
 export const ASSESSMENT_ENTITY_CLASS = ['Assessment'];
 
+export const PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE =
+  'knowbe4_phishing_security_test_result';
+
+export const PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE =
+  'phishing_security_test_contains_phishing_security_test_result';
+
+export const USER_HAS_PHISHING_SECURITY_TEST_RESULT_RELATIONSHIP_TYPE =
+  'knowbe4_user_has_phishing_security_test_result';
+
+export const RECORD_ENTITY_CLASS = ['Record'];
+
 export interface AccountEntity extends Entity {
   name: string;
   type: string;
@@ -184,4 +195,26 @@ export interface PhishingSecurityTestEntity extends Entity {
   exploited_count: number;
   reported_count: number;
   bounced_count: number;
+}
+
+export interface PhishingSecurityTestResult extends Entity {
+  recipient_id: string;
+  pst_id: number;
+  user: string[];
+  template: number;
+  scheduled_at: string;
+  delivered_at: string;
+  opened_at?: string | null;
+  clicked_at?: string | null;
+  replied_at?: string | null;
+  attachment_opened_at?: string | null;
+  macro_enabled_at?: string | null;
+  data_entered_at: string;
+  reported_at?: string | null;
+  bounced_at?: string | null;
+  ip: string;
+  ip_location: string;
+  browser: string;
+  browser_version: string;
+  os: string;
 }

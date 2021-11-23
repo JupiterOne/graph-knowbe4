@@ -6,12 +6,14 @@ import {
   createTrainingModuleEntity,
   createPhishingCampaignEntity,
   createPhishingSecurityTestEntity,
+  createPhishingSecurityTestResultEntity,
 } from './converters';
 import {
   Account,
   Group,
   PhishingCampaign,
   PhishingSecurityTest,
+  PhishingSecurityTestResult,
   TrainingCampaign,
   User,
 } from './ProviderClient';
@@ -25,6 +27,8 @@ import {
   ASSESSMENT_ENTITY_CLASS,
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
+  PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+  RECORD_ENTITY_CLASS,
 } from './types';
 
 /* tslint:disable */
@@ -160,6 +164,74 @@ test('should convert phishingSecurityTest to entity', () => {
         {
           name: 'default',
           rawData: phishingSecurityTest,
+        },
+      ],
+    }),
+  );
+});
+
+test('should convert phishingSecurityTestResult to entity', () => {
+  const phishingSecurityTestResult = {
+    recipient_id: '3077742',
+    pst_id: 14240,
+    user: {
+      id: '264215',
+      provisioning_guid: null,
+      first_name: 'Bob',
+      last_name: 'Ross',
+      email: 'bob.r@kb4-demo.com',
+    },
+    template: {
+      id: 2,
+      name: 'Your Amazon Order',
+    },
+    scheduled_at: '2019-04-02T15:02:38.000Z',
+    delivered_at: '2019-04-02T15:02:38.000Z',
+    opened_at: '2019-04-02T15:02:38.000Z',
+    clicked_at: '2019-04-02T15:02:38.000Z',
+    replied_at: null,
+    attachment_opened_at: null,
+    macro_enabled_at: null,
+    data_entered_at: '2019-04-02T15:02:38.000Z',
+    reported_at: null,
+    bounced_at: null,
+    ip: 'XX.XX.XXX.XXX',
+    ip_location: 'St.Petersburg, FL',
+    browser: 'Chrome',
+    browser_version: '48.0',
+    os: 'MacOSX',
+  } as PhishingSecurityTestResult;
+  const entity = createPhishingSecurityTestResultEntity(
+    phishingSecurityTestResult,
+  );
+  expect(entity).toEqual(
+    expect.objectContaining({
+      _class: RECORD_ENTITY_CLASS,
+      _type: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+      _key: 'knowbe4:phishing:security_tests:3077742:recepients',
+      recipientId: '3077742',
+      pstId: 14240,
+      user: '264215',
+      template: [2],
+      scheduledAt: '2019-04-02T15:02:38.000Z',
+      deliveredAt: '2019-04-02T15:02:38.000Z',
+      openedAt: '2019-04-02T15:02:38.000Z',
+      clickedAt: '2019-04-02T15:02:38.000Z',
+      repliedAt: null,
+      attachmentOpenedAt: null,
+      macroEnabledAt: null,
+      dataEnteredAt: '2019-04-02T15:02:38.000Z',
+      reportedAt: null,
+      bouncedAt: null,
+      ip: 'XX.XX.XXX.XXX',
+      ipLocation: 'St.Petersburg, FL',
+      browser: 'Chrome',
+      browserVersion: '48.0',
+      os: 'MacOSX',
+      _rawData: [
+        {
+          name: 'default',
+          rawData: phishingSecurityTestResult,
         },
       ],
     }),

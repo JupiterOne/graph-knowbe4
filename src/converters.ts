@@ -10,10 +10,12 @@ import {
   Group,
   PhishingCampaign,
   PhishingSecurityTest,
+  PhishingSecurityTestResult,
   TrainingCampaign,
   TrainingContent,
   TrainingEnrollment,
   User,
+  UserBase,
 } from './ProviderClient';
 import {
   ACCOUNT_ENTITY_CLASS,
@@ -37,6 +39,8 @@ import {
   PHISHING_CAMPAIGN_ENTITY_TYPE,
   PHISHING_SECURITY_TEST_ENTITY_TYPE,
   ASSESSMENT_ENTITY_CLASS,
+  PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+  RECORD_ENTITY_CLASS,
 } from './types';
 
 import toCamelCase from './util/toCamelCase';
@@ -60,6 +64,19 @@ export function createAccountEntity(data: Account): AccountEntity {
     type: data.type,
     domains: data.domains,
     admins,
+  };
+}
+
+export function createUserBaseEntity(data: UserBase): UserEntity {
+  return {
+    ...(toCamelCase(data) as any),
+    _class: USER_ENTITY_CLASS,
+    _key: `knowbe4:user:${data.id}`,
+    _type: USER_ENTITY_TYPE,
+    id: data.id.toString(),
+    firstName: data.first_name,
+    lastName: data.last_name,
+    email: data.email,
   };
 }
 
@@ -209,6 +226,51 @@ export function createPhishingSecurityTestEntity(
         exploitedCount: data.exploited_count,
         reportedCount: data.reported_count,
         bouncedCount: data.bounced_count,
+      },
+    },
+  });
+}
+
+export function createPhishingSecurityTestResultEntity(
+  data: PhishingSecurityTestResult,
+): Entity {
+  let user: string = '';
+  if (data.user.id !== undefined) {
+    user = data.user.id;
+  }
+
+  const template: number[] = [];
+  if (data.template.id !== undefined) {
+    template.push(data.template.id);
+  }
+
+  return createIntegrationEntity({
+    entityData: {
+      source: data,
+      assign: {
+        _class: RECORD_ENTITY_CLASS,
+        _type: PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
+        _key: `knowbe4:phishing:security_tests:${data.recipient_id}:recepients`,
+        name: 'Phishing Security Test Result',
+        recipientId: data.recipient_id,
+        pstId: data.pst_id,
+        user: user,
+        template: template,
+        scheduledAt: data.scheduled_at,
+        deliveredAt: data.delivered_at,
+        openedAt: data.opened_at,
+        clickedAt: data.clicked_at,
+        repliedAt: data.replied_at,
+        attachmentOpenedAt: data.attachment_opened_at,
+        macroEnabledAt: data.macro_enabled_at,
+        dataEnteredAt: data.data_entered_at,
+        reportedAt: data.reported_at,
+        bouncedAt: data.bounced_at,
+        ip: data.ip,
+        ipLocation: data.ip_location,
+        browser: data.browser,
+        browserVersion: data.browser_version,
+        os: data.os,
       },
     },
   });

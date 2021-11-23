@@ -162,7 +162,27 @@ export interface PhishingSecurityTest {
   reported_count: number;
   bounced_count: number;
 }
-
+export interface PhishingSecurityTestResult {
+  recipient_id: string;
+  pst_id: number;
+  user: UserBase;
+  template: Template;
+  scheduled_at: string;
+  delivered_at: string;
+  opened_at?: string | null;
+  clicked_at?: string | null;
+  replied_at?: string | null;
+  attachment_opened_at?: string | null;
+  macro_enabled_at?: string | null;
+  data_entered_at: string;
+  reported_at?: string | null;
+  bounced_at?: string | null;
+  ip: string;
+  ip_location: string;
+  browser: string;
+  browser_version: string;
+  os: string;
+}
 export interface Categories {
   category_id: number;
   name: string;
@@ -255,6 +275,14 @@ export default class ProviderClient {
   ): Promise<PhishingSecurityTest[]> {
     return await this.collectAllPages(
       `phishing/campaigns/${campaignId}/security_tests`,
+    );
+  }
+
+  public async fetchPhishingSecurityTestResults(
+    pstsId: number,
+  ): Promise<PhishingSecurityTestResult[]> {
+    return await this.collectAllPages(
+      `phishing/security_tests/${pstsId}/recipients`,
     );
   }
 
