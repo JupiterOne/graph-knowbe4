@@ -39,7 +39,6 @@ describe('#fetchPhishingSecurityTestResult', () => {
     });
 
     await fetchPhishingSecurityTestResults(context);
-    await fetchPhishingSecurityTest(context);
 
     expect(context.jobState.collectedEntities?.length).toBeTruthy;
     expect(
