@@ -8,6 +8,23 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.2.0] - 2021-11-26
+
+### Added
+
+- Added support for ingesting the following **new** resources:
+
+| Resources                              | Entity `_type`                          | Entity `_class` |
+| -------------------------------------- | --------------------------------------- | --------------- |
+| KnowBe4 Phishing Security Test Results | `knowbe4_phishing_security_test_result` | `Record`        |
+
+- Added support for ingesting the following **new** relationships:
+
+| Source Entity `_type`            | Relationship `_class` | Target Entity `_type`                   |
+| -------------------------------- | --------------------- | --------------------------------------- |
+| `knowbe4_phishing_security_test` | **CONTAINS**          | `knowbe4_phishing_security_test_result` |
+| `knowbe4_user`                   | **HAS**               | `knowbe4_phishing_security_test_result` |
+
 ## [2.1.3] - 2021-11-18
 
 ### Changed
