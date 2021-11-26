@@ -5,7 +5,6 @@ import { Recording, setupKnowBe4Recording } from '../../test/recording';
 
 import { integrationConfig } from '../../test/config';
 
-import { fetchPhishingSecurityTest } from './phishingSecurityTests';
 import { fetchPhishingSecurityTestResults } from './phishingSecurityTestResults';
 import {
   PHISHING_SECURITY_TEST_RESULT_ENTITY_TYPE,
@@ -39,7 +38,6 @@ describe('#fetchPhishingSecurityTestResult', () => {
     });
 
     await fetchPhishingSecurityTestResults(context);
-    await fetchPhishingSecurityTest(context);
 
     expect(context.jobState.collectedEntities?.length).toBeTruthy;
     expect(
