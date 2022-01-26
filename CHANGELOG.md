@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.2.1] - 2022-01-26
+
+- Updated error handling around rate limiting. Users who run into 429s will now
+  be informed via the error message to reduce their Polling Interval to a daily
+  cadence.
+
 ## [2.2.0] - 2021-11-26
 
 ### Added
