@@ -331,6 +331,10 @@ export default class ProviderClient {
 
       return results;
     } catch (err) {
+      if (err instanceof IntegrationProviderAPIError) {
+        throw err;
+      }
+
       throw new IntegrationProviderAPIError({
         cause: err,
         endpoint: firstUri,
@@ -409,12 +413,24 @@ export default class ProviderClient {
           logger.warn(
             `Status 429 (rate limiting) encountered. Engaging backoff function.`,
           );
+
+          if (attemptContext.attemptsRemaining === 0) {
+            // Reaching this case most likely means the daily request quota has been hit.
+            // Throwing this error provides guidance for users.
+            // https://developer.knowbe4.com/reporting/#tag/Rate-Limiting
+            throw new IntegrationProviderAPIError({
+              cause: error,
+              statusText: `Reached the rate limits of KnowBe4's API. Consider reducing the Polling Interval in the integration configuration settings to once per day.`,
+              status: error.status,
+              endpoint: url,
+            });
+          }
         }
 
         //test for 5xx HTTP codes
         if (Math.floor(error.status / 100) === 5) {
           logger.warn(
-            `Status 5xx (server errors) encountered. Engaging backoff function.`,
+            `Status ${error.status} (server errors) encountered. Engaging backoff function.`,
           );
         }
         logger.info(`Retrying on ${error.endpoint}`);
