@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Added support for the Canada API. Config validation now allows for `us`, `eu`,
+  and `ca`.
+
 ## [2.2.1] - 2022-01-26
 
 - Updated error handling around rate limiting. Users who run into 429s will now

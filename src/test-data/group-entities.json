@@ -2,7 +2,7 @@
   {
     "_key": "knowbe4:group:14804",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 14804,
     "name": "Admins",
     "displayName": "Admins",
@@ -14,7 +14,7 @@
   {
     "_key": "knowbe4:group:14224",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 14224,
     "name": "IT",
     "displayName": "IT",
@@ -27,7 +27,7 @@
   {
     "_key": "knowbe4:group:3140",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 3140,
     "name": "Executives",
     "displayName": "Executives",
@@ -39,7 +39,7 @@
   {
     "_key": "knowbe4:group:3141",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 3141,
     "name": "Accounting",
     "displayName": "Accounting",
@@ -52,7 +52,7 @@
   {
     "_key": "knowbe4:group:3139",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 3139,
     "name": "Sales",
     "displayName": "Sales",
@@ -64,7 +64,7 @@
   {
     "_key": "knowbe4:group:7824",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 7824,
     "name": "Marketing",
     "displayName": "Marketing",
@@ -76,7 +76,7 @@
   {
     "_key": "knowbe4:group:1759",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 1759,
     "name": "Customer Service",
     "displayName": "Customer Service",
@@ -88,7 +88,7 @@
   {
     "_key": "knowbe4:group:6276",
     "_type": "knowbe4_user_group",
-    "_class": [ "UserGroup" ],
+    "_class": ["UserGroup"],
     "id": 6276,
     "name": "Clickers in the past 90 days",
     "displayName": "Clickers in the past 90 days",

@@ -1,5 +1,5 @@
-import maxBy from "lodash.maxby";
-import { TrainingEnrollment } from "../ProviderClient";
+import maxBy from 'lodash.maxby';
+import { TrainingEnrollment } from '../ProviderClient';
 
 /**
  * A user can be enrolled in multiple instances of the same training module.
@@ -17,9 +17,9 @@ import { TrainingEnrollment } from "../ProviderClient";
 export function findMostRelevantEnrollment(
   enrollments: TrainingEnrollment[],
 ): TrainingEnrollment {
-  let e = maxBy(enrollments, "completion_date"); // The one most recently completed is the most relevant
-  e = e ? e : maxBy(enrollments, "start_date"); // Then the most recently started one
-  e = e ? e : maxBy(enrollments, "enrollment_date"); // Then the most recently enrolled one
+  let e = maxBy(enrollments, 'completion_date'); // The one most recently completed is the most relevant
+  e = e ? e : maxBy(enrollments, 'start_date'); // Then the most recently started one
+  e = e ? e : maxBy(enrollments, 'enrollment_date'); // Then the most recently enrolled one
   e = e ? e : enrollments[0]; // Then just the first one (This should never happen)
   return e;
 }
