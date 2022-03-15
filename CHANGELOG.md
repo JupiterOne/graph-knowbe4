@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.3.0] - 2022-03-15
+
 ### Changed
 
 - Added support for the Canada API. Config validation now allows for `us`, `eu`,
