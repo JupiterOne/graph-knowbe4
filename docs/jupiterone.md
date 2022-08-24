@@ -1,4 +1,4 @@
-# Integration with JupiterOne
+# KnownBe4
 
 ## KnowBe4 + JupiterOne Integration Benefits
 
@@ -44,7 +44,7 @@ info.
 
 ### In JupiterOne
 
-1. From the configuration **Gear Icon**, select **Integrations**.
+1. From the top navigation of the J1 Search homepage, select **Integrations**
 2. Scroll to the **KnowBe4** integration tile and click it.
 3. Click the **Add Configuration** button and configure the following settings:
 
@@ -62,7 +62,7 @@ info.
 
 ## How to Uninstall
 
-1. From the configuration **Gear Icon**, select **Integrations**.
+1. From the top navigation of the J1 Search homepage, select **Integrations**
 2. Scroll to the **KnowBe4** integration tile and click it.
 3. Identify and click the **integration to delete**.
 4. Click the **trash can** icon.
