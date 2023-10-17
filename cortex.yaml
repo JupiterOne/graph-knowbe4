@@ -1,0 +1,12 @@
+openapi: 3.0.1
+info:
+  title: '@jupiterone/graph-knowbe4'
+  description: A JupiterOne managed integration for https://www.knowbe4.com.
+  x-cortex-git:
+    github:
+      repository: JupiterOne/graph-knowbe4
+  x-cortex-owners:
+    - type: group
+      name: JupiterOne/integrations
+  x-cortex-service-groups: tier-4
+  x-cortex-tag: '@jupiterone/graph-knowbe4'
