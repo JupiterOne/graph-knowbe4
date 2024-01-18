@@ -53,7 +53,7 @@ export interface IntegrationConfig extends IntegrationInstanceConfig {
 export async function validateInvocation(
   context: IntegrationExecutionContext<IntegrationConfig>,
 ) {
-  const { config, logger } = context.instance;
+  const { config } = context.instance;
 
   if (!config.site || !config.apiKey) {
     throw new IntegrationValidationError(
