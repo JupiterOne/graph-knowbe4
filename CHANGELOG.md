@@ -8,6 +8,13 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.4.0] - 2024-01-18
+
+## Changed
+
+- Added support for the UK & DE API. Config validation now allows for `us`,
+  `eu`, `ca`, `uk`, and `de`.
+
 ## [2.3.0] - 2022-03-15
 
 ### Changed

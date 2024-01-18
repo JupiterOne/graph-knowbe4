@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-knowbe4",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "A JupiterOne managed integration for https://www.knowbe4.com.",
   "repository": {
     "type": "git",

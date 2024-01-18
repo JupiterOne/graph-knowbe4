@@ -37,7 +37,7 @@ export const instanceConfigFields: IntegrationInstanceConfigFieldMap = {
 export interface IntegrationConfig extends IntegrationInstanceConfig {
   /**
    * The KnowBe4 site used to authenticate requests.
-   * Typically, either `us`, `eu` or `ca`.
+   * Typically, either `us`, `eu`, `ca`, `uk`, or `de`.
    * Just a regional modifier to the base URL for the API
    * Used in ProviderClient.ts
    */
@@ -61,9 +61,9 @@ export async function validateInvocation(
     );
   }
 
-  if (!['us', 'eu', 'ca'].includes(config.site.toLowerCase())) {
+  if (!['us', 'eu', 'ca', 'uk', 'de'].includes(config.site.toLowerCase())) {
     throw new IntegrationValidationError(
-      'Invalid {site} in config. Should be `us`, `eu`, or `ca`.',
+      'Invalid {site} in config. Should be `us`, `eu`, `ca`, `uk`, or `de`.',
     );
   }
 

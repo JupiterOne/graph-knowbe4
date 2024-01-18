@@ -22,4 +22,6 @@ To authenticate, present your API token in an Authorization header in requests
 
 The `site` config variable is a modifier to the base URL used for the REST API,
 which is `https://${config.site.toLowerCase()}.api.knowbe4.com/v1`. Valid sites
-include `us`, `eu`, and `ca`.
+include `us`, `eu`, `uk`, `de` and `ca`. Official documentation stating valid
+sites can be found
+[here](https://developer.knowbe4.com/graphql/phisher/page/Base-URL)
